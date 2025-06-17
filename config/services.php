@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'motork' => [
+        'url' => env('MOTORK_URL'),
+        'key' => env('MOTORK_KEY'),
+    ],
 ];
