@@ -1,9 +1,109 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* @font-face {
+    font-family: 'fleetmarket';
+    src: url('/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.woff') format('woff2'),
+         url('/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+} */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
+@theme {
+    --color-theme: oklch(0.78 0.20 253.57);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #111;
+}
+.is-active {
+    @apply block;
+}
+
+.h1 {
+    @apply mb-4 text-2xl font-extrabold leading-6 md:text-3xl;
+}
+
+/****** range-slider *****/
+.range-slider {
+    display: flex;
+    flex-direction: column;
+}
+.range-slider-control {
+    position: relative;
+    min-height: 20px;
+    margin-top: 20px;
+}
+.range-slider-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: all;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid #22222299;
+    box-shadow: 2px 2px 4px 0 #00000022;
+    cursor: pointer;
+    margin-top:-1px;
+}
+.range-slider-control input[type=range]::-moz-range-thumb {
+    -webkit-appearance: none;
+    pointer-events: all;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid #22222299;
+    box-shadow: 2px 2px 4px 0 #00000022;
+    cursor: pointer;
+    margin-top:-1px;
+}
+.range-slider-control input[type=range]::-webkit-slider-thumb:hover {
+    background: #FFF;
+}
+.range-slider-control input[type="number"] {
+    color: #8a8383;
+    width: 50px;
+    height: 30px;
+    font-size: 20px;
+    border: none;
+}
+.range-slider-control input[type=number]::-webkit-inner-spin-button,
+.range-slider-control input[type=number]::-webkit-outer-spin-button {
+     opacity: 1;
+}
+.range-slider-control input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+}
 
 
+input[type="checkbox"] {
+    /* ...existing styles */
+    display: grid;
+    place-content: center;
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
