@@ -18,7 +18,7 @@
         <span class="flex-1" :class="selectedLabels.length ? '' : 'text-gray-400 italic'" x-text="selectedLabels.length ? selectedLabels.join(', ') : '{{ $placeholder }}'"></span>
         <span><span class="icon icon-chevron-down" :class="open ? 'icon-chevron-up' : 'icon-chevron-down'"></span></span>
     </div>
-    <div x-show="open" x-cloak class="absolute z-10 w-full overflow-y-auto bg-white shadow-lg outline outline-gray-200 top-full max-h-40 min-h-30" @click.outside="open = false">
+    <div x-show="open" x-cloak class="absolute z-10 w-full overflow-y-auto bg-white shadow-lg select-list outline outline-gray-200 top-full max-h-40 min-h-30" @click.outside="open = false">
         @foreach ($options as $key => $option)
             <div class="px-3 border-b border-gray-100 active:bg-gray-50 hover:bg-gray-50">
                 @if($multiple)
