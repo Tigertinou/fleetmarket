@@ -31,7 +31,7 @@
 
     <x-layouts.header />
 
-    <x-layouts.breadcrumb />
+    <x-layouts.breadcrumb :$breadcrumb/>
 
     {{-- Contenu principal --}}
     <main class="flex-1">

@@ -4,7 +4,7 @@
         <div class="max-w-screen-xl px-4 py-4 mx-auto md:py-6">
 
             <h1 class="h1">Trouvons ensemble votre nouvelle voiture</h1>
-            <p>comparez les options, les prix et les promotions en temps réel parmi plus de 500 modèles de véhicules</p>
+            <p>Comparez les options, les prix et les promotions en temps réel parmi plus de 500 modèles de véhicules</p>
 
         </div>
     </div>

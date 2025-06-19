@@ -23,6 +23,9 @@
                 <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">Comparer</a></li>
                 <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">Guide d’achat</a></li>
                 <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">Comment ça marche</a></li>
+                <li class="border-t border-gray-100"></li>
+                <li><a href="{{ localized_route('pages.elements') }}" class="hover:text-theme">Elements UIUX</a></li>
+                <li><a href="/assets/fonts/fleetmarket.v1.1/icons-reference.html" class="hover:text-theme">Icons</a></li>
             </ul>
         </div>
     </div>

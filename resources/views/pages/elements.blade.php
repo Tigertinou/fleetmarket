@@ -1,4 +1,10 @@
-<x-layouts.app :title="'Elements'">
+@php 
+$breadcrumb = [
+    ['url' => localized_route('pages.home'), 'label' => 'Acceuil', 'class' => 'font-semibold text-black'],
+    ['label' => 'Elements']
+]
+@endphp
+<x-layouts.app :title="'Elements'" :$breadcrumb>
 
 
 
@@ -72,26 +78,26 @@
 
         <div class="mt-8"><b>Buttons</b></div>
 
-        <div class="mt-4">
-            <x-utils.button class="mr-1" label="Default"></x-utils.button>
-            <x-utils.button class="mr-1" label="Theme" color="theme"></x-utils.button>
-            <x-utils.button class="mr-1" label="Theme 2" color="theme-2"></x-utils.button>
-            <x-utils.button class="mr-1" label="Light" color="light"></x-utils.button>
-            <x-utils.button class="mr-1" label="Dark" color="black"></x-utils.button>
-            <x-utils.button class="mr-1" label="Button sm" size="sm"></x-utils.button>
-            <x-utils.button class="mr-1" label="Button xs" size="xs"></x-utils.button>
+        <div class="mt-4 flex flex-wrap gap-2">
+            <x-utils.button label="Default"></x-utils.button>
+            <x-utils.button label="Theme" color="theme"></x-utils.button>
+            <x-utils.button label="Theme 2" color="theme-2"></x-utils.button>
+            <x-utils.button label="Light" color="light"></x-utils.button>
+            <x-utils.button label="Dark" color="black"></x-utils.button>
+            <x-utils.button label="Button sm" size="sm"></x-utils.button>
+            <x-utils.button label="Button xs" size="xs"></x-utils.button>
         </div>
-        <div class="mt-2">
-            <x-utils.button class="mr-1" label="Default (icon)" icon="icon-search"></x-utils.button>
-            <x-utils.button class="mr-1" label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
-            <x-utils.button class="mr-1" label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
-            <x-utils.button class="mr-1" label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
+        <div class="mt-2 flex flex-wrap gap-2">
+            <x-utils.button label="Default (icon)" icon="icon-search"></x-utils.button>
+            <x-utils.button label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
+            <x-utils.button label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
         </div>
 
         <div class="mt-8"><b>Label</b></div>
-        <div class="mt-4">
-            <x-utils.label class="mr-1" label="Small label"></x-utils.button>
-            <x-utils.label class="mr-1" label="Small label gray" color="gray"></x-utils.button>
+        <div class="mt-4 flex flex-wrap gap-2">
+            <x-utils.label label="Small label"></x-utils.button>
+            <x-utils.label label="Small label gray" color="gray"></x-utils.button>
         </div>
 
         <div class="mt-8"><b>Box</b></div>
