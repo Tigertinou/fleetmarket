@@ -70,6 +70,24 @@
             array( 'value' => '4', 'name' => 'Option <b>4</b>' ),
         )" :values="array(3,2)" name="inp_select_pre" placeholder="Multi select with selected value"/>
 
+        <div class="mt-8"><b>Buttons</b></div>
+
+        <div>
+            <x-utils.button class="mt-8" label="Default"></x-utils.button>
+            <x-utils.button class="mt-8" label="Theme" color="theme"></x-utils.button>
+            <x-utils.button class="mt-8" label="Theme 2" color="theme-2"></x-utils.button>
+            <x-utils.button class="mt-8" label="Light" color="light"></x-utils.button>
+            <x-utils.button class="mt-8" label="Dark" color="black"></x-utils.button>
+            <x-utils.button class="mt-8" label="Button sm" size="sm"></x-utils.button>
+            <x-utils.button class="mt-8" label="Button xs" size="xs"></x-utils.button>
+        </div>
+        <div>
+            <x-utils.button class="mt-8" label="Default (icon)" icon="icon-search"></x-utils.button>
+            <x-utils.button class="mt-8" label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button class="mt-8" label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
+            <x-utils.button class="mt-8" label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
+        </div>
+
         {{-- <input type="radio" class="my-2 mr-2" name="radio" id="option1" value="1" checked>
         <label class="mr-8 cursor-pointer select-none" for="option1">Option 1</label>
 
