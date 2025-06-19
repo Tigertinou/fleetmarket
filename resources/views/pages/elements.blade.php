@@ -72,33 +72,52 @@
 
         <div class="mt-8"><b>Buttons</b></div>
 
-        <div>
-            <x-utils.button class="mt-8" label="Default"></x-utils.button>
-            <x-utils.button class="mt-8" label="Theme" color="theme"></x-utils.button>
-            <x-utils.button class="mt-8" label="Theme 2" color="theme-2"></x-utils.button>
-            <x-utils.button class="mt-8" label="Light" color="light"></x-utils.button>
-            <x-utils.button class="mt-8" label="Dark" color="black"></x-utils.button>
-            <x-utils.button class="mt-8" label="Button sm" size="sm"></x-utils.button>
-            <x-utils.button class="mt-8" label="Button xs" size="xs"></x-utils.button>
+        <div class="mt-4">
+            <x-utils.button class="mr-1" label="Default"></x-utils.button>
+            <x-utils.button class="mr-1" label="Theme" color="theme"></x-utils.button>
+            <x-utils.button class="mr-1" label="Theme 2" color="theme-2"></x-utils.button>
+            <x-utils.button class="mr-1" label="Light" color="light"></x-utils.button>
+            <x-utils.button class="mr-1" label="Dark" color="black"></x-utils.button>
+            <x-utils.button class="mr-1" label="Button sm" size="sm"></x-utils.button>
+            <x-utils.button class="mr-1" label="Button xs" size="xs"></x-utils.button>
         </div>
-        <div>
-            <x-utils.button class="mt-8" label="Default (icon)" icon="icon-search"></x-utils.button>
-            <x-utils.button class="mt-8" label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
-            <x-utils.button class="mt-8" label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
-            <x-utils.button class="mt-8" label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
+        <div class="mt-2">
+            <x-utils.button class="mr-1" label="Default (icon)" icon="icon-search"></x-utils.button>
+            <x-utils.button class="mr-1" label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button class="mr-1" label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
+            <x-utils.button class="mr-1" label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
         </div>
 
-        {{-- <input type="radio" class="my-2 mr-2" name="radio" id="option1" value="1" checked>
-        <label class="mr-8 cursor-pointer select-none" for="option1">Option 1</label>
+        <div class="mt-8"><b>Label</b></div>
+        <div class="mt-4">
+            <x-utils.label class="mr-1" label="Small label"></x-utils.button>
+            <x-utils.label class="mr-1" label="Small label gray" color="gray"></x-utils.button>
+        </div>
 
-        <input type="radio" class="my-2 mr-2" name="radio" id="option2" value="2" checked>
-        <label class="mr-8 cursor-pointer select-none" for="option2">Option 2</label>
+        <div class="mt-8"><b>Box</b></div>
+        <div class="mt-4 select-none" x-data="{ change(target){
+                $el.querySelectorAll('[name=inp_radio]').forEach( (el) => {
+                    const data = Alpine.$data(el).active = (el==target);
+                });
+            },
+            select(target){
+                const radio = target.querySelector('[type=radio]');
+                if(radio!=null){
+                    radio.click();
+                }
+            }}">
+            <x-utils.box x-data="{active : false}" @click="select($event.target)">
+                <x-forms.elements.radio class="inline-block" name="inp_radio" value="1" @change="change($event.target)" /> Box default
+            </x-utils.box>
+            <x-utils.box class="mt-2" x-data="{active : true}" @click="select($event.target)">
+                <x-forms.elements.radio class="inline-block" name="inp_radio" value="2" @change="change($event.target)" checked/> Box active
+            </x-utils.box>
+        </div>
 
-        <div style="font-size:0.8em;">
-            <input type="radio" class="my-2 mr-2" name="radio" id="option-small" value="2" checked>
-            <label class="mr-8 cursor-pointer select-none" for="option2">Option small</label>
-        </div> --}}
-
+        <x-utils.box class="mt-2" color="gray">
+            Box gray
+        </x-utils.box>
+        
     </div>
 
 </x-layouts.app>

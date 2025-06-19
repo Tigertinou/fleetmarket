@@ -21,5 +21,9 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    'bg-theme',
+    'bg-theme-2',
+  ],
   plugins: [],
 }
