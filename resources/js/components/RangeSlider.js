@@ -1,7 +1,7 @@
 export default class RangeSlider {
     constructor(el) {
         this.slider = el;
-        console.log(el);
+
         this.step = parseInt(el.dataset.step || 1);
         this.min = parseInt(el.dataset.min || 0);
         this.max = parseInt(el.dataset.max);
@@ -33,6 +33,18 @@ export default class RangeSlider {
 
         this.slider.prepend(this.controls);
 
+        this.inputFrom = document.createElement('input');
+        this.inputFrom.type = 'hidden';
+        this.inputFrom.name = `${el.dataset.name}_min`;
+        this.inputFrom.value = this.minValue;
+        this.slider.appendChild(this.inputFrom);
+
+        this.inputTo = document.createElement('input');
+        this.inputTo.type = 'hidden';
+        this.inputTo.name = `${el.dataset.name}_max`;
+        this.inputTo.value = this.maxValue;
+        this.slider.appendChild(this.inputTo);
+
         // Initial fill
         this.fillSlider();
 
@@ -44,6 +56,8 @@ export default class RangeSlider {
     }
 
     change() {
+        this.inputFrom.value = this.from.value;
+        this.inputTo.value = this.to.value;
         this.slider.querySelectorAll('.text-min').forEach(el => {
             el.textContent = this.from.value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
         });
