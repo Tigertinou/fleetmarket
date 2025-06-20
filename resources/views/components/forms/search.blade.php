@@ -1,29 +1,32 @@
 <div {{ $attributes->merge(['class' => '']) }}>
 
-    <div class="flex flex-col max-w-sm mx-auto">
+    <div class="flex flex-col flex-wrap mx-auto md:flex-row">
 
-        <div>
-            <div class="text-sm font-extrabold text-center">Votre budget</div>
+        <div class="md:w-full">
+            <div class="text-sm font-extrabold">Votre budget</div>
             <x-forms.elements.range
                 name="inp_price"
                 min="0"
                 max="100000"
                 min-value="5000"
-                max-value="95000"
+                max-value="50000"
                 step="1000"/>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 md:w-1/2">
             <div class="mb-2 text-sm font-extrabold">Carosseries</div>
             <x-forms.elements.select id="bodytype-select" multiple :options="[]" name="inp_bodytype" placeholder="Type de carosserie ..."/>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 md:pl-4 md:w-1/2">
             <div class="mb-2 text-sm font-extrabold">Marques</div>
             <x-forms.elements.select id="brands-select" multiple :options="[]" name="inp_brands" placeholder="Marques ..."/>
         </div>
 
-        <x-utils.button label="Rechercher" icon="icon-search" class="w-full mt-4" size="lg"></x-utils.button>
+        <div class="mt-4 md:w-full">
+            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg"></x-utils.button>
+        </div>
+
     </div>
 </div>
 <script>
