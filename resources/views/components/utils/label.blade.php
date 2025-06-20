@@ -3,9 +3,11 @@
     "color" => 'dark',
     "size" => 'xs',
     "url" => "javascript:void(0);",
+    "icon" => null,
+    "rIcon" => null,
 ])
 @php
-$def_class = 'inline-block rounded-md ';
+$def_class = 'inline-block rounded-md whitespace-nowrap';
 switch ($color) {
     case 'theme':
     case 'theme-2':
@@ -36,4 +38,12 @@ switch ($size) {
     break;
 }
 @endphp
-<span {{ $attributes->merge(['class' => $def_class]) }}>{{ $label }}</span>
+<span {{ $attributes->merge(['class' => $def_class]) }}>
+    @if($icon ?? false)
+        <span class="icon {{ $icon }} inline-block align-middle mr-1 -ml-2"></span>
+    @endif
+    <span>{!! $label !!}</span>
+    @if($rIcon ?? false)
+        <span class="icon {{ $rIcon }} inline-block align-middle ml-1 -mr-2"></span>
+    @endif
+</span>

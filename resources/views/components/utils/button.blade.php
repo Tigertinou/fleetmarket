@@ -21,7 +21,10 @@ switch ($color) {
     break;
     case 'light':
     case 'gray':
-        $def_class .= " bg-gray-200 font-normal";
+        $def_class .= " bg-gray-100 font-normal";
+    break;
+    case 'bordered':
+        $def_class .= " border-1 border-gray-200 font-normal";
     break;
     default:
         $def_class .= " bg-{$color} text-white";
@@ -36,7 +39,7 @@ switch ($size) {
         $def_class .= " px-5 py-1.5 text-sm";
     break;
     case 'md':
-        $def_class .= " px-6 py-2";
+        $def_class .= " px-6 py-2 text-md";
     break;
     default:
         $def_class .= " px-6 py-3";
@@ -44,7 +47,7 @@ switch ($size) {
 }
 @endphp
 <a href="{{ $url }}" {{ $attributes->merge(['class' => $def_class]) }}>
-    <span class="flex items-center justify-beetween">
+    <span class="flex items-center justify-center">
         @if($icon ?? false)
             <span class="icon {{ $icon }} inline-block align-middle mr-1 -ml-2"></span>
         @endif

@@ -81,6 +81,7 @@ $breadcrumb = [
             <x-utils.button label="Theme" color="theme"></x-utils.button>
             <x-utils.button label="Theme 2" color="theme-2"></x-utils.button>
             <x-utils.button label="Light" color="light"></x-utils.button>
+            <x-utils.button label="Bordered" color="bordered"></x-utils.button>
             <x-utils.button label="Dark" color="black"></x-utils.button>
             <x-utils.button label="Button sm" size="sm"></x-utils.button>
             <x-utils.button label="Button xs" size="xs"></x-utils.button>
@@ -94,8 +95,9 @@ $breadcrumb = [
 
         <div class="mt-8"><b>Label</b></div>
         <div class="flex flex-wrap items-center gap-2 mt-4">
-            <x-utils.label label="Small label"></x-utils.button>
-            <x-utils.label label="Small label gray" color="gray"></x-utils.button>
+            <x-utils.label label="Small label" />
+            <x-utils.label label="Small label gray" color="gray" />
+            <x-utils.label label="Small label r-icon" r-icon="icon-times" />
         </div>
 
         <div class="mt-8"><b>Box</b></div>
