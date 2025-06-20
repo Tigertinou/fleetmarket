@@ -1,7 +1,7 @@
 @php
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
-    ['label' => 'Recherche']
+    ['label' => 'Recherche', 'class' => 'text-gray-400']
 ]
 @endphp
 <x-layouts.app :title="'Page'" :$breadcrumb>
@@ -16,23 +16,32 @@ $breadcrumb = [
                     <h1 class="h1">Les offres du mois</h1>
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
 
-                    <div class="flex flex-wrap gap-1 py-4 my-4 border-gray-200 border-y">
+                    <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
                         <x-utils.label label="AUDI" r-icon="icon-times" />
                         <x-utils.label label="KIA" r-icon="icon-times" />
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end">
-                        <x-utils.button label="Recommandations" r-icon="icon-chevron-down" color="bordered" size="md" class="w-full md:w-auto md:order-2" @click="filtersOpen=true"></x-utils.button>
-                        <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="w-full md:w-auto md:hidden md:order-3" @click="filtersOpen=true"></x-utils.button>
-                        <div class="flex-1 w-full pt-2 md:order-1"><b class="font-bold">1000</b> véhicules trouvés</div>
+
+                    <div class="items-center md:flex">
+                        <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
+                            <x-utils.button label="Recommandations" r-icon="icon-chevron-down" color="bordered" size="md" class="flex-1 md:w-auto" @click="filtersOpen=true"></x-utils.button>
+                            <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
+                        </div>
+
+                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold">1000</b> véhicules trouvés</div>
                     </div>
 
-                    <div class="mt-4">Results...</div>
+                    <div class="mt-4">
+
+                        <div></div>
+
+
+                        Results...</div>
 
 
                 </div>
             </div>
-            <div class="absolute top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-xs md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
+            <div class="absolute top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 <div>
                     <div class="flex items-center justify-between py-4 md:hidden">
                         <div class="text-2xl">Filtres</div>
@@ -74,8 +83,8 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['fuelType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-1 capitalize"
-                                        size="lg"
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
                                         name="inp_fuelType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -85,11 +94,20 @@ $breadcrumb = [
                         </div>
                     </details>
 
-                    <details>
+                    <details open>
                         <summary class="pl-4 -ml-4">Marques</summary>
                         <div class="flex flex-col gap-2 pb-4">
                             <div>
-
+                                @foreach ($makes as $make)
+                                    <x-forms.elements.checkbox
+                                        class="flex items-center font-bold uppercase"
+                                        size="md"
+                                        name="inp_make"
+                                        :value="$make['id'] ?? ''"
+                                    >
+                                    <span class="flex items-center flex-1"><img src="{{ $make['logo'] }}" class="w-10 mr-2"> {{ $make['name'] }}</span>
+                                    </x-forms.elements.checkbox>
+                                @endforeach
                             </div>
                         </div>
                     </details>
@@ -100,8 +118,8 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['bodyType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-1 capitalize"
-                                        size="lg"
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
                                         name="inp_bodyType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -112,13 +130,13 @@ $breadcrumb = [
                     </details>
 
                     <details>
-                        <summary class="pl-4 -ml-4">Traction</summary>
+                        <summary class="pl-4 -ml-4">Tractions</summary>
                         <div class="flex flex-col gap-2 pb-4">
                             <div>
                                 @foreach ($facets['traction'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-1 capitalize"
-                                        size="lg"
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -129,10 +147,72 @@ $breadcrumb = [
                     </details>
 
                     <details>
-                        <summary class="pl-4 -ml-4">Caractéristiques</summary>
+                        <summary class="pl-4 -ml-4">Dimensions</summary>
                         <div class="flex flex-col gap-2 pb-4">
                             <div>
+                                <div class="mb-2">
+                                    <label class="text-xs font-semibold">Hauteur</label>
+                                    <x-forms.elements.range name="inp_" min="0" max="500" min-value="0" max-value="500" step="1" prefix="cm"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="text-xs font-semibold">Longueur</label>
+                                    <x-forms.elements.range name="inp_" min="0" max="500" min-value="0" max-value="500" step="1" prefix="cm"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="text-xs font-semibold">Largeur</label>
+                                    <x-forms.elements.range name="inp_" min="0" max="500" min-value="0" max-value="500" step="1" prefix="cm"/>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
 
+                    <details>
+                        <summary class="pl-4 -ml-4">Places</summary>
+                        <div class="flex flex-col gap-2 pb-4">
+                            <div>
+                                @foreach ($facets['seats'] ?? [] as $key => $facet)
+                                    <x-forms.elements.checkbox
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
+                                        name="inp_traction"
+                                        :label="$facet['label'] ?? ''"
+                                        :value="$facet['value'] ?? ''"
+                                    />
+                                @endforeach
+                            </div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary class="pl-4 -ml-4">Portes</summary>
+                        <div class="flex flex-col gap-2 pb-4">
+                            <div>
+                                @foreach ($facets['doors'] ?? [] as $key => $facet)
+                                    <x-forms.elements.checkbox
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
+                                        name="inp_traction"
+                                        :label="$facet['label'] ?? ''"
+                                        :value="$facet['value'] ?? ''"
+                                    />
+                                @endforeach
+                            </div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary class="pl-4 -ml-4">Normes antipollution</summary>
+                        <div class="flex flex-col gap-2 pb-4">
+                            <div>
+                                @foreach ($facets['emissionsClass'] ?? [] as $key => $facet)
+                                    <x-forms.elements.checkbox
+                                        class="flex my-2 font-normal capitalize"
+                                        size="md"
+                                        name="inp_traction"
+                                        :label="$facet['label'] ?? ''"
+                                        :value="$facet['value'] ?? ''"
+                                    />
+                                @endforeach
                             </div>
                         </div>
                     </details>
