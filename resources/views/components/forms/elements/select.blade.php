@@ -6,7 +6,7 @@
     "multiple" => false,
 ])
 {{-- {{ $multiple ? '' : 'open = false;' }} --}}
-<div {{ $attributes->merge(['class' => 'h-11 border-gray-300 border-1 cursor-pointer relative select-none']) }} x-data="{
+<div {{ $attributes->merge(['class' => 'h-11 border-gray-300 border-1 cursor-pointer relative select-none text-sm font-normal']) }} x-data="{
          open: false,
          selectedLabels: [],
          change() {

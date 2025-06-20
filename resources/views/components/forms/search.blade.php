@@ -24,7 +24,7 @@
         </div>
 
         <div class="mt-4 md:w-full">
-            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg"></x-utils.button>
+            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" id="search"></x-utils.button>
         </div>
 
     </div>
@@ -32,6 +32,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+        document.querySelector('#search').addEventListener('click',()=>{
+            const params = new URLSearchParams({
+                price_min: document.querySelector('[name="inp_price_min"]')?.value,
+                price_max: document.querySelector('[name="inp_price_max"]')?.value,
+                bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
+                brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(',')
+            });
+            document.location.href=`{{ localized_route('pages.vehicles.search') }}${params.toString()}`;
+        })
+        
         window.api.motork.getMakes().then(function (makes) {
             const list = document.querySelector('#brands-select .select-list');
             if(list!=null){

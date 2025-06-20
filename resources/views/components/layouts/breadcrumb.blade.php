@@ -7,7 +7,7 @@
                     @if($key > 0)
                         <span class="text-[10px] icon icon-chevron-right font-extrabold"></span>
                     @endif
-                    <a href="{{ $item['url'] ?? '#' }}" class="text-sm hover:text-theme {{ $item['class'] ?? '' }}">{{ $item['label'] }}</a>
+                    <a href="{{ $item['url'] ?? '#' }}" class="text-sm hover:text-theme {{ $item['class'] ?? '' }}">{!! $item['label'] !!}</a>
                 @endforeach
             </nav>
         </div>

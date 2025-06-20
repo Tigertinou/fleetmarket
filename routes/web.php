@@ -9,9 +9,17 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en']], function
         return view('pages.home');
     })->name('pages.home');
 
-    Route::get('/search', function () {
-        return view('pages.search');
-    })->name('pages.search');
+    Route::get('/recherche', function () {
+        return view('pages.vehicles.search');
+    })->name('pages.vehicles.search');
+
+    Route::get('/compare', function () {
+        return view('pages.vehicles.compare');
+    })->name('pages.vehicles.compare');
+
+    Route::get('/detail', function () {
+        return view('pages.vehicles.detail');
+    })->name('pages.vehicles.detail');
 
     Route::get('/elements', function () {
         return view('pages.elements');

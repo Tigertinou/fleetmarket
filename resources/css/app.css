@@ -30,7 +30,7 @@ body {
 }
 
 .h1 {
-    @apply mb-4 text-2xl font-extrabold leading-6 md:text-3xl;
+    @apply mb-2 text-2xl font-extrabold leading-6 md:text-3xl;
 }
 
 /****** range-slider *****/

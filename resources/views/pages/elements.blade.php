@@ -1,14 +1,12 @@
 @php
 $breadcrumb = [
-    ['url' => localized_route('pages.home'), 'label' => 'Acceuil', 'class' => 'font-semibold text-black'],
+    ['url' => localized_route('pages.home'), 'label' => '<span class="icon icon-home font-thin text-xs" />', 'class' => 'font-semibold text-black'],
     ['label' => 'Elements']
 ]
 @endphp
 <x-layouts.app :title="'Elements'" :$breadcrumb>
 
-
-
-    <div class="max-w-screen-xl px-4 py-4 mx-auto md:py-6">
+    <x-utils.container>
 
         <h1 class="h1">Elements</h1>
         <p>All elements.</p>
@@ -124,6 +122,6 @@ $breadcrumb = [
             Box gray
         </x-utils.box>
 
-    </div>
+    </x-utils.container>
 
 </x-layouts.app>

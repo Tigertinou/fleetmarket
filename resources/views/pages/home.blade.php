@@ -1,18 +1,18 @@
 <x-layouts.app :title="'Accueil'">
 
-    <x-utils.container class="bg-black">
+    <x-utils.container class="bg-black py-4 md:py-6">
         <div class="mb-6 text-center text-white">
             <h1 class="h1">Trouvons ensemble la voiture de vos rêves</h1>
             <p>Comparez les options, les prix et les promotions en temps réel parmi plus de 500 modèles de véhicules</p>
         </div>
 
-        <div class="flex flex-col max-w-2xl px-6 py-6 mx-auto mt-2 bg-white rounded-xl">
+        <div class="flex flex-col max-w-2xl px-6 py-6 md:mx-auto mt-2 bg-white rounded-xl mx-2">
             <p class="mb-2 text-xs"><span class="inline-block mr-2 align-middle icon icon-search"></span><span>Recherchez votre voiture > configurez > comparez</span></p>
             <x-forms.search />
         </div>
     </x-utils.container>
 
-    <x-utils.container>
+    <x-utils.container class="py-4 md:py-6">
         <div class="text-center">
             <h2 class="h1">Quelle marque préférez-vous ?</h2>
             <p>Choisissez parmi les <span class="brands-count"></span> marques du marché belge</p>
@@ -21,7 +21,7 @@
     </x-utils.container>
 
 
-    <x-utils.container class="bg-gray-50">
+    <x-utils.container class="py-4 md:py-6 bg-gray-50">
         <div class="text-center">
             <h2 class="h1">Comment fonctionne Fleet<span class="text-theme">Market</span> ?</h2>
             <p class="italic">Découvrez-le en 3 étapes ...</p>
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(list!=null){
             makes.forEach(item => {
                 let el = document.createElement('a');
-                el.href = `{{ localized_route('pages.search') }}?inp_brands=${ item.id }`;
+                el.href = `{{ localized_route('pages.vehicles.search') }}?inp_brands=${ item.id }`;
                 el.setAttribute('class', 'bg-white flex items-center justify-center outline-1 outline-gray-200 p-4 cursor-pointer hover:bg-gray-50 ');
                 el.innerHTML = `<img src="${ item.logo }" class="w-20 md:w-24">`;
                 list.appendChild(el);
