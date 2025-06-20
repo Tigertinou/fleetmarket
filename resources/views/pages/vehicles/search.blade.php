@@ -21,7 +21,7 @@ $breadcrumb = [
                         <x-utils.label label="KIA" r-icon="icon-times" />
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2 text-xs md:text-sm md:justify-end">
+                    <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end">
                         <x-utils.button label="Recommandations" r-icon="icon-chevron-down" color="bordered" size="md" class="w-full md:w-auto md:order-2" @click="filtersOpen=true"></x-utils.button>
                         <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="w-full md:w-auto md:hidden md:order-3" @click="filtersOpen=true"></x-utils.button>
                         <div class="flex-1 w-full pt-2 md:order-1"><b class="font-bold">1000</b> véhicules trouvés</div>
