@@ -2,14 +2,14 @@
     "label" => null,
     "name" => null,
     "disabled" => false,
-    "size" => 'md',
+    "size" => 'lg',
     "color" => 'dark',
     "url" => "javascript:void(0);",
     "icon" => null,
     "rIcon" => null,
 ])
 @php
-$def_class = 'inline-block rounded-full hover:opacity-90 transition-all duration-200 ease-in-out';
+$def_class = 'inline-block rounded-full hover:opacity-90 transition-all duration-200 ease-in-out text-center';
 switch ($color) {
     case 'theme':
     case 'theme-2':
@@ -35,8 +35,11 @@ switch ($size) {
     case 'sm':
         $def_class .= " px-5 py-1.5 text-sm";
     break;
-    default:
+    case 'md':
         $def_class .= " px-6 py-2";
+    break;
+    default:
+        $def_class .= " px-6 py-3";
     break;
 }
 @endphp

@@ -21,15 +21,22 @@ class MotorKVehicleService
         $json = $response->json();
         $res = [];
         foreach ($json['response'] as $item) {
+            $logo = $item['makeLogo'] ?? '';
+            if(file_exists(public_path('/assets/images/brands/logo_' . $item['makeUrlCode'] .'.svg'))){
+                $logo = asset('/assets/images/brands/logo_' . $item['makeUrlCode'] .'.svg');
+            }
             $res[] = [
                 'id'   => $item['makeId'] ?? null,
                 'name' => $item['makeName'] ?? '',
                 'slug' => $item['makeUrlCode'] ?? '',
-                'logo' => $item['makeLogo'] ?? '',
+                'logo' => $logo,
             ];
+
         }
         return $res;
     }
+
+
 
 
     // Autres méthodes comme getModels, getSubmodels...

@@ -11,6 +11,7 @@ Route::get('/test', fn() => response()->json(['status' => 'OK']));
 
 Route::prefix('v1')->group(function () {
     Route::get('/makes', [VehicleController::class, 'listMakes']);
+    Route::get('/facets/{type}', [VehicleController::class, 'listFacets']);
     Route::get('/models/{make}', [VehicleController::class, 'listModels']);
     Route::get('/submodels/{model}', [VehicleController::class, 'listSubmodels']);
     Route::get('/versions/{submodel}', [VehicleController::class, 'listVersions']);

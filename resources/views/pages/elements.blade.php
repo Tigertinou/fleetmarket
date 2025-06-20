@@ -1,4 +1,4 @@
-@php 
+@php
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => 'Acceuil', 'class' => 'font-semibold text-black'],
     ['label' => 'Elements']
@@ -78,7 +78,7 @@ $breadcrumb = [
 
         <div class="mt-8"><b>Buttons</b></div>
 
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="flex flex-wrap items-center gap-2 mt-4">
             <x-utils.button label="Default"></x-utils.button>
             <x-utils.button label="Theme" color="theme"></x-utils.button>
             <x-utils.button label="Theme 2" color="theme-2"></x-utils.button>
@@ -87,7 +87,7 @@ $breadcrumb = [
             <x-utils.button label="Button sm" size="sm"></x-utils.button>
             <x-utils.button label="Button xs" size="xs"></x-utils.button>
         </div>
-        <div class="mt-2 flex flex-wrap gap-2">
+        <div class="flex flex-wrap items-center gap-2 mt-2">
             <x-utils.button label="Default (icon)" icon="icon-search"></x-utils.button>
             <x-utils.button label="Default (r-icon)" color="light" r-icon="icon-chevron-right"></x-utils.button>
             <x-utils.button label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
@@ -95,7 +95,7 @@ $breadcrumb = [
         </div>
 
         <div class="mt-8"><b>Label</b></div>
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="flex flex-wrap items-center gap-2 mt-4">
             <x-utils.label label="Small label"></x-utils.button>
             <x-utils.label label="Small label gray" color="gray"></x-utils.button>
         </div>
@@ -123,7 +123,7 @@ $breadcrumb = [
         <x-utils.box class="mt-2" color="gray">
             Box gray
         </x-utils.box>
-        
+
     </div>
 
 </x-layouts.app>
