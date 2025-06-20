@@ -25,6 +25,7 @@ class SyncFilterFacets extends Command
      */
     public function handle()
     {
-        //
+        app(\App\Services\FacetSyncService::class)->sync();
+        $this->info("Facets synchronized successfully.");
     }
 }

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Http;
 class FacetSyncService
 {
 
-    protected string $apiBase = config('motork.api_url');
-    protected string $apiKey = config('motork.api_key');
+    protected string $apiBase;
+    protected string $apiKey;
 
     protected array $facets = [
         'bodyType',
@@ -21,9 +21,15 @@ class FacetSyncService
         'traction',
     ];
 
+    public function __construct()
+    {
+        $this->apiBase = config('motork.api_url');
+        $this->apiKey = config('motork.api_key');
+    }
+
     public function sync()
     {
-        $response = Http::get("{$this->apiBase}{$this->apiKey}/car/models", [
+        $response = Http::get("{$this->apiBase}/{$this->apiKey}/car/models", [
             'facets' => implode(',', $this->facets),
             'rows' => 0
         ]);
@@ -32,19 +38,26 @@ class FacetSyncService
             throw new \Exception("API Facet fetch failed");
         }
 
-        $data = $response->json()['facetCounts'] ?? [];
+        $json = $response->json();
+        $data = $response['response']['facetResults'] ?? [];
 
-        foreach ($this->facets as $facet) {
-            foreach ($data[$facet] ?? [] as $value) {
-                FilterFacet::updateOrCreate(
-                    ['facet_type' => $facet, 'value' => $value],
-                    [
-                        'label_fr' => $value,
-                        'label_nl' => $this->translate($value, 'nl'),
-                        'label_en' => $this->translate($value, 'en'),
-                        'count' => $count ?? 0,
-                    ]
-                );
+        foreach ($data as $facet => $items) {
+            foreach ($items ?? [] as $item) {
+
+                $get = FilterFacet::firstOrNew([
+                    'facet_type' => $facet,
+                    'value' => $item['value'] ?? '',
+                ]);
+
+                if(!$get->exists) {
+                    $get->label_fr = $item['value'];
+                    $get->label_nl = $this->translate($item['value'], 'nl');
+                    $get->label_en = $this->translate($item['value'], 'en');
+                }
+
+                $get->count = $item['count'] ?? 0;
+                $get->save();
+
             }
         }
     }
