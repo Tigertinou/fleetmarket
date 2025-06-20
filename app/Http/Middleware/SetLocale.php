@@ -14,6 +14,12 @@ class SetLocale
         session(['locale' => $locale]);
         app()->setLocale($locale);
 
+        match ($locale) {
+            'fr' => stripos(PHP_OS_FAMILY, 'Windows') ? setlocale(LC_TIME, 'fr_FR.UTF-8') : setlocale(LC_TIME, 'french'),
+            'nl' => stripos(PHP_OS_FAMILY, 'Windows') ? setlocale(LC_TIME, 'nl_NL.UTF-8') : setlocale(LC_TIME, 'nld_nld'),
+            default => stripos(PHP_OS_FAMILY, 'Windows') ? setlocale(LC_TIME, 'en_US.UTF-8') : setlocale(LC_TIME, 'english'),
+        };
+
         return $next($request);
     }
 }

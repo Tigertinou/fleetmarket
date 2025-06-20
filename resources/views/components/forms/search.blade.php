@@ -39,9 +39,9 @@
                 bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
                 brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(',')
             });
-            document.location.href=`{{ localized_route('pages.vehicles.search') }}${params.toString()}`;
+            document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
         })
-        
+
         window.api.motork.getMakes().then(function (makes) {
             const list = document.querySelector('#brands-select .select-list');
             if(list!=null){
