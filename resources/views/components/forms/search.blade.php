@@ -3,7 +3,7 @@
     <div class="flex flex-col flex-wrap mx-auto md:flex-row">
 
         <div class="md:w-full">
-            <div class="text-sm font-extrabold">Votre budget</div>
+            <div class="text-sm font-extrabold">Budget</div>
             <x-forms.elements.range
                 name="inp_price"
                 min="0"
@@ -15,12 +15,12 @@
 
         <div class="mt-4 md:w-1/2">
             <div class="mb-2 text-sm font-extrabold">Carosseries</div>
-            <x-forms.elements.select id="bodytype-select" multiple :options="[]" name="inp_bodytype" placeholder="Type de carosserie ..."/>
+            <x-forms.elements.select id="bodytype-select" multiple :options="[]" name="inp_bodytype" placeholder="Tous les type de carosseries ..."/>
         </div>
 
         <div class="mt-4 md:pl-4 md:w-1/2">
             <div class="mb-2 text-sm font-extrabold">Marques</div>
-            <x-forms.elements.select id="brands-select" multiple :options="[]" name="inp_brands" placeholder="Marques ..."/>
+            <x-forms.elements.select id="brands-select" multiple :options="[]" name="inp_brands" placeholder="Toutes les marques ..."/>
         </div>
 
         <div class="mt-4 md:w-full">
