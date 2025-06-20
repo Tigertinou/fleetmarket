@@ -33,6 +33,28 @@ body {
     @apply mb-2 text-2xl font-extrabold leading-6 md:text-3xl;
 }
 
+.icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+details summary {
+    @apply relative flex items-center justify-between py-2 font-normal border-t border-gray-200 cursor-pointer select-none;
+}
+details summary::marker {
+    display:none;
+}
+details summary::after {
+    content: '\e03e';
+    font-family: 'fleetmarket';
+    float: right;
+    font-size: 1.6em;
+    transition: transform 0.2s;
+    font-weight: 200;
+}
+details[open] summary::after {
+    transform: rotate(180deg);
+}
 /****** range-slider *****/
 .range-slider {
     display: flex;
@@ -101,7 +123,7 @@ input[type="checkbox"] {
     -moz-appearance: none;
     appearance: none;
     display: inline-block;
-    padding: 3px;
+    padding: 2px;
     border: 1px solid #00000033;
     cursor: pointer;
     vertical-align: middle;

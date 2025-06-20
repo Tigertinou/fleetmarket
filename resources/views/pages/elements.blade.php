@@ -1,6 +1,6 @@
 @php
 $breadcrumb = [
-    ['url' => localized_route('pages.home'), 'label' => '<span class="icon icon-home font-thin text-xs" />', 'class' => 'font-semibold text-black'],
+    ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
     ['label' => 'Elements']
 ]
 @endphp
@@ -35,13 +35,13 @@ $breadcrumb = [
 
         <div class="mt-8"><b>Checkbox</b></div>
 
-        <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_simple" label="Simple checkbox"/>
+        <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_simple" label="Large checkbox" size="lg"/>
 
         <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_disabled" label="Disabled checkbox" disabled/>
 
         <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_checked" label="Checked checkbox" checked/>
 
-        <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_small" label="Small checkbox" size="sm"/>
+        <x-forms.elements.checkbox class="inline-block mt-4" name="inp_checkbox_small" label="Checkbox" />
 
         <div class="mt-8"><b>Radio</b></div>
 

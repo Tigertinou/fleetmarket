@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VehicleSearchController;
 
 Route::redirect('/', '/fr/');
 
@@ -9,9 +10,7 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en']], function
         return view('pages.home');
     })->name('pages.home');
 
-    Route::get('/recherche', function () {
-        return view('pages.vehicles.search');
-    })->name('pages.vehicles.search');
+    Route::get('/recherche',VehicleSearchController::class)->name('pages.vehicles.search');
 
     Route::get('/compare', function () {
         return view('pages.vehicles.compare');

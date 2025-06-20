@@ -44,12 +44,14 @@ switch ($size) {
 }
 @endphp
 <a href="{{ $url }}" {{ $attributes->merge(['class' => $def_class]) }}>
-    @if($icon ?? false)
-        <span class="icon {{ $icon }} inline-block align-middle mr-1 -ml-2"></span>
-    @endif
-    {!! $label !!}
-    @if($rIcon ?? false)
-        <span class="icon {{ $rIcon }} inline-block align-middle ml-1 -mr-2"></span>
-    @endif
+    <span class="flex items-center justify-beetween">
+        @if($icon ?? false)
+            <span class="icon {{ $icon }} inline-block align-middle mr-1 -ml-2"></span>
+        @endif
+        <span>{!! $label !!}</span>
+        @if($rIcon ?? false)
+            <span class="icon {{ $rIcon }} inline-block align-middle ml-1 -mr-2"></span>
+        @endif
+    </span>
 </a>
 
