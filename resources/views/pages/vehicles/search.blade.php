@@ -1,7 +1,7 @@
 @php
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
-    ['label' => 'Recherche', 'class' => 'text-gray-400']
+    ['label' => 'Recherche']
 ]
 @endphp
 <x-layouts.app :title="'Page'" :$breadcrumb>

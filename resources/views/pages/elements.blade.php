@@ -77,14 +77,23 @@ $breadcrumb = [
         <div class="mt-8"><b>Buttons</b></div>
 
         <div class="flex flex-wrap items-center gap-2 mt-4">
-            <x-utils.button label="Default"></x-utils.button>
+            <x-utils.button label="Button lg" size="lg"></x-utils.button>
+            <x-utils.button label="Button md (default)" size="md"></x-utils.button>
+            <x-utils.button label="Button sm" size="sm"></x-utils.button>
+            <x-utils.button label="Button xs" size="xs"></x-utils.button>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
             <x-utils.button label="Theme" color="theme"></x-utils.button>
             <x-utils.button label="Theme 2" color="theme-2"></x-utils.button>
             <x-utils.button label="Light" color="light"></x-utils.button>
             <x-utils.button label="Bordered" color="bordered"></x-utils.button>
             <x-utils.button label="Dark" color="black"></x-utils.button>
-            <x-utils.button label="Button sm" size="sm"></x-utils.button>
-            <x-utils.button label="Button xs" size="xs"></x-utils.button>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+            <x-utils.button label="Button icon lg" size="lg" icon="icon-search" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button label="Button icon md" size="md" icon="icon-search" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button label="Button icon sm" size="sm" icon="icon-search" r-icon="icon-chevron-right"></x-utils.button>
+            <x-utils.button label="Button icon xs" size="xs" icon="icon-search" r-icon="icon-chevron-right"></x-utils.button>
         </div>
         <div class="flex flex-wrap items-center gap-2 mt-2">
             <x-utils.button label="Default (icon)" icon="icon-search"></x-utils.button>

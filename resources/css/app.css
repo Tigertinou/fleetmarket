@@ -17,8 +17,8 @@
 
 @theme {
     /* --color-theme: oklch(0.78 0.20 253.57); */
-    --color-theme: #5fa6f6;
-    --color-theme-2: #1f62ee;
+    --color-theme: rgb(0, 88, 163);
+    --color-theme-2: rgb(38 127 203);
 }
 
 body {
