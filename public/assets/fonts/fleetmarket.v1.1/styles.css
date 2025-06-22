@@ -21,9 +21,7 @@ display: block;
   font-variant: normal !important;
   text-transform: none !important;
   speak: none;
-  /*line-height: 1em;*/
-  margin-bottom: -0.5em;
-  margin-top: -0.3em;
+  line-height: 1em;
   font-size: 1.4em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -38,11 +36,11 @@ display: block;
   font-variant: normal !important;
   text-transform: none !important;
   speak: none;
-  margin-bottom: -0.5em;
-  margin-top: -0.3em;
+  line-height: 1em;
   font-size: 1.4em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin-bottom: -1px;
 }
 
 .icon-home:before {
