@@ -24,7 +24,7 @@
         </div>
 
         <div class="mt-4 md:w-full">
-            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" id="search"></x-utils.button>
+            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" color="theme" id="search"></x-utils.button>
         </div>
 
     </div>
