@@ -31,6 +31,12 @@ $breadcrumb = [
                         <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalFound">0</b> véhicules trouvés</div>
                     </div>
 
+                    <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
+                        <div x-show="shown" class="fixed bottom-4 right-3 z-20" x-transition>
+                            <div class="rounded-full bg-black text-white icon icon-filter p-3 text-xl font-light shadow-lg" @click="filtersOpen=true"></div>
+                        </div>
+                    </div>
+
                     <div class="mt-4" id="search-results">
                         {{-- @include('partials.vehicles.search.results')--}}
                     </div>
@@ -48,9 +54,11 @@ $breadcrumb = [
                         
                 </div>
             </div>
+            
             <div class="fixed overflow-auto top-0 left-0 right-0 bottom-0 px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 @include('partials.vehicles.search.filters')
             </div>
+            
         </div>
     </div>
 
