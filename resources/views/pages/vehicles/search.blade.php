@@ -22,7 +22,6 @@ $breadcrumb = [
                         <x-utils.label label="KIA" r-icon="icon-times" />
                     </div>
 
-
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
                             <x-utils.button label="Recommandations" r-icon="icon-chevron-down" color="bordered" size="md" class="flex-1 md:w-auto" @click="suggestionsOpen=true"></x-utils.button>
@@ -49,7 +48,7 @@ $breadcrumb = [
                         
                 </div>
             </div>
-            <div class="fixed overflow-auto top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
+            <div class="fixed overflow-auto top-0 left-0 right-0 bottom-0 px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 @include('partials.vehicles.search.filters')
             </div>
         </div>
