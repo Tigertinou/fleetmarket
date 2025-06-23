@@ -29,5 +29,13 @@ class VehicleSearchController extends Controller
 
         return view('pages.vehicles.search', compact('facets','makes'));
     }
+
+    public function partialResult(Request $request, MotorKVehicleService $motorKService)
+    {
+        /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
+        $vehicles = $motorKService->search($filters ?? []);
+
+        return view('partials.vehicles.search.results', compact('vehicles'));
+    }
 }
 

@@ -23,4 +23,8 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en']], function
     Route::get('/elements', function () {
         return view('pages.elements');
     })->name('pages.elements');
+
+    Route::prefix('/partials')->group(function () {
+        Route::get('/vehicles/search/results', [VehicleSearchController::class, 'partialResult'])->name('vehicles.search.partial');
+    });
 });

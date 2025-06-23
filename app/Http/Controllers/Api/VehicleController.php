@@ -36,6 +36,20 @@ class VehicleController extends Controller
 
         return response()->json($facets);
     }
+
+    /*public function searchVehicles(array $filters): array
+    {
+        $query = http_build_query($filters);
+
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?" . $query);
+
+        if ($response->successful()) {
+            return $response->json()['submodels'] ?? [];
+        }
+
+        return [];
+    }*/
+
     // listMakes
     // listModels
     // listSubmodels
