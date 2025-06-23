@@ -101,6 +101,13 @@ $breadcrumb = [
             <x-utils.button label="Default (r-icon)" color="black" icon="icon-envelope" r-icon="icon-chevron-right" size="xs"></x-utils.button>
             <x-utils.button label="Label filtred" color="black" r-icon="icon-times" size="xs"></x-utils.button>
         </div>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+            <x-utils.button label="Button align none" icon="icon-search" r-icon="icon-chevron-right" class="w-full max-w-sm"></x-utils.button>
+            <x-utils.button label="Button align center" icon="icon-search" r-icon="icon-chevron-right" class="w-full max-w-sm" align="center"></x-utils.button>
+            <x-utils.button label="Button align right" icon="icon-search" r-icon="icon-chevron-right" class="w-full max-w-sm" align="right"></x-utils.button>
+            <x-utils.button label="Button align left" icon="icon-search" r-icon="icon-chevron-right" class="w-full max-w-sm" align="left"></x-utils.button>
+            
+        </div>
 
         <div class="mt-8"><b>Label</b></div>
         <div class="flex flex-wrap items-center gap-2 mt-4">

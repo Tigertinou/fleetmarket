@@ -7,6 +7,7 @@
     "url" => "javascript:void(0);",
     "icon" => null,
     "rIcon" => null,
+    "align" => ''
 ])
 @php
 $def_class = 'inline-block rounded-full hover:opacity-90 transition-all duration-200 ease-in-out text-center';
@@ -62,14 +63,14 @@ switch ($size) {
 }
 @endphp
 <a href="{{ $url }}" {{ $attributes->merge(['class' => $def_class]) }}>
-    <span class="flex items-center justify-center">
+    <div class="flex items-center justify-center">
         @if($icon ?? false)
-            <span class="icon {{ $icon }} inline-block align-middle {{ $def_class_icon }}"></span>
+            <div class="align-middle {{ $def_class_icon }}"><i class="icon {{ $icon }} inline-block"></i></div>
         @endif
-        <span>{!! $label !!}</span>
+        <div class="{{ $align == 'center' ? 'flex-1' : ''}} {{ $align == 'left' ? 'flex-1 text-left' : ''}} {{ $align == 'right' ? 'flex-1 text-right' : ''}}">{!! $label !!}</div>
         @if($rIcon ?? false)
-            <span class="icon {{ $rIcon }} inline-block align-middle {{ $def_class_r_icon }}"></span>
+            <div class="align-middle {{ $def_class_r_icon }}"><i class="icon {{ $rIcon }} inline-block"></i></div>
         @endif
-    </span>
+    </div>
 </a>
 

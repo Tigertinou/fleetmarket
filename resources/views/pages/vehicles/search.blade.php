@@ -84,7 +84,6 @@ $breadcrumb = [
                                 @foreach ($facets['fuelType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_fuelType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -101,7 +100,6 @@ $breadcrumb = [
                                 @foreach ($makes as $make)
                                     <x-forms.elements.checkbox
                                         class="flex items-center font-bold uppercase"
-                                        size="md"
                                         name="inp_make"
                                         :value="$make['id'] ?? ''"
                                     >
@@ -119,7 +117,6 @@ $breadcrumb = [
                                 @foreach ($facets['bodyType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_bodyType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -136,7 +133,6 @@ $breadcrumb = [
                                 @foreach ($facets['traction'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -173,7 +169,6 @@ $breadcrumb = [
                                 @foreach ($facets['seats'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -190,7 +185,6 @@ $breadcrumb = [
                                 @foreach ($facets['doors'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -207,7 +201,6 @@ $breadcrumb = [
                                 @foreach ($facets['emissionsClass'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
                                         class="flex my-2 font-normal capitalize"
-                                        size="md"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -219,8 +212,8 @@ $breadcrumb = [
 
 
                 </div>
-                <div class="sticky bottom-0 py-4">
-                    <x-utils.button label="Recherche" icon="icon-search" color="theme" size="lg" class="w-full" @click="filtersOpen=true"></x-utils.button>
+                <div class="sticky bottom-0 pt-2 pb-4 z-10 bg-white -m-4 p-4">
+                    <x-utils.button label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
                 </div>
             </div>
         </div>
