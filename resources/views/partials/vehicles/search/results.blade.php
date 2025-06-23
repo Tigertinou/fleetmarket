@@ -4,9 +4,11 @@
     @foreach ( $vehicles['data'] as $key => $vehicle)
         <div class="flex flex-col md:flex-row bg-white shadow-lg md:border-t md:border-r border-gray-100">
             <div class="md:max-w-xs"><img src="{{ $vehicle['model']['covers'][0]['cover500'] }}" class="aspect-3/2 object-cover w-full"></div>
-            <div class="flex flex-1 flex-col p-4 gap-4">
+            <div class="flex flex-1 flex-col p-4 gap-2">
                 <div class="flex-1">
-                    <div class="text-xl font-bold"><h3>{{ $vehicle['model']['modelName'] }}</h3></div>
+                    <div class="text-2xl font-bold">
+                        <h3>{{ $vehicle['model']['makeName'] }} <b class="font-normal">{{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}</b></h3>
+                    </div>
                     <p class="text-xs leading-5">
                         @if(isset($vehicle['fuelTypeLabel']))
                             <span class="mr-2 pr-2 border-r last:border-r-0 border-gray-400">
@@ -47,9 +49,16 @@
                         @endif
                     </p>
                 </div>
-                <div class="flex justify-end flex-col md:flex-row gap-2">
-                    <x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>
-                    <x-utils.button label="En savoir plus" size="md" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1"></x-utils.button>
+                @if(isset($vehicle['summary']['minPrice']))
+                    <div class="flex items-center">
+                        <div class="flex-1 text-xs">Prix à partir de</div>
+                        <div class="text-xs"><span class="font-extrabold text-3xl md:text-2xl mr-1">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
+                    </div>
+                @endif
+                <div class="flex md:justify-end flex-col md:flex-row gap-2 items-center border-t border-gray-100 pt-4">
+                    <div class="md:flex-1"><a href="" class="text-xs font-semibold underline">Comparer avec un autre vehicule</a></div>
+                    {{--<x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>--}}
+                    <x-utils.button label="En savoir plus" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none"></x-utils.button>
                 </div>
             </div>
         </div>

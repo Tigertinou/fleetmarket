@@ -6,7 +6,7 @@ $breadcrumb = [
 @endphp
 <x-layouts.app :title="'Page'" :$breadcrumb>
 
-    <div class="max-w-screen-xl mx-auto" x-data="{
+    <div id="main" class="max-w-screen-xl mx-auto" x-data="{
         filtersOpen: false,
         suggestionsOpen: false,
         init() {}
@@ -29,7 +29,7 @@ $breadcrumb = [
                             <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
                         </div>
 
-                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold">1000</b> véhicules trouvés</div>
+                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalFound">0</b> véhicules trouvés</div>
                     </div>
 
                     <div class="mt-4" id="search-results">
@@ -49,7 +49,7 @@ $breadcrumb = [
                         
                 </div>
             </div>
-            <div class="absolute top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
+            <div class="fixed overflow-auto top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 @include('partials.vehicles.search.filters')
             </div>
         </div>
@@ -63,7 +63,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams({ fuel: 'diesel', body: 'suv' });
 
         fetch('/{{ app()->getLocale() }}/partials/vehicles/search/results?' + params.toString())
-        .then(response => response.text())
+        .then(response => {
+            const total = response.headers.get('X-Total-Count');
+            if (total !== null) {
+                document.querySelectorAll('[data-var="totalFound"]').forEach( (el)=>{
+                    el.innerHTML = total;
+                })
+            }
+            return response.text();
+        })
         .then(html => {
             document.getElementById('search-results').innerHTML = html;
         });

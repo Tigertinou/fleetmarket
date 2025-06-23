@@ -35,7 +35,9 @@ class VehicleSearchController extends Controller
         /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
         $vehicles = $motorKService->search($filters ?? []);
 
-        return view('partials.vehicles.search.results', compact('vehicles'));
+        return response(view('partials.vehicles.search.results', compact('vehicles')))
+            ->header('X-Total-Count', $vehicles['total']);
+
     }
 }
 

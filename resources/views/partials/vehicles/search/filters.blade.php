@@ -1,4 +1,4 @@
-<div>
+<div class="pb-8">
     <div class="flex items-center justify-between py-4 md:hidden">
         <div class="text-2xl">Filtres</div>
         <a href="javascript:void(0);" @click="filtersOpen=!filtersOpen"><i class="text-2xl icon icon-times"></i></a>
@@ -165,8 +165,6 @@
             </div>
         </div>
     </details>
-
-
 </div>
 <div class="sticky bottom-0 pt-2 pb-4 z-10 bg-white -m-4 p-4">
     <x-utils.button label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
