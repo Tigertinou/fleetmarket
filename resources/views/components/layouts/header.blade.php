@@ -22,7 +22,7 @@ x-data="{
     <div class="relative flex items-center max-w-screen-xl px-4 mx-auto min-h-18 md:min-h-24 whitespace-nowrap">
         {{-- Logo --}}
         <div class="items-center justify-center flex-1 order-1 md:order-1 md:flex-none md:mr-4" x-show="!globalSearchOpen">
-            <a href="{{ localized_route('pages.home') }}" class="block">
+            <a href="{{ localized_route('pages.home') }}" class="inline-block">
                 <img src="{{ asset('assets/images/logo.svg') }}" alt="FleetMarket logo" class="h-8 md:my-2 md:mr-4 md:h-10">
             </a>
         </div>
@@ -37,7 +37,7 @@ x-data="{
         </nav>
         <div id="global-search" class="flex self-stretch flex-1" x-show="globalSearchOpen" x-cloak>
             <div class="self-center pr-2 text-lg text-gray-400 icon icon-search"></div>
-            <input x-ref="inpGlobalSearch" class="self-stretch flex-1 border-0 outline-0 text-sm" name="inp_global_search" placeholder="Recherche par marques, modèle ou mot-clé" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" x-model="globalSearchQuery">
+            <input x-ref="inpGlobalSearch" class="self-stretch flex-1 border-0 outline-0 text-sm" name="inp_global_search" placeholder="Recherche par marques, modèle ou mot-clé" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         <div class="order-2 mx-2 md:order-3">
             <a href="javascript:void(0);" @Click="toggleGlobalSearch" class="hover:text-theme"><span class="text-lg icon md:text-xl" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>

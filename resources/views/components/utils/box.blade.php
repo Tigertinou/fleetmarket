@@ -2,7 +2,7 @@
     "color" => 'default',
 ])
 @php
-$def_class = 'block rounded-xl px-6 py-4';
+$def_class = 'box block rounded-xl px-6 py-4';
 switch ($color) {
     case 'default':
         $def_class .= " border-2 border-gray-200";

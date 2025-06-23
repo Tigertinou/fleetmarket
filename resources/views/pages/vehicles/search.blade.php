@@ -8,6 +8,7 @@ $breadcrumb = [
 
     <div class="max-w-screen-xl mx-auto" x-data="{
         filtersOpen: false,
+        suggestionsOpen: false,
         init() {}
         }">
         <div class="flex gap-4 px-4">
@@ -36,9 +37,14 @@ $breadcrumb = [
                         <div></div>
 
 
-                        Results...</div>
+                        Results...
+                    </div>
 
+                    
 
+                    <div class="modal" x-show="suggestionsOpen" x-cloak>
+                        modal
+                    </div>
                 </div>
             </div>
             <div class="absolute top-0 left-0 right-0 h-screen px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
@@ -83,7 +89,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['fuelType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_fuelType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -116,7 +122,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['bodyType'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_bodyType"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -132,7 +138,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['traction'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -168,7 +174,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['seats'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -184,7 +190,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['doors'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"
@@ -200,7 +206,7 @@ $breadcrumb = [
                             <div>
                                 @foreach ($facets['emissionsClass'] ?? [] as $key => $facet)
                                     <x-forms.elements.checkbox
-                                        class="flex my-2 font-normal capitalize"
+                                        class="flex my-3 font-normal capitalize"
                                         name="inp_traction"
                                         :label="$facet['label'] ?? ''"
                                         :value="$facet['value'] ?? ''"

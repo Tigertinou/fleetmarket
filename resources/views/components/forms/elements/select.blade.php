@@ -22,7 +22,7 @@
         @foreach ($options as $key => $option)
             <div class="px-3 border-b border-gray-100 active:bg-gray-50 hover:bg-gray-50">
                 @if($multiple)
-                    <x-forms.elements.checkbox name="{{ $name }}" value="{{ $option['value'] }}" :label="$option['name']" @change="change" class="flex" :checked="is_array($values) && in_array($option['value'], $values)" />
+                    <x-forms.elements.checkbox name="{{ $name }}" value="{{ $option['value'] }}" :label="$option['name']" @change="change" class="flex py-2" :checked="is_array($values) && in_array($option['value'], $values)" size="lg" />
                 @else
                     <input type="radio" style="display:none!important;" id="id-{{ $name }}-{{ $option['value'] }}" name="{{ $name }}" value="{{ $option['value'] }}" data-label="{{ html_entity_decode(strip_tags($option['name'])) }}" @if($values == $option['value']) checked @endif @change="change">
                     <label class="inline-block w-full py-2 cursor-pointer select-none" for="id-{{ $name }}-{{ $option['value'] }}">{!! $option['name'] !!}</label>
