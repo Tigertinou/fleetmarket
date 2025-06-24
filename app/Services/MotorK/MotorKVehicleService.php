@@ -38,7 +38,43 @@ class MotorKVehicleService
 
     public function search(array $filters): array
     {
-        $query = http_build_query($filters);
+        $queryParams = [];
+
+        $q = [];
+
+        foreach ($filters as $key => $filter) {
+            $type = $filter['type'];
+            $values = collect($filter['values'])->pluck('code');
+            switch ($type){
+                case 'brands':
+                    $q[] = '(' . $values->map(fn($code) => "makeUrlCode:$code")->implode(' OR ') . ')';
+                    break;
+                case 'fuelType':
+                case 'bodyType':
+                case 'traction':
+                case 'seats':
+                case 'doors':
+                case 'emissionsClass':
+                case 'gearboxType':
+                    //$value = $filter['values'][0]['value'] ?? '';
+                    break;
+                case 'price_min':
+                    $q[] = "maxPrice:[" . ($filter['values'][0]['code'] ?? 0) . " TO *]";
+                break;
+                case 'price_max':
+                    $q[] = "minPrice:[* TO " . ($filter['values'][0]['code'] ?? 0) . "]";
+                    //$value = ['min' => $filter['values'][0]['value'] ?? 0, 'max' => $filter['values'][1]['value'] ?? 100000];
+                    break;
+                default:
+                    continue 2; // Skip unknown filter types
+
+            }
+        }
+
+        $queryParams['q'] = implode(' AND ', $q);
+        $queryParams['rows'] = 20;
+
+        $query = http_build_query($queryParams);
 
         /*
         Each parameter could be passed via the “q” parameter in query string by this way:
@@ -57,6 +93,7 @@ class MotorKVehicleService
         “facets=$param” - Choose between params you want to return as facet.
 
         */
+        /* dd($query); */
 
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?" . $query);
 
@@ -64,6 +101,8 @@ class MotorKVehicleService
             $json = $response->json();
             $items = $json['response']['searchResults']['models'];
             $res = [
+                'query' => $queryParams['q'] ?? '',
+                'queryParams' => $queryParams,
                 'filters' => $filters,
                 'total' => $json['response']['numResultFound'] ?? count($items),
                 'data' => []
@@ -79,9 +118,15 @@ class MotorKVehicleService
             }
 
             return $res;
+        } else {
+            return [
+                'query' => $query,
+                'filters' => $filters,
+                'total' => 0,
+                'data' => []
+            ];
         }
 
-        return [];
     }
 
 

@@ -29,14 +29,32 @@ class VehicleSearchController extends Controller
 
         $makes = $motorK->getMakes();
 
-        $q = $request->query();
+        $filters = $this->parseQueryFilters($request->query());
+
+        return view('pages.vehicles.search', compact('facets','makes','filters'));
+    }
+
+    public function partialResult(Request $request, MotorKVehicleService $motorKService)
+    {
+        /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
+        $filters = $this->parseQueryFilters($request->query());
+
+        $vehicles = $motorKService->search($filters ?? []);
+
+        return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
+            ->header('X-Total-Count', $vehicles['total']);
+
+    }
+
+    public function parseQueryFilters(array $query): array
+    {
         $filters = [];
         foreach (FilterEnum::cases() as $facet_type) {
-            if(isset($q[$facet_type->value])) {
+            if(isset($query[$facet_type->value])) {
                 $f = [
-                    'facet_type' => $facet_type->value,
+                    'type' => $facet_type->value,
                     'label' => $facet_type->label( app()->getLocale() ),
-                    'values' => $facet_type->getValues(explode(',',$q[$facet_type->value])),
+                    'values' => $facet_type->getValues(explode(',',$query[$facet_type->value])),
                 ];
                 switch ($facet_type) {
                     case FilterEnum::Brands:
@@ -68,21 +86,7 @@ class VehicleSearchController extends Controller
 
             }
         }
-
-
-        return view('pages.vehicles.search', compact('facets','makes','filters'));
-    }
-
-    public function partialResult(Request $request, MotorKVehicleService $motorKService)
-    {
-        /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
-        $filters = $request->query();
-        $vehicles = $motorKService->search($filters ?? []);
-
-
-        return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
-            ->header('X-Total-Count', $vehicles['total']);
-
+        return $filters;
     }
 }
 

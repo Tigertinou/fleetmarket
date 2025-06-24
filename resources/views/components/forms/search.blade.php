@@ -24,7 +24,7 @@
         </div>
 
         <div class="mt-4 md:w-full">
-            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" color="theme" id="search"></x-utils.button>
+            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" color="theme" id="run-search"></x-utils.button>
         </div>
 
     </div>
@@ -32,7 +32,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        document.querySelector('#search').addEventListener('click',()=>{
+        document.querySelector('#run-search').addEventListener('click',()=>{
             const params = new URLSearchParams({
                 price_min: document.querySelector('[name="inp_price_min"]')?.value,
                 price_max: document.querySelector('[name="inp_price_max"]')?.value,

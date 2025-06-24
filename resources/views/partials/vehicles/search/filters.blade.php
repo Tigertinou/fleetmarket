@@ -167,5 +167,5 @@
     </details>
 </div>
 <div class="sticky bottom-0 z-10 p-4 pt-2 pb-4 -m-4 bg-white">
-    <x-utils.button label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
+    <x-utils.button id="run-filter" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
 </div>

@@ -16,21 +16,23 @@ $breadcrumb = [
                 <div class="pt-6">
                     <h1 class="h1">Les offres du mois</h1>
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
-
-                    <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
-                        @foreach($filters as $key => $filter)
-                            @foreach ($filter['values'] as $value)
-                                <x-utils.label r-icon="icon-times" title="{{ $filter['label']}}" class="cursor-pointer">
-                                    {{-- {{ $filter['label']}}</b> :  --}}{{ $value['label'] }}
-                                </x-utils.label>
+                    
+                    @if(count($filters) > 0)
+                        <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y empty:hidden">
+                            @foreach($filters as $key => $filter)
+                                @foreach ($filter['values'] as $value)
+                                    <x-utils.label r-icon="icon-times" title="{{ $filter['label']}}" class="cursor-pointer" onclick="window.removeParams('{{ $filter['type'] }}','{{ $value['code'] }}');this.remove();">
+                                        {{-- {{ $filter['label']}}</b> :  --}}{{ $value['label'] }}
+                                    </x-utils.label>
+                                @endforeach
                             @endforeach
-                            {{--
-                            <x-utils.label r-icon="icon-times">
-                                <b>{{ $filter['label']}}</b> : {{ collect($filter['values'])->pluck('label')->implode(', ')}}
-                            </x-utils.label>
-                            --}}
-                        @endforeach
-                    </div>
+                        </div>
+                        {{--
+                        <x-utils.label r-icon="icon-times">
+                            <b>{{ $filter['label']}}</b> : {{ collect($filter['values'])->pluck('label')->implode(', ')}}
+                        </x-utils.label>
+                        --}}
+                    @endif
 
                     {{-- <pre>{{ json_encode($filters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
@@ -67,7 +69,7 @@ $breadcrumb = [
                 </div>
             </div>
 
-            <div class="fixed top-0 bottom-0 left-0 right-0 px-4 overflow-auto bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
+            <div class="fixed top-0 bottom-0 left-0 right-0 px-4 overflow-auto bg-white border-l border-gray-200 md:overflow-visible z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 @include('partials.vehicles.search.filters')
             </div>
 
@@ -76,26 +78,67 @@ $breadcrumb = [
 
 </x-layouts.app>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    function loadSearchResults() {
-        const params = new URLSearchParams({ fuel: 'diesel', body: 'suv' });
-
-        fetch('/{{ app()->getLocale() }}/partials/vehicles/search/results?' + params.toString())
-        .then(response => {
-            const total = response.headers.get('X-Total-Count');
-            if (total !== null) {
-                document.querySelectorAll('[data-var="totalFound"]').forEach( (el)=>{
-                    el.innerHTML = total;
-                })
+window.removeParams = function (type,code) {
+    const params = new URLSearchParams(window.location.search);
+    params.forEach((value, key) => {
+        if (key==type) {
+            value = value.split(',').filter(item => item !== code).join(',');
+            if (value) {
+                params.set(key, value);
+            } else {
+                params.delete(key);
             }
-            return response.text();
-        })
-        .then(html => {
-            document.getElementById('search-results').innerHTML = html;
+        }
+    });
+    /*
+    window.loadSearchResults(params.toString());
+    history.pushState({}, '', window.location.pathname + '?' + params.toString());*/
+    document.location.href = `{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
+}
+
+window.loadSearchResults = function(params = window.location.search) {
+    params = new URLSearchParams(params);
+    fetch('/{{ app()->getLocale() }}/partials/vehicles/search/results?' + params.toString())
+    .then(response => {
+        const total = response.headers.get('X-Total-Count');
+        if (total !== null) {
+            document.querySelectorAll('[data-var="totalFound"]').forEach( (el)=>{
+                el.innerHTML = total;
+            })
+        }
+        return response.text();
+    })
+    .then(html => {
+        document.getElementById('search-results').innerHTML = html;
+    });
+}
+
+window.reloadFilters = function(){
+    const params = new URLSearchParams(window.location.search);
+    params.forEach((value, key) => {
+        document.querySelectorAll(`[name="inp_${key}"]`).forEach((el) => {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+                el.checked = value.split(',').includes(el.value);
+            } else {
+                el.value = value;
+            }
         });
-    }
-    loadSearchResults();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    window.loadSearchResults();
+    window.reloadFilters();
+
+    document.querySelector('#run-filter').addEventListener('click',()=>{
+        const params = new URLSearchParams({
+            price_min: document.querySelector('[name="inp_price_min"]')?.value,
+            price_max: document.querySelector('[name="inp_price_max"]')?.value,
+            bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
+            brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(',')
+        });
+        document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
+    })
     /*
     window.api.motork.getMakes().then(function (makes) {
         const list = document.querySelector('#brands-grid');

@@ -37,12 +37,28 @@ export default class RangeSlider {
         this.inputFrom.type = 'hidden';
         this.inputFrom.name = `${el.dataset.name}_min`;
         this.inputFrom.value = this.minValue;
+        this.inputFrom.addEventListener('change', () => {
+            if(this.inputFrom.value == this.from.value) {
+                return;
+            }
+            this.from.value = this.inputFrom.value;
+            this.fillSlider();
+            this.change();
+        });
         this.slider.appendChild(this.inputFrom);
 
         this.inputTo = document.createElement('input');
         this.inputTo.type = 'hidden';
         this.inputTo.name = `${el.dataset.name}_max`;
         this.inputTo.value = this.maxValue;
+        this.inputTo.addEventListener('change', () => {
+            if(this.inputTo.value == this.to.value) {
+                return;
+            }
+            this.to.value = this.inputTo.value;
+            this.fillSlider();
+            this.change();
+        });
         this.slider.appendChild(this.inputTo);
 
         // Initial fill

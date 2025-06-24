@@ -23,7 +23,8 @@ class VehicleController extends Controller
             ->get()
             ->map(function ($item) {
                 return [
-                    'value' => $item->code,
+                    'code' => $item->code,
+                    'value' => $item->value,
                     'label' => [
                         'en' => $item->label_en,
                         'fr' => $item->label_fr,
