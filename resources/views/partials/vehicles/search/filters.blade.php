@@ -4,7 +4,7 @@
         <a href="javascript:void(0);" @click="filtersOpen=!filtersOpen"><i class="text-2xl icon icon-times"></i></a>
     </div>
     <div class="flex justify-end my-4">
-        <a href="" class="text-xs font-semibold underline">Supprimer tous les filtres <i class="icon icon-times"></i></a>
+        <a href="?" class="text-xs font-semibold underline">Supprimer tous les filtres <i class="icon icon-times"></i></a>
     </div>
     <details open>
         <summary class="pl-4 -ml-4">Prix</summary>
@@ -125,7 +125,7 @@
                 @foreach ($facets['seats'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
                         class="flex my-3 font-normal capitalize"
-                        name="inp_traction"
+                        name="inp_seats"
                         :label="$facet['label'] ?? ''"
                         :value="$facet['value'] ?? ''"
                     />
@@ -141,7 +141,7 @@
                 @foreach ($facets['doors'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
                         class="flex my-3 font-normal capitalize"
-                        name="inp_traction"
+                        name="inp_doors"
                         :label="$facet['label'] ?? ''"
                         :value="$facet['value'] ?? ''"
                     />
@@ -157,7 +157,7 @@
                 @foreach ($facets['emissionsClass'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
                         class="flex my-3 font-normal capitalize"
-                        name="inp_traction"
+                        name="inp_co2"
                         :label="$facet['label'] ?? ''"
                         :value="$facet['value'] ?? ''"
                     />
@@ -167,5 +167,5 @@
     </details>
 </div>
 <div class="sticky bottom-0 z-10 p-4 pt-2 pb-4 -m-4 bg-white">
-    <x-utils.button id="run-filter" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>{{-- animate-pulse --}}
+    <x-utils.button onclick="window.runSearch();" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>{{-- animate-pulse --}}
 </div>

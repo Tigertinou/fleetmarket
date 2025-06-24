@@ -18,7 +18,7 @@ $breadcrumb = [
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
                     
                     @if(count($filters) > 0)
-                        <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y empty:hidden">
+                        <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
                             @foreach($filters as $key => $filter)
                                 @foreach ($filter['values'] as $value)
                                     <x-utils.label r-icon="icon-times" title="{{ $filter['label']}}" class="cursor-pointer" onclick="window.removeParams('{{ $filter['type'] }}','{{ $value['code'] }}');this.remove();">
@@ -32,13 +32,17 @@ $breadcrumb = [
                             <b>{{ $filter['label']}}</b> : {{ collect($filter['values'])->pluck('label')->implode(', ')}}
                         </x-utils.label>
                         --}}
+                    @else
+                        <div class="mt-4 mb-4 border-b border-gray-200"></div>
                     @endif
 
                     {{-- <pre>{{ json_encode($filters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
-                            <x-utils.button label="Recommandations" r-icon="icon-chevron-down" color="bordered" size="md" class="flex-1 md:w-auto" @click="suggestionsOpen=true"></x-utils.button>
+                            <x-utils.button r-icon="icon-chevron-down" color="bordered" size="md" class="flex-1 md:w-auto whitespace-nowrap" @click="suggestionsOpen=true">
+                                <span id="id-sort-label">Recommandations</span>
+                            </x-utils.button>
                             <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
                         </div>
 
@@ -57,8 +61,8 @@ $breadcrumb = [
 
                     <x-layouts.modal title="Recommandations" ref="suggestions">
                         <div class="flex flex-col">
-                            <a href="" class="py-3 border-b border-gray-100">Nos recommandations</a>
-                            <a href="" class="py-3 border-b border-gray-100">Meilleurs ventes</a>
+                            <a href="javascript:void(0);" onclick="window.sortSearchResults('');" class="py-3 border-b border-gray-100">Nos recommandations</a>
+                            <a href="javascript:void(0);" onclick="window.sortSearchResults('price');" class="py-3 border-b border-gray-100">Meilleurs ventes</a>
                             <a href="" class="py-3 border-b border-gray-100">Du plus économique au plus cher</a>
                             <a href="" class="py-3 border-b border-gray-100">Du plus cher au plus économique</a>
                             <a href="" class="py-3 border-b border-gray-100">De A-Z</a>
@@ -78,6 +82,8 @@ $breadcrumb = [
 
 </x-layouts.app>
 <script>
+window.searchParams = window.location.search || '';
+
 window.removeParams = function (type,code) {
     const params = new URLSearchParams(window.location.search);
     params.forEach((value, key) => {
@@ -90,10 +96,14 @@ window.removeParams = function (type,code) {
             }
         }
     });
-    /*
-    window.loadSearchResults(params.toString());
-    history.pushState({}, '', window.location.pathname + '?' + params.toString());*/
     document.location.href = `{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
+}
+
+window.sortSearchResults = function (sort) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('sort', sort);
+    window.searchParams = params.toString();
+    window.runSearch();
 }
 
 window.loadSearchResults = function(params = window.location.search) {
@@ -113,54 +123,67 @@ window.loadSearchResults = function(params = window.location.search) {
     });
 }
 
-window.reloadFilters = function(){
+window.populateSearch = function(){
     const params = new URLSearchParams(window.location.search);
     params.forEach((value, key) => {
-        document.querySelectorAll(`[name="inp_${key}"]`).forEach((el) => {
-            if (el.type === 'checkbox' || el.type === 'radio') {
-                el.checked = value.split(',').includes(el.value);
-            } else {
-                el.value = value;
-            }
-            if(el.isRangeSliderInput) {
-                el.updateRangeSlider();
-            }
-            el.closest('details')?.setAttribute('open', 'open');
-        });
+        switch (key){
+            case 'sort':
+                switch (value) {
+                    case 'price':
+                        document.querySelector('#id-sort-label').innerText = 'Meilleur ventes';
+                    break;
+                    default:
+                        document.querySelector('#id-sort-label').innerText = 'Recommandations';
+                    break;
+                }
+            break;
+            case 'page':
+                
+            break;
+            default :
+                if (!value || value.trim() == '') {
+                    return;
+                }
+                document.querySelectorAll(`[name="inp_${key}"]`).forEach((el) => {
+                    if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = value.split(',').includes(el.value);
+                    } else {
+                        el.value = value;
+                    }
+                    if(el.isRangeSliderInput) {
+                        el.updateRangeSlider();
+                    }
+                    el.closest('details')?.setAttribute('open', 'open');
+                });
+            break;
+        }
     });
+}
+
+window.runSearch = function(){
+    const params = new URLSearchParams(window.searchParams || document.location.search);
+    params.delete('page'); // Remove page parameter to reset pagination
+    params.set('price_min', document.querySelector('[name="inp_price_min"]')?.value || '');
+    params.set('price_max', document.querySelector('[name="inp_price_max"]')?.value || '');
+    params.set('bodytype', [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','));
+    params.set('brands', [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value ).join(','));
+    params.set('traction', [...document.querySelectorAll('[name="inp_traction"]:checked')].map(input => input.value).join(','));
+    params.set('fueltype', [...document.querySelectorAll('[name="inp_fueltype"]:checked')].map(input => input.value).join(','));
+    params.set('gearbox', [...document.querySelectorAll('[name="inp_gearbox"]:checked')].map(input => input.value).join(','));
+    params.set('doors', document.querySelector('[name="inp_doors"]:checked')?.value || '');
+    params.set('seats', document.querySelector('[name="inp_seats"]:checked')?.value || '');
+    params.set('traction', document.querySelector('[name="inp_traction"]:checked')?.value || '');
+    params.set('limit', document.querySelector('[name="inp_limit"]')?.value || 20);
+    for (const [key, value] of params.entries()) {
+        if (!value || value.trim() == '') {
+            params.delete(key);
+        }
+    }
+    document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     window.loadSearchResults();
-    window.reloadFilters();
-
-    document.querySelector('#run-filter').addEventListener('click',()=>{
-        const params = new URLSearchParams({
-            price_min: document.querySelector('[name="inp_price_min"]')?.value,
-            price_max: document.querySelector('[name="inp_price_max"]')?.value,
-            bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
-            brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(','),
-            traction : [...document.querySelectorAll('[name="inp_traction"]:checked')].map(input => input.value).join(','),
-            fueltype : [...document.querySelectorAll('[name="inp_fueltype"]:checked')].map(input => input.value).join(','),
-            gearbox : [...document.querySelectorAll('[name="inp_gearbox"]:checked')].map(input => input.value).join(',')
-        });
-        document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
-    })
-    /*
-    window.api.motork.getMakes().then(function (makes) {
-        const list = document.querySelector('#brands-grid');
-        if(list!=null){
-            makes.forEach(item => {
-                let el = document.createElement('a');
-                el.href = `{{ localized_route('pages.vehicles.search') }}?inp_brands=${ item.id }`;
-                el.setAttribute('class', 'bg-white flex items-center justify-center outline-1 outline-gray-200 p-4 cursor-pointer hover:bg-gray-50 ');
-                el.innerHTML = `<img src="${ item.logo }" class="w-20 md:w-24">`;
-                list.appendChild(el);
-            });
-            document.querySelector('.brands-count').textContent = makes.length;
-        }
-    }).catch(function (error) {
-        console.error('Error fetching makes:', error);
-    });*/
+    window.populateSearch();
 });
 </script>

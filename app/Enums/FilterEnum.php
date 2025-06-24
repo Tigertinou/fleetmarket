@@ -12,6 +12,9 @@ enum FilterEnum: string
     case FuelType  = 'fueltype';
     case BodyType  = 'bodytype';
     case Gearbox   = 'gearbox';
+    case Doors   = 'doors';
+    case Seats   = 'seats';
+    case Traction = 'traction';
     case PriceMin  = 'price_min';
     case PriceMax  = 'price_max';
 
@@ -22,6 +25,9 @@ enum FilterEnum: string
             self::FuelType  => $locale === 'nl' ? 'Brandstoftype' : 'Carburant',
             self::BodyType  => $locale === 'nl' ? 'Koetswerk' : 'Type de carrosserie',
             self::Gearbox   => $locale === 'nl' ? 'Versnellingsbak' : 'Boîte de vitesses',
+            self::Doors     => $locale === 'nl' ? 'Deuren' : 'Portes',
+            self::Seats     => $locale === 'nl' ? 'Zitplaatsen' : 'Sièges',
+            self::Traction  => $locale === 'nl' ? 'Aandrijving' : 'Traction',
             self::PriceMin  => $locale === 'nl' ? 'Prijs min' : 'Prix min',
             self::PriceMax  => $locale === 'nl' ? 'Prijs max' : 'Prix max',
         };
@@ -34,6 +40,9 @@ enum FilterEnum: string
             self::FuelType  => 'fuelType',
             self::BodyType  => 'bodyType',
             self::Gearbox   => 'gearboxType',
+            self::Doors     => 'doors',
+            self::Seats     => 'seats',
+            self::Traction  => 'traction',
             self::PriceMin  => 'maxPrice',
             self::PriceMax  => 'minPrice',
         };
@@ -57,6 +66,9 @@ enum FilterEnum: string
             }), */
             self::FuelType,
             self::BodyType,
+            self::Doors,
+            self::Seats,
+            self::Traction,
             self::Gearbox => Cache::remember("facet_{$this->value}_v2", 3600, function () {
                 return FilterFacet::query()
                     ->where('facet_type', $this->value)

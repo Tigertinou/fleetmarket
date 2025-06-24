@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(list!=null){
             makes.forEach(item => {
                 let el = document.createElement('a');
-                el.href = `{{ localized_route('pages.vehicles.search') }}?inp_brands=${ item.id }`;
+                el.href = `{{ localized_route('pages.vehicles.search') }}?brands=${ item.slug }`;
                 el.setAttribute('class', 'bg-white flex items-center justify-center outline-1 outline-gray-200 p-4 cursor-pointer hover:bg-gray-50 ');
                 el.innerHTML = `<img src="${ item.logo }" class="w-20 md:w-24">`;
                 list.appendChild(el);

@@ -67,7 +67,7 @@ switch ($size) {
         @if($icon ?? false)
             <div class="align-middle {{ $def_class_icon }}"><i class="icon {{ $icon }} inline-block"></i></div>
         @endif
-        <div class="{{ $align == 'center' ? 'flex-1' : ''}} {{ $align == 'left' ? 'flex-1 text-left' : ''}} {{ $align == 'right' ? 'flex-1 text-right' : ''}}">{!! $label !!}</div>
+        <div class="{{ $align == 'center' ? 'flex-1' : ''}} {{ $align == 'left' ? 'flex-1 text-left' : ''}} {{ $align == 'right' ? 'flex-1 text-right' : ''}}">{!! $label ?? $slot !!}</div>
         @if($rIcon ?? false)
             <div class="align-middle {{ $def_class_r_icon }}"><i class="icon {{ $rIcon }} inline-block"></i></div>
         @endif
