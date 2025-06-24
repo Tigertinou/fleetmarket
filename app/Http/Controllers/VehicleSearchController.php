@@ -36,9 +36,9 @@ class VehicleSearchController extends Controller
 
     public function partialResult(Request $request, MotorKVehicleService $motorKService)
     {
-        /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
-        $filters = $this->parseQueryFilters($request->query());
 
+        $filters = $this->parseQueryFilters($request->query());
+        /* var_dump($filters); */ // Debugging line, can be removed later
         $vehicles = $motorKService->search($filters ?? []);
 
         return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
@@ -85,6 +85,21 @@ class VehicleSearchController extends Controller
                 $filters[] = $f;
 
             }
+        }
+        if(isset($query['sort'])) {
+            if($query['sort'] === 'price') {
+                $filters[] = [
+                    'type' => 'sort',
+                    'label' => 'Sort by',
+                    'values' => [
+                        [
+                            'code' => $query['sort'],
+                            'label' => Str::ucfirst($query['sort']),
+                        ]
+                    ]
+                ];
+            }
+
         }
         return $filters;
     }

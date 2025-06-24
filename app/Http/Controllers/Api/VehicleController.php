@@ -20,6 +20,7 @@ class VehicleController extends Controller
 
         $facets = FilterFacet::where('facet_type', $type)
             ->orderBy('position')
+            ->orderBy('label_fr')
             ->get()
             ->map(function ($item) {
                 return [

@@ -45,6 +45,14 @@ class MotorKVehicleService
 
         foreach ($filters as $key => $filter) {
             $facet = FilterEnum::fromCode($filter['type']);
+            if (!$facet) {
+                switch ($filter['type']) {
+                    case 'sort':
+                        $queryParams['sort'] = 'minPrice asc';
+                    break;
+                }
+                continue; // Skip if the facet type is not recognized
+            }
             $type = $facet->filterSearchCode();
             $values = $facet->getValues(collect($filter['values'])->toArray());
             $q[] = '(' . collect($values)->map(function ($e) use ($type) {
@@ -64,7 +72,7 @@ class MotorKVehicleService
 
         $queryParams['q'] = implode(' AND ', $q);
         $queryParams['rows'] = 20;
-
+        
         $query = http_build_query($queryParams);
 
         /*
