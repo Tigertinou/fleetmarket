@@ -27,6 +27,18 @@ enum FilterEnum: string
         };
     }
 
+    public function filterSearchCode(): string
+    {
+        return match ($this) {
+            self::Brands    => 'makeUrlCode',
+            self::FuelType  => 'fuelType',
+            self::BodyType  => 'bodyType',
+            self::Gearbox   => 'gearboxType',
+            self::PriceMin  => 'maxPrice',
+            self::PriceMax  => 'minPrice',
+        };
+    }
+
     public static function fromCode(string $code): ?self
     {
         return collect(self::cases())

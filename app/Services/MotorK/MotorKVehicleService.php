@@ -3,6 +3,7 @@
 namespace App\Services\MotorK;
 
 use Illuminate\Support\Facades\Http;
+use App\Enums\FilterEnum;
 
 class MotorKVehicleService
 {
@@ -43,32 +44,22 @@ class MotorKVehicleService
         $q = [];
 
         foreach ($filters as $key => $filter) {
-            $type = $filter['type'];
-            $values = collect($filter['values'])->pluck('code');
-            switch ($type){
-                case 'brands':
-                    $q[] = '(' . $values->map(fn($code) => "makeUrlCode:$code")->implode(' OR ') . ')';
+            $facet = FilterEnum::fromCode($filter['type']);
+            $type = $facet->filterSearchCode();
+            $values = $facet->getValues(collect($filter['values'])->toArray());
+            $q[] = '(' . collect($values)->map(function ($e) use ($type) {
+                switch ($type) {
+                    case 'maxPrice':
+                        return "maxPrice:[" . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . " TO *]";
+                    case 'minPrice':
+                        return "minPrice:[* TO " . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . "]";
                     break;
-                case 'fuelType':
-                case 'bodyType':
-                case 'traction':
-                case 'seats':
-                case 'doors':
-                case 'emissionsClass':
-                case 'gearboxType':
-                    //$value = $filter['values'][0]['value'] ?? '';
+                    default:
+                        return $type . ":" . ($e['code']['value'] ?? $e['code']['code'] ?? '');
                     break;
-                case 'price_min':
-                    $q[] = "maxPrice:[" . ($filter['values'][0]['code'] ?? 0) . " TO *]";
-                break;
-                case 'price_max':
-                    $q[] = "minPrice:[* TO " . ($filter['values'][0]['code'] ?? 0) . "]";
-                    //$value = ['min' => $filter['values'][0]['value'] ?? 0, 'max' => $filter['values'][1]['value'] ?? 100000];
-                    break;
-                default:
-                    continue 2; // Skip unknown filter types
+                }
+            })->implode(' OR ') . ')';
 
-            }
         }
 
         $queryParams['q'] = implode(' AND ', $q);

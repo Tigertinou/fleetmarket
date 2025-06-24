@@ -8,7 +8,7 @@
     </div>
     <details open>
         <summary class="pl-4 -ml-4">Prix</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 <label class="text-xs font-semibold">Prix</label>
                 <x-forms.elements.range name="inp_price" min="0" max="100000" min-value="5000" max-value="95000" step="5000"/>
@@ -21,7 +21,7 @@
 
     <details open>
         <summary class="pl-4 -ml-4">Solutions de financement</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 <label class="text-xs font-semibold">Loyer mensuel</label>
                 <x-forms.elements.range name="inp_" min="50" max="2000" min-value="50" max-value="2000" step="1"/>
@@ -35,12 +35,12 @@
 
     <details>
         <summary class="pl-4 -ml-4">Carburant</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['fuelType'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
                         class="flex my-3 font-normal capitalize"
-                        name="inp_fuelType"
+                        name="inp_fueltype"
                         :label="$facet['label'] ?? ''"
                         :value="$facet['value'] ?? ''"
                     />
@@ -51,7 +51,7 @@
 
     <details open>
         <summary class="pl-4 -ml-4">Marques</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($makes as $make)
                     <x-forms.elements.checkbox
@@ -68,12 +68,12 @@
 
     <details>
         <summary class="pl-4 -ml-4">Carosseries</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['bodyType'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
                         class="flex my-3 font-normal capitalize"
-                        name="inp_bodyType"
+                        name="inp_bodytype"
                         :label="$facet['label'] ?? ''"
                         :value="$facet['value'] ?? ''"
                     />
@@ -84,7 +84,7 @@
 
     <details>
         <summary class="pl-4 -ml-4">Tractions</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['traction'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
@@ -100,7 +100,7 @@
 
     <details>
         <summary class="pl-4 -ml-4">Dimensions</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 <div class="mb-2">
                     <label class="text-xs font-semibold">Hauteur</label>
@@ -120,7 +120,7 @@
 
     <details>
         <summary class="pl-4 -ml-4">Places</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['seats'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
@@ -136,7 +136,7 @@
 
     <details>
         <summary class="pl-4 -ml-4">Portes</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['doors'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
@@ -152,7 +152,7 @@
 
     <details>
         <summary class="pl-4 -ml-4">Normes antipollution</summary>
-        <div class="flex flex-col gap-2 pb-4">
+        <div class="flex flex-col gap-2 px-2 pb-6 md:px-0">
             <div>
                 @foreach ($facets['emissionsClass'] ?? [] as $key => $facet)
                     <x-forms.elements.checkbox
@@ -167,5 +167,5 @@
     </details>
 </div>
 <div class="sticky bottom-0 z-10 p-4 pt-2 pb-4 -m-4 bg-white">
-    <x-utils.button id="run-filter" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
+    <x-utils.button id="run-filter" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>{{-- animate-pulse --}}
 </div>

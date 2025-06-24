@@ -9,8 +9,8 @@
             </div>
         </div>
         {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
-        @return
     @endif
+    {{-- <pre>{{ $vehicles['query'] }}</pre> --}}
     {{-- <pre>{{ $vehicles['query'] }}</pre> --}}
     {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
     {{-- {{ $vehicles['query'] }} --}}

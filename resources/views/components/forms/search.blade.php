@@ -9,7 +9,7 @@
                 min="0"
                 max="100000"
                 min-value="5000"
-                max-value="50000"
+                max-value="95000"
                 step="1000"/>
         </div>
 

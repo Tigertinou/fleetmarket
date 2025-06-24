@@ -122,6 +122,10 @@ window.reloadFilters = function(){
             } else {
                 el.value = value;
             }
+            if(el.isRangeSliderInput) {
+                el.updateRangeSlider();
+            }
+            el.closest('details')?.setAttribute('open', 'open');
         });
     });
 }
@@ -135,7 +139,10 @@ document.addEventListener('DOMContentLoaded', function () {
             price_min: document.querySelector('[name="inp_price_min"]')?.value,
             price_max: document.querySelector('[name="inp_price_max"]')?.value,
             bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
-            brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(',')
+            brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(','),
+            traction : [...document.querySelectorAll('[name="inp_traction"]:checked')].map(input => input.value).join(','),
+            fueltype : [...document.querySelectorAll('[name="inp_fueltype"]:checked')].map(input => input.value).join(','),
+            gearbox : [...document.querySelectorAll('[name="inp_gearbox"]:checked')].map(input => input.value).join(',')
         });
         document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
     })
