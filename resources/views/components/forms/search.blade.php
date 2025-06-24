@@ -49,8 +49,8 @@
                     let div = document.createElement('div');
                     div.setAttribute('class', 'px-3 border-b border-gray-100 active:bg-gray-50 hover:bg-gray-50 text-sm');
                     div.innerHTML = `<div class="flex items-center checkbox">
-                        <input type="checkbox" id="id-make-${ item.id }" name="inp_make" value="${ item.id }" data-label="${ item.name.toUpperCase() }" @change="change">
-                        <label class="flex items-center flex-1 py-2 pl-3 mr-8 font-extrabold uppercase cursor-pointer select-none" for="id-make-${ item.id }">
+                        <input type="checkbox" id="id-brands-${ item.slug }" name="inp_brands" value="${ item.slug }" data-label="${ item.name.toUpperCase() }" @change="change">
+                        <label class="flex items-center flex-1 py-2 pl-3 mr-8 font-extrabold uppercase cursor-pointer select-none" for="id-brands-${ item.slug }">
                             <span><img src="${ item.logo }" class="w-10 mr-2"></span>
                             <b>${ item.name.toUpperCase() }</b>
                         </label>

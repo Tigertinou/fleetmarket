@@ -42,7 +42,7 @@ switch ($size) {
     @if($icon ?? false)
         <span class="icon {{ $icon }} inline-block align-middle mr-1 -ml-2"></span>
     @endif
-    <span>{!! $label !!}</span>
+    <span>{!! $label ?? $slot !!}</span>
     @if($rIcon ?? false)
         <span class="icon {{ $rIcon }} inline-block align-middle ml-1 -mr-2"></span>
     @endif

@@ -1,5 +1,7 @@
 <?php
 
+/* herd php artisan app:sync-filter-facets */
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\FilterFacet;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class FacetSyncService
 {
@@ -50,6 +51,7 @@ class FacetSyncService
                 ]);
 
                 if(!$get->exists) {
+                    $get->code = Str::slug($item['code'] ?? $item['value'] ?? '');
                     $get->label_fr = $item['value'];
                     $get->label_nl = $this->translate($item['value'], 'nl');
                     $get->label_en = $this->translate($item['value'], 'en');

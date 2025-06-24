@@ -18,9 +18,21 @@ $breadcrumb = [
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
 
                     <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
-                        <x-utils.label label="AUDI" r-icon="icon-times" />
-                        <x-utils.label label="KIA" r-icon="icon-times" />
+                        @foreach($filters as $key => $filter)
+                            @foreach ($filter['values'] as $value)
+                                <x-utils.label r-icon="icon-times" title="{{ $filter['label']}}" class="cursor-pointer">
+                                    {{-- {{ $filter['label']}}</b> :  --}}{{ $value['label'] }}
+                                </x-utils.label>
+                            @endforeach
+                            {{--
+                            <x-utils.label r-icon="icon-times">
+                                <b>{{ $filter['label']}}</b> : {{ collect($filter['values'])->pluck('label')->implode(', ')}}
+                            </x-utils.label>
+                            --}}
+                        @endforeach
                     </div>
+
+                    {{-- <pre>{{ json_encode($filters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
@@ -32,33 +44,33 @@ $breadcrumb = [
                     </div>
 
                     <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
-                        <div x-show="shown" class="fixed bottom-4 right-3 z-20" x-transition>
-                            <div class="rounded-full bg-black text-white icon icon-filter p-3 text-xl font-light shadow-lg" @click="filtersOpen=true"></div>
+                        <div x-show="shown" class="fixed z-20 bottom-4 right-3" x-transition>
+                            <div class="p-3 text-xl font-light text-white bg-black rounded-full shadow-lg icon icon-filter" @click="filtersOpen=true"></div>
                         </div>
                     </div>
 
                     <div class="mt-4" id="search-results">
                         {{-- @include('partials.vehicles.search.results')--}}
                     </div>
-                    
+
                     <x-layouts.modal title="Recommandations" ref="suggestions">
                         <div class="flex flex-col">
-                            <a href="" class="border-b py-3 border-gray-100">Nos recommandations</a>
-                            <a href="" class="border-b py-3 border-gray-100">Meilleurs ventes</a>
-                            <a href="" class="border-b py-3 border-gray-100">Du plus économique au plus cher</a>
-                            <a href="" class="border-b py-3 border-gray-100">Du plus cher au plus économique</a>
-                            <a href="" class="border-b py-3 border-gray-100">De A-Z</a>
-                            <a href="" class="border-b py-3 border-gray-100">De Z-A</a>
+                            <a href="" class="py-3 border-b border-gray-100">Nos recommandations</a>
+                            <a href="" class="py-3 border-b border-gray-100">Meilleurs ventes</a>
+                            <a href="" class="py-3 border-b border-gray-100">Du plus économique au plus cher</a>
+                            <a href="" class="py-3 border-b border-gray-100">Du plus cher au plus économique</a>
+                            <a href="" class="py-3 border-b border-gray-100">De A-Z</a>
+                            <a href="" class="py-3 border-b border-gray-100">De Z-A</a>
                         </div>
                     </x-layouts.modal>
-                        
+
                 </div>
             </div>
-            
-            <div class="fixed overflow-auto top-0 left-0 right-0 bottom-0 px-4 bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
+
+            <div class="fixed top-0 bottom-0 left-0 right-0 px-4 overflow-auto bg-white border-l border-gray-200 z-100 side-filter md:w-sm md:relative md:h-auto md:z-5" x-show="filtersOpen || !isMobile" x-cloak>
                 @include('partials.vehicles.search.filters')
             </div>
-            
+
         </div>
     </div>
 
@@ -102,4 +114,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });*/
 });
 </script>
-    

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\FilterFacet;
 use App\Services\MotorK\MotorKVehicleService;
+use App\Enums\FilterEnum;
 
 class VehicleSearchController extends Controller
 {
@@ -20,22 +22,65 @@ class VehicleSearchController extends Controller
                 ->orderBy('position')
                 ->get()
                 ->map(fn($item) => [
-                    'value' => $item->value,
+                    'value' => $item->code,
                     'label' => $item->{'label_' . $locale} ?? $item->label_en,
                 ]);
         }
 
         $makes = $motorK->getMakes();
 
-        return view('pages.vehicles.search', compact('facets','makes'));
+        $q = $request->query();
+        $filters = [];
+        foreach (FilterEnum::cases() as $facet_type) {
+            if(isset($q[$facet_type->value])) {
+                $f = [
+                    'facet_type' => $facet_type->value,
+                    'label' => $facet_type->label( app()->getLocale() ),
+                    'values' => $facet_type->getValues(explode(',',$q[$facet_type->value])),
+                ];
+                switch ($facet_type) {
+                    case FilterEnum::Brands:
+                        $f['values'] = collect($f['values'])->map(function ($val) {
+                            $val['label'] = strtoupper($val['label']);
+                            return $val;
+                        })->toArray();
+                    break;
+                    case FilterEnum::PriceMin:
+                        $f['values'] = collect($f['values'])->map(function ($val) {
+                            $val['label'] = '>= ' . number_format($val['label'], 0, ',', ' ') . ' €';
+                            return $val;
+                        })->toArray();
+                    break;
+                    case FilterEnum::PriceMax:
+                        $f['values'] = collect($f['values'])->map(function ($val) {
+                            $val['label'] = '<= ' . number_format($val['label'], 0, ',', ' ') . ' €';
+                            return $val;
+                        })->toArray();
+                    break;
+                    default:
+                        $f['values'] = collect($f['values'])->map(function ($val) {
+                            $val['label'] = Str::ucfirst($val['label']);
+                            return $val;
+                        })->toArray();
+                    break;
+                }
+                $filters[] = $f;
+
+            }
+        }
+
+
+        return view('pages.vehicles.search', compact('facets','makes','filters'));
     }
 
     public function partialResult(Request $request, MotorKVehicleService $motorKService)
     {
         /* $filters = $request->only(['make', 'fuel', 'bodyType']);*/
+        $filters = $request->query();
         $vehicles = $motorKService->search($filters ?? []);
 
-        return response(view('partials.vehicles.search.results', compact('vehicles')))
+
+        return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
             ->header('X-Total-Count', $vehicles['total']);
 
     }

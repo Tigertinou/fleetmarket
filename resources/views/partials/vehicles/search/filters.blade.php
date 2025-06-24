@@ -56,8 +56,8 @@
                 @foreach ($makes as $make)
                     <x-forms.elements.checkbox
                         class="flex items-center font-bold uppercase"
-                        name="inp_make"
-                        :value="$make['id'] ?? ''"
+                        name="inp_brands"
+                        :value="$make['slug'] ?? ''"
                     >
                     <span class="flex items-center flex-1"><img src="{{ $make['logo'] }}" class="w-10 mr-2"> {{ $make['name'] }}</span>
                     </x-forms.elements.checkbox>
@@ -166,6 +166,6 @@
         </div>
     </details>
 </div>
-<div class="sticky bottom-0 pt-2 pb-4 z-10 bg-white -m-4 p-4">
+<div class="sticky bottom-0 z-10 p-4 pt-2 pb-4 -m-4 bg-white">
     <x-utils.button label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>
 </div>
