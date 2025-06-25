@@ -1,5 +1,5 @@
 @php
-$model_link = localized_route('pages.vehicles.detail', ['slug' => $vehicle['model']['slug']]) ;
+// $model_link = localized_route('pages.vehicles.detail', ['slug' => $vehicle['model']['slug']]) ;
 @endphp
 <div class="bg-white border-gray-100 shadow-lg md:border-t md:border-r">
     <div class="flex flex-col">
