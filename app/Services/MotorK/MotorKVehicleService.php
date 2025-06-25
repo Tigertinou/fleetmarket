@@ -39,43 +39,111 @@ class MotorKVehicleService
 
     public function search(array $filters): array
     {
-        $queryParams = [];
+        $queryParams = [
+            'rows' => 10,
+            'start' => 0,
+            'withVersions' => 1,
+            'withMedias' => 1,
+            'facets' => '',
+            'q' => '',
+            'sort' => '',
+        ];
 
         $q = [];
 
+        usort($filters, function ($a, $b) {
+             return ($a['type'] == 'page') <=> ($b['type'] == 'page');
+        });
+
         foreach ($filters as $key => $filter) {
             $facet = FilterEnum::fromCode($filter['type']);
-            if (!$facet) {
+            if ($facet) {
+                $type = $facet->filterSearchCode();
+                $values = $facet->getValues(collect($filter['values'])->toArray());
+                $q[] = '(' . collect($values)->map(function ($e) use ($type) {
+                    switch ($type) {
+                        case 'maxPrice':
+                            return "maxPrice:[" . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . " TO *]";
+                        case 'minPrice':
+                            return "minPrice:[* TO " . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . "]";
+                        break;
+                        default:
+                            return $type . ":" . ($e['code']['value'] ?? $e['code']['code'] ?? '');
+                        break;
+                    }
+                })->implode(' OR ') . ')';
+            } else {
                 switch ($filter['type']) {
                     case 'sort':
-                        $queryParams['sort'] = 'minPrice asc';
+                        $queryParams['sort'] = $filter['values'][0]['code'] ?? '';
+                    break;
+                    case 'page':
+                        $queryParams['start'] = ((int)($filter['values'][0]['code'] ?? 1) * $queryParams['rows'])- $queryParams['rows'];
+                    break;
+                    case 'limit':
+                        $queryParams['rows'] = (int)($filter['values'][0]['code'] ?? 10);
+                    break;
+                    case 'offset':
+                        $queryParams['start'] = (int)($filter['values'][0]['code'] ?? 0);
+                    break;
+                    case 'facets':
+                        $queryParams['facets'] = implode(',', $filter['values']);
+                    break;
+                    case 'withVersions':
+                        $queryParams['withVersions'] = (int)($filter['values'][0]['code'] ?? 1);
+                    break;
+                    case 'withMedias':
+                        $queryParams['withMedias'] = (int)($filter['values'][0]['code'] ?? 1);
                     break;
                 }
-                continue; // Skip if the facet type is not recognized
             }
-            $type = $facet->filterSearchCode();
-            $values = $facet->getValues(collect($filter['values'])->toArray());
-            $q[] = '(' . collect($values)->map(function ($e) use ($type) {
-                switch ($type) {
-                    case 'maxPrice':
-                        return "maxPrice:[" . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . " TO *]";
-                    case 'minPrice':
-                        return "minPrice:[* TO " . ($e['code']['value'] ?? $e['code']['code'] ?? 0) . "]";
-                    break;
-                    default:
-                        return $type . ":" . ($e['code']['value'] ?? $e['code']['code'] ?? '');
-                    break;
-                }
-            })->implode(' OR ') . ')';
-
         }
 
         $queryParams['q'] = implode(' AND ', $q);
-        $queryParams['rows'] = 20;
-        
+
         $query = http_build_query($queryParams);
 
-        /*
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?" . $query);
+        $res = [
+            'status' => $response->status(),
+            'total' => 0,
+            'page' => 0,
+            'totalPages' => 0,
+            'query' => $query,
+            'queryParams' => $queryParams,
+            'filters' => $filters,
+            'data' => []
+        ];
+        if ($response->successful()) {
+            $json = $response->json();
+            $items = $json['response']['searchResults']['models'];
+            $res = array_merge($res, [
+                'status' => $response->status(),
+                'total' => $json['response']['numResultFound'] ?? count($items),
+                'page' => floor($queryParams['start'] / $queryParams['rows']) + 1,
+                'totalPages' => ceil(($json['response']['numResultFound'] ?? count($items)) / $queryParams['rows'])
+            ]);
+            foreach ($items as $item) {
+
+                $fuelTag = collect($item['model']['tags'] ?? [])
+                    ->firstWhere('dimension', 'Fuel type');
+                $item['fuelTypeName'] = $fuelTag['name'] ?? null;
+                $item['fuelTypeLabel'] = $fuelTag['translations']['FR'] ?? $item['fuelTypeName'];
+
+                $res['data'][] = $item;
+            }
+        }
+        return $res;
+    }
+
+
+
+
+    // Autres méthodes comme getModels, getSubmodels...
+}
+
+
+/*
         Each parameter could be passed via the “q” parameter in query string by this way:
         “?q=$param:$value”
 
@@ -93,43 +161,3 @@ class MotorKVehicleService
 
         */
         /* dd($query); */
-
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?" . $query);
-
-        if ($response->successful()) {
-            $json = $response->json();
-            $items = $json['response']['searchResults']['models'];
-            $res = [
-                'query' => $queryParams['q'] ?? '',
-                'queryParams' => $queryParams,
-                'filters' => $filters,
-                'total' => $json['response']['numResultFound'] ?? count($items),
-                'data' => []
-            ];
-            foreach ($items as $item) {
-
-                $fuelTag = collect($item['model']['tags'] ?? [])
-                    ->firstWhere('dimension', 'Fuel type');
-                $item['fuelTypeName'] = $fuelTag['name'] ?? null;
-                $item['fuelTypeLabel'] = $fuelTag['translations']['FR'] ?? $item['fuelTypeName'];
-
-                $res['data'][] = $item;
-            }
-
-            return $res;
-        } else {
-            return [
-                'query' => $query,
-                'filters' => $filters,
-                'total' => 0,
-                'data' => []
-            ];
-        }
-
-    }
-
-
-
-
-    // Autres méthodes comme getModels, getSubmodels...
-}

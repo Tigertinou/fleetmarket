@@ -167,5 +167,5 @@
     </details>
 </div>
 <div class="sticky bottom-0 z-10 p-4 pt-2 pb-4 -m-4 bg-white">
-    <x-utils.button onclick="window.runSearch();" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=true" align="center"></x-utils.button>{{-- animate-pulse --}}
+    <x-utils.button onclick="window.runSearch();" label="Filtrer" icon="icon-search" r-icon="icon-chevron-right" color="theme" size="lg" class="w-full justify-beetween" @click="filtersOpen=false" align="center"></x-utils.button>{{-- animate-pulse --}}
 </div>

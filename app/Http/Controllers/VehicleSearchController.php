@@ -41,6 +41,7 @@ class VehicleSearchController extends Controller
         /* var_dump($filters); */ // Debugging line, can be removed later
         $vehicles = $motorKService->search($filters ?? []);
 
+
         return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
             ->header('X-Total-Count', $vehicles['total']);
 
@@ -86,21 +87,19 @@ class VehicleSearchController extends Controller
 
             }
         }
-        if(isset($query['sort'])) {
-            if($query['sort'] === 'price') {
-                $filters[] = [
-                    'type' => 'sort',
-                    'label' => 'Sort by',
-                    'values' => [
-                        [
-                            'code' => $query['sort'],
-                            'label' => Str::ucfirst($query['sort']),
-                        ]
-                    ]
-                ];
-            }
-
+        if(isset($query['sort']) && $query['sort'] != '') {
+            $filters[] = [ 'type' => 'sort', 'values' => [ [ 'code' => $query['sort'] ] ] ];
         }
+        if(isset($query['page']) && $query['page'] != '') {
+            $filters[] = [ 'type' => 'page', 'values' => [ [ 'code' => $query['page'] ] ] ];
+        }
+        if(isset($query['limit']) && $query['limit'] != '') {
+            $filters[] = [ 'type' => 'limit', 'values' => [ [ 'code' => $query['limit'] ] ] ];
+        }
+        if(isset($query['offset']) && $query['offset'] != '') {
+            $filters[] = [ 'type' => 'offset', 'values' => [ [ 'code' => $query['offset'] ] ] ];
+        }
+
         return $filters;
     }
 }

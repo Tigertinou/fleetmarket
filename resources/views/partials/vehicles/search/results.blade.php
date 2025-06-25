@@ -1,6 +1,4 @@
 <div class="flex flex-col gap-6">
-    {{--{{ var_dump($vehicles) }}--}}
-    {{--@dump($vehicles)--}}
     @if(!isset($vehicles['data']) || count($vehicles['data']) === 0)
         <div class="flex items-center justify-center w-full h-64">
             <div class="text-center">
@@ -10,6 +8,7 @@
         </div>
         {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
     @endif
+    {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
     {{-- <pre>{{ $vehicles['query'] }}</pre> --}}
     {{-- <pre>{{ $vehicles['query'] }}</pre> --}}
     {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
@@ -80,10 +79,10 @@
             </div>
         </div>
     @endforeach
-
-
 </div>
-
+<div class="pt-4">
+    
+</div>
 
 {{--
 

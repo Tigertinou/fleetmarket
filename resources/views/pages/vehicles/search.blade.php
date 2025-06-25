@@ -16,27 +16,22 @@ $breadcrumb = [
                 <div class="pt-6">
                     <h1 class="h1">Les offres du mois</h1>
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
-                    
+
                     @if(count($filters) > 0)
                         <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
                             @foreach($filters as $key => $filter)
                                 @foreach ($filter['values'] as $value)
-                                    <x-utils.label r-icon="icon-times" title="{{ $filter['label']}}" class="cursor-pointer" onclick="window.removeParams('{{ $filter['type'] }}','{{ $value['code'] }}');this.remove();">
+                                    @if(isset($filter['label']))
+                                        <x-utils.label r-icon="icon-times" title="{{ $filter['label'] }}" class="cursor-pointer" onclick="window.removeParams('{{ $filter['type'] }}','{{ $value['code'] }}');this.remove();">
                                         {{-- {{ $filter['label']}}</b> :  --}}{{ $value['label'] }}
-                                    </x-utils.label>
+                                        </x-utils.label>
+                                    @endif
                                 @endforeach
                             @endforeach
                         </div>
-                        {{--
-                        <x-utils.label r-icon="icon-times">
-                            <b>{{ $filter['label']}}</b> : {{ collect($filter['values'])->pluck('label')->implode(', ')}}
-                        </x-utils.label>
-                        --}}
                     @else
                         <div class="mt-4 mb-4 border-b border-gray-200"></div>
                     @endif
-
-                    {{-- <pre>{{ json_encode($filters, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
@@ -50,23 +45,25 @@ $breadcrumb = [
                     </div>
 
                     <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
-                        <div x-show="shown" class="fixed z-20 bottom-4 right-3" x-transition>
-                            <div class="p-3 text-xl font-light text-white bg-black rounded-full shadow-lg icon icon-filter" @click="filtersOpen=true"></div>
+                        <div x-show="shown" class="fixed z-20 bottom-4 right-3 md:hidden" x-transition>
+                            <div class="p-3 text-xl font-light bg-white border-gray-100 rounded-full shadow-lg border-1 icon icon-filter" @click="filtersOpen=true"></div>
                         </div>
                     </div>
 
-                    <div class="mt-4" id="search-results">
-                        {{-- @include('partials.vehicles.search.results')--}}
+                    <div class="mt-4" id="search-results"></div>
+                    <div id="loading-results" class="flex justify-center hidden mt-4 mb-6 align-center">
+                        <svg class="mr-3 -ml-1 text-white size-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-15" cx="12" cy="12" r="10" stroke="var(--color-black)" stroke-width="4"></circle><path class="opacity-75" fill="var(--color-theme)" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span class="text-sm font-normal text-black">Chargement des résultats...</span>
                     </div>
 
-                    <x-layouts.modal title="Recommandations" ref="suggestions">
+                    <x-layouts.modal title="Trier les vehicules par ?" ref="suggestions" id="suggestions-modal">
                         <div class="flex flex-col">
-                            <a href="javascript:void(0);" onclick="window.sortSearchResults('');" class="py-3 border-b border-gray-100">Nos recommandations</a>
-                            <a href="javascript:void(0);" onclick="window.sortSearchResults('price');" class="py-3 border-b border-gray-100">Meilleurs ventes</a>
-                            <a href="" class="py-3 border-b border-gray-100">Du plus économique au plus cher</a>
-                            <a href="" class="py-3 border-b border-gray-100">Du plus cher au plus économique</a>
-                            <a href="" class="py-3 border-b border-gray-100">De A-Z</a>
-                            <a href="" class="py-3 border-b border-gray-100">De Z-A</a>
+                            <a href="javascript:void(0);" data-sort="" data-label="Recommandation" class="py-3 border-b border-gray-100">Nos recommandations</a>
+                            {{-- <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Meilleurs ventes" class="py-3 border-b border-gray-100">Meilleurs ventes</a> --}}
+                            <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Les plus économiques" class="py-3 border-b border-gray-100">Du plus économique au plus cher</a>
+                            <a href="javascript:void(0);" data-sort="minPrice desc" data-label="Les plus chers" class="py-3 border-b border-gray-100">Du plus cher au plus économique</a>
+                            <a href="javascript:void(0);" data-sort="modelName asc" data-label="A-Z" class="py-3 border-b border-gray-100">De A-Z</a>
+                            <a href="javascript:void(0);" data-sort="modelName desc" data-label="Z-A" class="py-3">De Z-A</a>
                         </div>
                     </x-layouts.modal>
 
@@ -108,6 +105,8 @@ window.sortSearchResults = function (sort) {
 
 window.loadSearchResults = function(params = window.location.search) {
     params = new URLSearchParams(params);
+    document.getElementById('search-results').innerHTML = '';
+    document.getElementById('loading-results').classList.remove('hidden');
     fetch('/{{ app()->getLocale() }}/partials/vehicles/search/results?' + params.toString())
     .then(response => {
         const total = response.headers.get('X-Total-Count');
@@ -120,6 +119,7 @@ window.loadSearchResults = function(params = window.location.search) {
     })
     .then(html => {
         document.getElementById('search-results').innerHTML = html;
+        document.getElementById('loading-results').classList.add('hidden');
     });
 }
 
@@ -128,13 +128,9 @@ window.populateSearch = function(){
     params.forEach((value, key) => {
         switch (key){
             case 'sort':
-                switch (value) {
-                    case 'price':
-                        document.querySelector('#id-sort-label').innerText = 'Meilleur ventes';
-                    break;
-                    default:
-                        document.querySelector('#id-sort-label').innerText = 'Recommandations';
-                    break;
+                const el = document.querySelectorAll(`[data-sort="${value}"]`)[0];
+                if(el!=null){
+                    document.querySelector('#id-sort-label').innerText = el.getAttribute('data-label') || el.innerText;
                 }
             break;
             case 'page':
@@ -162,7 +158,8 @@ window.populateSearch = function(){
 
 window.runSearch = function(){
     const params = new URLSearchParams(window.searchParams || document.location.search);
-    params.delete('page'); // Remove page parameter to reset pagination
+    params.delete('page');
+    /* params.delete('offset'); */
     params.set('price_min', document.querySelector('[name="inp_price_min"]')?.value || '');
     params.set('price_max', document.querySelector('[name="inp_price_max"]')?.value || '');
     params.set('bodytype', [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','));
@@ -173,17 +170,28 @@ window.runSearch = function(){
     params.set('doors', document.querySelector('[name="inp_doors"]:checked')?.value || '');
     params.set('seats', document.querySelector('[name="inp_seats"]:checked')?.value || '');
     params.set('traction', document.querySelector('[name="inp_traction"]:checked')?.value || '');
-    params.set('limit', document.querySelector('[name="inp_limit"]')?.value || 20);
+    /* params.set('limit', document.querySelector('[name="inp_limit"]')?.value || 20);
+    params.set('offset', document.querySelector('[name="inp_offset"]')?.value || 0); */
     for (const [key, value] of params.entries()) {
         if (!value || value.trim() == '') {
             params.delete(key);
         }
     }
-    document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
+    window.searchParams = params.toString();
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    window.loadSearchResults(params.toString());
+    window.populateSearch();
+    //document.location.href=`{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     window.loadSearchResults();
     window.populateSearch();
+    document.querySelectorAll('[data-sort]').forEach(el => {
+        el.addEventListener('click', function () {
+            window.sortSearchResults(this.getAttribute('data-sort'));
+            document.querySelector('#main')._x_dataStack[0].suggestionsOpen=false;
+        });
+    });
 });
 </script>
