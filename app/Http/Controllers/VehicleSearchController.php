@@ -10,7 +10,7 @@ use App\Enums\FilterEnum;
 
 class VehicleSearchController extends Controller
 {
-    public function __invoke(Request $request, MotorKVehicleService $motorK)
+    public function __invoke(Request $request, MotorKVehicleService $motorK,  string $brand = null, string $model = null)
     {
         $locale = app()->getLocale();
 
@@ -28,10 +28,29 @@ class VehicleSearchController extends Controller
         }
 
         $makes = $motorK->getMakes();
+        $query = $request->query();
 
-        $filters = $this->parseQueryFilters($request->query());
+        /* if ($brand) {
+            $query['brands'] = 'dacia';
+        }
+        if ($model) {
+            $query['models'] = $model;
+        } */
+/* var_dump($model); */
+        $filters = $this->parseQueryFilters($query);
 
         return view('pages.vehicles.search', compact('facets','makes','filters'));
+
+    }
+
+    public function byBrand(Request $request, MotorKVehicleService $motorK, string $brand)
+    {
+        return $this->__invoke($request, $motorK, $brand);
+    }
+
+    public function byBrandModel(Request $request, MotorKVehicleService $motorK, string $brand, string $model)
+    {
+        return $this->__invoke($request, $motorK, $brand, $model);
     }
 
     public function partialResult(Request $request, MotorKVehicleService $motorKService)
@@ -52,6 +71,7 @@ class VehicleSearchController extends Controller
 
     public function parseQueryFilters(array $query): array
     {
+
         $filters = [];
         foreach (FilterEnum::cases() as $facet_type) {
             if(isset($query[$facet_type->value])) {

@@ -73,8 +73,8 @@ $breadcrumb = [
                     </div>
 
                     <div class="mt-4" id="search-results"></div>
-                    <div id="loading-results" class="flex justify-center hidden mt-4 mb-6 align-center">
-                        <svg class="mr-3 -ml-1 text-white size-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-15" cx="12" cy="12" r="10" stroke="var(--color-black)" stroke-width="4"></circle><path class="opacity-75" fill="var(--color-theme)" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <div id="loading-results" class="flex flex-col items-center justify-center hidden gap-4 mt-12 mb-6 animate-pulse">
+                        <svg class="mr-3 -ml-1 text-white size-8 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-15" cx="12" cy="12" r="10" stroke="{{-- var(--color-black) --}}" stroke-width="4"></circle><path class="opacity-75" fill="var(--color-theme)" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                         <span class="text-sm font-normal text-black">Chargement des résultats...</span>
                     </div>
 

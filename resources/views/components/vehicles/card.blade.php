@@ -1,3 +1,6 @@
+@php
+$model_link = localized_route('pages.vehicles.detail', ['slug' => $vehicle['model']['slug']]) ;
+@endphp
 <div class="bg-white border-gray-100 shadow-lg md:border-t md:border-r">
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row">
@@ -64,12 +67,16 @@
             </div>
         </div>
         @if(isset($vehicle['model']['versions']) && count($vehicle['model']['versions']) > 0)
-            <div>
+            <div class="flex flex-wrap items-center gap-2 px-4 py-4 border-t border-gray-100">
                 @foreach ($vehicle['model']['versions'] as $version)
                     @if ($loop->first)
-                        <div class="px-4 py-4 border-t border-gray-100">
+                        <div class="flex items-start flex-1 flex-justify-start">
                             <x-utils.efficiency :value="$version['efficiencyClass'] ?? null" />
                             <span class="text-xs font-bold">{{ $version['versionName'] }}</span>
+                        </div>
+                        <div>
+                            <div class="text-xs"><span class="mr-1 font-extrabold underline font-lg">{{ number_format($version['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
+
                         </div>
                     @endif
                 @endforeach
