@@ -43,7 +43,10 @@ class VehicleSearchController extends Controller
 
 
         return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
-            ->header('X-Total-Count', $vehicles['total']);
+            ->header('X-Total-Count', $vehicles['total'])
+            ->header('X-Total-Pages', $vehicles['totalPages'])
+            ->header('X-Current-Page', $vehicles['currentPage'])
+            ->header('X-Facets', json_encode($this->parseQueryFilters($request->query())));
 
     }
 

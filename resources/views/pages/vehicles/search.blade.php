@@ -9,6 +9,11 @@ $breadcrumb = [
     <div id="main" class="max-w-screen-xl mx-auto" x-data="{
         filtersOpen: false,
         suggestionsOpen: false,
+        facets: [],
+        removeFacet(facet) {
+            window.removeParams(facet.type, facet.code);
+            this.facets = this.facets.filter(f => f.code !== facet.code);
+        },
         init() {}
         }">
         <div class="flex gap-4 px-4">
@@ -17,13 +22,21 @@ $breadcrumb = [
                     <h1 class="h1">Les offres du mois</h1>
                     <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
 
-                    @if(count($filters) > 0)
+                    <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y" x-show="facets.length > 0">
+                        <template x-for="facet in facets">
+                            <x-utils.label r-icon="icon-times" class="cursor-pointer" @click="removeFacet(facet);">
+                                <span x-text="facet.label"></span>
+                            </x-utils.label>
+                        </template>
+                    </div>
+
+                    {{-- @if(count($filters) > 0)
                         <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
                             @foreach($filters as $key => $filter)
                                 @foreach ($filter['values'] as $value)
                                     @if(isset($filter['label']))
                                         <x-utils.label r-icon="icon-times" title="{{ $filter['label'] }}" class="cursor-pointer" onclick="window.removeParams('{{ $filter['type'] }}','{{ $value['code'] }}');this.remove();">
-                                        {{-- {{ $filter['label']}}</b> :  --}}{{ $value['label'] }}
+                                        {{ $value['label'] }}
                                         </x-utils.label>
                                     @endif
                                 @endforeach
@@ -31,7 +44,7 @@ $breadcrumb = [
                         </div>
                     @else
                         <div class="mt-4 mb-4 border-b border-gray-200"></div>
-                    @endif
+                    @endif --}}
 
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
@@ -115,6 +128,23 @@ window.loadSearchResults = function(params = window.location.search) {
                 el.innerHTML = total;
             })
         }
+        const facets = response.headers.get('X-Facets');
+        if (facets !== null) {
+            const facetsData = JSON.parse(facets);
+            window.xMainData.facets = [];
+            for(const facetType of facetsData) {
+                for(const facet of facetType.values) {
+                    if(facet.label!=null && facet.label!=''){
+                        window.xMainData.facets.push({
+                            id: `facet-${facetType.type}-${facet.code}`,
+                            type: facetType.type,
+                            code: facet.code || facet.value || facet.label,
+                            label: facet.label || facet.code
+                        });
+                    }
+                }
+            }
+        }
         return response.text();
     })
     .then(html => {
@@ -185,12 +215,13 @@ window.runSearch = function(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    window.xMainData = document.querySelector('#main')._x_dataStack[0];
     window.loadSearchResults();
     window.populateSearch();
     document.querySelectorAll('[data-sort]').forEach(el => {
         el.addEventListener('click', function () {
             window.sortSearchResults(this.getAttribute('data-sort'));
-            document.querySelector('#main')._x_dataStack[0].suggestionsOpen=false;
+            window.xMainData.suggestionsOpen=false;
         });
     });
 });

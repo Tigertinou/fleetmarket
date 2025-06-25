@@ -107,7 +107,7 @@ class MotorKVehicleService
         $res = [
             'status' => $response->status(),
             'total' => 0,
-            'page' => 0,
+            'currentPage' => 0,
             'totalPages' => 0,
             'query' => $query,
             'queryParams' => $queryParams,
@@ -120,7 +120,7 @@ class MotorKVehicleService
             $res = array_merge($res, [
                 'status' => $response->status(),
                 'total' => $json['response']['numResultFound'] ?? count($items),
-                'page' => floor($queryParams['start'] / $queryParams['rows']) + 1,
+                'currentPage' => floor($queryParams['start'] / $queryParams['rows']) + 1,
                 'totalPages' => ceil(($json['response']['numResultFound'] ?? count($items)) / $queryParams['rows'])
             ]);
             foreach ($items as $item) {
