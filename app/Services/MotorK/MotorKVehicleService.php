@@ -109,6 +109,7 @@ class MotorKVehicleService
             'total' => 0,
             'currentPage' => 0,
             'totalPages' => 0,
+            'perPage' => $queryParams['rows'],
             'query' => $query,
             'queryParams' => $queryParams,
             'filters' => $filters,

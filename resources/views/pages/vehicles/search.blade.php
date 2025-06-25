@@ -14,6 +14,14 @@ $breadcrumb = [
             window.removeParams(facet.type, facet.code);
             this.facets = this.facets.filter(f => f.code !== facet.code);
         },
+        paginate(page) {
+            if(page==null){ return; }
+            const params = new URLSearchParams(window.searchParams || document.location.search);
+            params.set('page', page);
+            window.searchParams = params.toString();
+            window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+            window.loadSearchResults(params.toString());
+        },
         init() {}
         }">
         <div class="flex gap-4 px-4">
@@ -29,6 +37,7 @@ $breadcrumb = [
                             </x-utils.label>
                         </template>
                     </div>
+                    <div class="mt-4 mb-4 border-b border-gray-200" x-show="facets.length == 0"></div>
 
                     {{-- @if(count($filters) > 0)
                         <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y">
@@ -106,7 +115,10 @@ window.removeParams = function (type,code) {
             }
         }
     });
-    document.location.href = `{{ localized_route('pages.vehicles.search') }}?${params.toString()}`;
+    window.searchParams = params.toString();
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    window.loadSearchResults(params.toString());
+    window.populateSearch();
 }
 
 window.sortSearchResults = function (sort) {
@@ -224,5 +236,10 @@ document.addEventListener('DOMContentLoaded', function () {
             window.xMainData.suggestionsOpen=false;
         });
     });
+});
+
+window.addEventListener('popstate', (event) => {
+    window.loadSearchResults();
+    window.populateSearch();
 });
 </script>

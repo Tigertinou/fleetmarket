@@ -81,9 +81,10 @@
     @endforeach
 </div>
 <div class="pt-4">
-    
+    <x-utils.pagination :total-pages="$vehicles['totalPages']" :per-page="$vehicles['perPage']" :current-page="$vehicles['currentPage']" :total="$vehicles['total']"/>
 </div>
-
+{{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+{{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 {{--
 
 <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
