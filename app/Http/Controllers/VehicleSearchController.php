@@ -10,12 +10,26 @@ use App\Enums\FilterEnum;
 
 class VehicleSearchController extends Controller
 {
-    public function __invoke(Request $request, MotorKVehicleService $motorK,  string $brand = null, string $model = null)
+    public function __invoke(Request $request, MotorKVehicleService $motorK,  string $lang, string $makeSlug = null, string $modelSlug = null)
     {
         $locale = app()->getLocale();
 
         $facetTypes = ['fuelType', 'bodyType', 'traction', 'seats', 'doors', 'emissionsClass', 'gearboxType'];
         $facets = [];
+
+
+        $makes = $motorK->getMakes();
+
+        $make = null;
+        if ($makeSlug) {
+            $make = collect($makes)->firstWhere('slug', $makeSlug);
+            if ($make && $modelSlug) {
+                $model = collect($make['models'] ?? [])->firstWhere('slug', $modelSlug);
+            }
+        }
+        // var_dump($make); // Debugging line, can be removed later
+
+        $model = null;
 
         foreach ($facetTypes as $type) {
             $facets[$type] = FilterFacet::where('facet_type', $type)
@@ -26,31 +40,24 @@ class VehicleSearchController extends Controller
                     'label' => $item->{'label_' . $locale} ?? $item->label_en,
                 ]);
         }
-
-        $makes = $motorK->getMakes();
         $query = $request->query();
 
-        /* if ($brand) {
-            $query['brands'] = 'dacia';
-        }
-        if ($model) {
-            $query['models'] = $model;
-        } */
-/* var_dump($model); */
         $filters = $this->parseQueryFilters($query);
 
-        return view('pages.vehicles.search', compact('facets','makes','filters'));
+        return view('pages.vehicles.search', compact('facets','makes','filters', 'make', 'model'))
+            ->with('locale', $locale)
+            ->with('query', $query);
 
     }
 
-    public function byBrand(Request $request, MotorKVehicleService $motorK, string $brand)
+    public function byMake(Request $request, MotorKVehicleService $motorK, string $lang, string $makeSlug)
     {
-        return $this->__invoke($request, $motorK, $brand);
+        return $this->__invoke($request, $motorK, $lang, $makeSlug);
     }
 
-    public function byBrandModel(Request $request, MotorKVehicleService $motorK, string $brand, string $model)
+    public function byMakeModel(Request $request, MotorKVehicleService $motorK, string $lang, string $makeSlug, string $modelSlug)
     {
-        return $this->__invoke($request, $motorK, $brand, $model);
+        return $this->__invoke($request, $motorK, $lang, $makeSlug, $modelSlug);
     }
 
     public function partialResult(Request $request, MotorKVehicleService $motorKService)
@@ -62,9 +69,11 @@ class VehicleSearchController extends Controller
 
 
         return response(view('partials.vehicles.search.results', compact('vehicles','filters')))
-            ->header('X-Total-Count', $vehicles['total'])
-            ->header('X-Total-Pages', $vehicles['totalPages'])
-            ->header('X-Current-Page', $vehicles['currentPage'])
+            ->header('X-Total-Count', $vehicles['total'] ?? '')
+            ->header('X-Total-Pages', $vehicles['totalPages'] ?? '')
+            ->header('X-Current-Page', $vehicles['currentPage'] ?? '')
+            ->header('X-Total-Submodels-Count', $vehicles['totalSubmodels'] ?? '')
+            ->header('X-Total-Versions-Count', $vehicles['totalVersions'] ?? '')
             ->header('X-Facets', json_encode($this->parseQueryFilters($request->query())));
 
     }
@@ -81,7 +90,7 @@ class VehicleSearchController extends Controller
                     'values' => $facet_type->getValues(explode(',',$query[$facet_type->value])),
                 ];
                 switch ($facet_type) {
-                    case FilterEnum::Brands:
+                    case FilterEnum::Makes:
                         $f['values'] = collect($f['values'])->map(function ($val) {
                             $val['label'] = strtoupper($val['label']);
                             return $val;

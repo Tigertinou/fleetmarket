@@ -32,6 +32,14 @@
 
     <x-layouts.header />
 
+    @stack(\App\Support\Stack::COVER)
+    @if(isset($cover))
+        <div class="relative">
+            <img src="{{ $cover }}" class="object-cover w-full h-64 md:h-96">
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+        </div>
+    @endif
+
     <x-layouts.breadcrumb :$breadcrumb/>
 
     {{-- Contenu principal --}}

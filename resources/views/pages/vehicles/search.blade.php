@@ -5,7 +5,6 @@ $breadcrumb = [
 ]
 @endphp
 <x-layouts.app :title="'Page'" :$breadcrumb>
-
     <div id="main" class="max-w-screen-xl mx-auto" x-data="{
         filtersOpen: false,
         suggestionsOpen: false,
@@ -27,8 +26,19 @@ $breadcrumb = [
         <div class="flex gap-4 px-4">
             <div class="flex-1">
                 <div class="pt-6">
-                    <h1 class="h1">Les offres du mois</h1>
-                    <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
+
+                    @if($make)
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="flex-1">
+                                <h1 class="h1">Les offres {{ $make['name'] }} du mois</h1>
+                                <p class="text-sm md:text-md">Découvrez les modèles de la marque {{ $make['name'] }} disponibles en Belgique, {{ strftime('%B %Y') }}</p>
+                            </div>
+                            <img src="{{ $make['logo'] }}" class="w-20 md:w-24">
+                        </div>
+                    @else
+                        <h1 class="h1">Les offres du mois</h1>
+                        <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
+                    @endif
 
                     <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y" x-show="facets.length > 0">
                         <template x-for="facet in facets">
@@ -63,7 +73,7 @@ $breadcrumb = [
                             <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
                         </div>
 
-                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalFound">0</b> véhicules trouvés</div>
+                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalSubmodelsFound">0</b> modèles trouvés</div>
                     </div>
 
                     <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
@@ -101,6 +111,13 @@ $breadcrumb = [
 
 </x-layouts.app>
 <script>
+@if($make)
+    let p = new URLSearchParams(window.location.search);
+    p.set('makes', '{{ $make['slug'] }}');
+    window.searchParams = p.toString();
+    window.history.pushState({}, '', `${window.location.pathname}?${p.toString()}`);
+@endif
+
 window.searchParams = window.location.search || '';
 
 window.removeParams = function (type,code) {
@@ -135,9 +152,15 @@ window.loadSearchResults = function(params = window.location.search) {
     fetch('/{{ app()->getLocale() }}/partials/vehicles/search/results?' + params.toString())
     .then(response => {
         const total = response.headers.get('X-Total-Count');
-        if (total !== null) {
+        if (total !== null && total !== '') {
             document.querySelectorAll('[data-var="totalFound"]').forEach( (el)=>{
                 el.innerHTML = total;
+            })
+        }
+        const totalSubmodels = response.headers.get('X-Total-Submodels-Count');
+        if (totalSubmodels !== null && totalSubmodels !== '') {
+            document.querySelectorAll('[data-var="totalSubmodelsFound"]').forEach( (el)=>{
+                el.innerHTML = totalSubmodels;
             })
         }
         const facets = response.headers.get('X-Facets');
@@ -167,6 +190,9 @@ window.loadSearchResults = function(params = window.location.search) {
 
 window.populateSearch = function(){
     const params = new URLSearchParams(window.location.search);
+    document.querySelectorAll('.range-slider').forEach((el) => {
+        el.slider?.reset();
+    });
     params.forEach((value, key) => {
         switch (key){
             case 'sort':
@@ -176,7 +202,7 @@ window.populateSearch = function(){
                 }
             break;
             case 'page':
-                
+
             break;
             default :
                 if (!value || value.trim() == '') {
@@ -202,10 +228,10 @@ window.runSearch = function(){
     const params = new URLSearchParams(window.searchParams || document.location.search);
     params.delete('page');
     /* params.delete('offset'); */
-    params.set('price_min', document.querySelector('[name="inp_price_min"]')?.value || '');
-    params.set('price_max', document.querySelector('[name="inp_price_max"]')?.value || '');
+    if(document.querySelector('[name="inp_price_min"]')?.hasChanged){ params.set('price_min', document.querySelector('[name="inp_price_min"]')?.value || '') };
+    if(document.querySelector('[name="inp_price_max"]')?.hasChanged){ params.set('price_max', document.querySelector('[name="inp_price_max"]')?.value || '') };
     params.set('bodytype', [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','));
-    params.set('brands', [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value ).join(','));
+    params.set('makes', [...document.querySelectorAll('[name="inp_makes"]:checked')].map(input => input.value ).join(','));
     params.set('traction', [...document.querySelectorAll('[name="inp_traction"]:checked')].map(input => input.value).join(','));
     params.set('fueltype', [...document.querySelectorAll('[name="inp_fueltype"]:checked')].map(input => input.value).join(','));
     params.set('gearbox', [...document.querySelectorAll('[name="inp_gearbox"]:checked')].map(input => input.value).join(','));

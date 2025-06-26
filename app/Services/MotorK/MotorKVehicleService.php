@@ -107,6 +107,8 @@ class MotorKVehicleService
         $res = [
             'status' => $response->status(),
             'total' => 0,
+            'totalSubmodels' => 0,
+            'totalVersions' => 0,
             'currentPage' => 0,
             'totalPages' => 0,
             'perPage' => $queryParams['rows'],
@@ -120,9 +122,11 @@ class MotorKVehicleService
             $items = $json['response']['searchResults']['models'];
             $res = array_merge($res, [
                 'status' => $response->status(),
-                'total' => $json['response']['numResultFound'] ?? count($items),
+                'total' => $json['response']['numGroupedFound'] ?? count($items),
+                'totalSubmodels' => $json['response']['numResultFound'] ?? 0,
+                'totalVersions' => $json['response']['numVersionsFound'] ?? 0,
                 'currentPage' => floor($queryParams['start'] / $queryParams['rows']) + 1,
-                'totalPages' => ceil(($json['response']['numResultFound'] ?? count($items)) / $queryParams['rows'])
+                'totalPages' => ceil(($json['response']['numGroupedFound'] ?? count($items)) / $queryParams['rows'])
             ]);
             foreach ($items as $item) {
 
@@ -137,6 +141,52 @@ class MotorKVehicleService
         return $res;
     }
 
+    public function getModelBySlug(string $makeSlug, $modelSlug): array
+    {
+        $queryParams = [
+            'withVersions' => 1,
+            'withMedias' => 1,
+            'q' => '',
+        ];
+        $q = [];
+        $q[] = "makeUrlCode:{$makeSlug}";
+        $q[] = "modelUrlCode:{$modelSlug}";
+
+        $queryParams['q'] = implode(' AND ', $q);
+        $query = http_build_query($queryParams);
+
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models?" . $query);
+        $res = [
+            'status' => $response->status(),
+            'total' => 0,
+            'totalVersions' => 0,
+            'data' => []
+        ];
+        if ($response->successful()) {
+            $json = $response->json();
+            $items = $json['response']['searchResults']['models'];
+            $res = array_merge($res, [
+                'status' => $response->status(),
+                'total' => $json['response']['numGroupedFound'] ?? count($items),
+                'totalVersions' => $json['response']['numVersionsFound'] ?? 0
+            ]);
+            foreach ($items as $item) {
+                $res['data'][] = $item;
+            }
+        }
+        return $res;
+    }
+
+   /*  public function getSubmodel(string $submodelSlug): array
+    {
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models/{$makeSlug}");
+        $json = $response->json();
+        $res = [];
+        foreach ($json['response'] as $item) {
+            $res['data'][] = $item;
+        }
+        return $res;
+    } */
 
 
 

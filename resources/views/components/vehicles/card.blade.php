@@ -1,17 +1,20 @@
 @php
-// $model_link = localized_route('pages.vehicles.detail', ['slug' => $vehicle['model']['slug']]) ;
+$model_link = localized_route('pages.vehicles.detail.model', [
+    'make' => $vehicle['model']['makeUrlCode'],
+    'model' => $vehicle['model']['modelUrlCode']
+]);
 @endphp
 <div class="bg-white border-gray-100 shadow-lg md:border-t md:border-r">
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row">
             <div class="relative md:max-w-xs">
                 <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon icon-camera bottom-3 right-3"></a>
-                <img src="{{ $vehicle['model']['covers'][0]['cover500'] }}" class="object-cover w-full aspect-3/2">
+                <a href="{{ $model_link }}"><img src="{{ $vehicle['model']['covers'][0]['cover500'] }}" class="object-cover w-full aspect-3/2"></a>
             </div>
             <div class="flex flex-col flex-1 gap-2 p-4">
                 <div class="flex-1">
                     <div class="text-2xl font-bold">
-                        <h3>{{ $vehicle['model']['makeName'] }} <b class="font-normal">{{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}</b></h3>
+                        <a href="{{ $model_link }}"><h3>{{ $vehicle['model']['makeName'] }} <b class="font-normal">{{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}</b></h3></a>
                     </div>
                     <p class="text-xs leading-5">
                         @if(isset($vehicle['fuelTypeLabel']))
@@ -56,13 +59,13 @@
                 @if(isset($vehicle['summary']['minPrice']))
                     <div class="flex items-center">
                         <div class="flex-1 text-xs">Prix à partir de</div>
-                        <div class="text-xs"><span class="mr-1 text-3xl font-extrabold md:text-2xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
+                        <div class="text-xs"><a href="{{ $model_link }}" class="mr-1 text-3xl font-extrabold md:text-2xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> TTC*</div>
                     </div>
                 @endif
                 <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100 md:justify-end md:flex-row">
                     <div class="md:flex-1"><a href="" class="text-xs font-semibold underline">Comparer avec un autre vehicule</a></div>
                     {{--<x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>--}}
-                    <x-utils.button label="En savoir plus" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none"></x-utils.button>
+                    <x-utils.button label="En savoir plus" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none" url="{{ $model_link }}"></x-utils.button>
                 </div>
             </div>
         </div>

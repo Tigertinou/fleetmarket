@@ -2,17 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VehicleSearchController;
+use App\Http\Controllers\VehicleDetailModelController;
+use App\Http\Controllers\VehicleDetailSubmodelController;
+use App\Http\Middleware\SetLocale;
 
 Route::redirect('/', '/fr/');
 
-Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en']], function () {
+Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middleware' => [SetLocale::class]], function () {
     Route::get('/', function () {
         return view('pages.home');
     })->name('pages.home');
 
     Route::get('/recherche',VehicleSearchController::class)->name('pages.vehicles.search');
-
-    
 
     Route::get('/compare', function () {
         return view('pages.vehicles.compare');
@@ -26,9 +27,11 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en']], function
         Route::get('/vehicles/search/results', [VehicleSearchController::class, 'partialResult'])->name('vehicles.search.partial');
     });
 
-    Route::get('/{brand}', [VehicleSearchController::class, 'byBrand'])->name('pages.vehicles.search.brand');
+    Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');
 
-    Route::get('/{brand}/{model}', [VehicleSearchController::class, 'byBrandModel'])->name('pages.vehicles.search.brand.model');
+    Route::get('/{make:slug}/{model:slug}', VehicleDetailModelController::class)->name('pages.vehicles.detail.model');
 
-    Route::get('/{brand}/{model}/{version}', [VehicleController::class, 'showVersion'])->name('pages.vehicles.version');
+    Route::get('/{make:slug}/{model:slug}/{submodel:slug}', VehicleDetailSubmodelController::class)->name('pages.vehicles.detail.submodel');
+
+    // Route::get('/{make:slug}/{model:slug}/{version:slug}', [VehicleController::class, 'showVersion'])->name('pages.vehicles.version');
 });

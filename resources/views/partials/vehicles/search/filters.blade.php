@@ -56,7 +56,7 @@
                 @foreach ($makes as $make)
                     <x-forms.elements.checkbox
                         class="flex items-center font-bold uppercase"
-                        name="inp_brands"
+                        name="inp_makes"
                         :value="$make['slug'] ?? ''"
                     >
                     <span class="flex items-center flex-1"><img src="{{ $make['logo'] }}" class="w-10 mr-2"> {{ $make['name'] }}</span>

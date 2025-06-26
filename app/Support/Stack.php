@@ -19,4 +19,5 @@ class Stack
     const CONTENT_END = "stack-content-end";
     const FOOTER_START = "stack-footer-start";
     const FOOTER_END = "stack-footer-end";
+    const COVER = "stack-cover";
 }

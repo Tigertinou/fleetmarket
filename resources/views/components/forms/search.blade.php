@@ -9,7 +9,7 @@
 
         <div class="mb-4 md:pl-4 md:w-1/2">
             <div class="mb-2 text-sm font-extrabold">Marques</div>
-            <x-forms.elements.select id="brands-select" multiple :options="[]" name="inp_brands" placeholder="Toutes les marques ..."/>
+            <x-forms.elements.select id="makes-select" multiple :options="[]" name="inp_makes" placeholder="Toutes les marques ..."/>
         </div>
 
         <div class="md:w-full">
@@ -37,7 +37,7 @@
                 price_min: document.querySelector('[name="inp_price_min"]')?.value,
                 price_max: document.querySelector('[name="inp_price_max"]')?.value,
                 bodytype : [...document.querySelectorAll('[name="inp_bodytype"]:checked')].map(input => input.value).join(','),
-                brands : [...document.querySelectorAll('[name="inp_brands"]:checked')].map(input => input.value).join(',')
+                makes : [...document.querySelectorAll('[name="inp_makes"]:checked')].map(input => input.value).join(',')
             });
             for (const [key, value] of params.entries()) {
                 if (!value || value.trim() == '') {
@@ -48,14 +48,14 @@
         })
 
         window.api.motork.getMakes().then(function (makes) {
-            const list = document.querySelector('#brands-select .select-list');
+            const list = document.querySelector('#makes-select .select-list');
             if(list!=null){
                 makes.forEach(item => {
                     let div = document.createElement('div');
                     div.setAttribute('class', 'px-3 border-b border-gray-100 active:bg-gray-50 hover:bg-gray-50 text-sm');
                     div.innerHTML = `<div class="flex items-center checkbox">
-                        <input type="checkbox" id="id-brands-${ item.slug }" name="inp_brands" value="${ item.slug }" data-label="${ item.name.toUpperCase() }" @change="change">
-                        <label class="flex items-center flex-1 py-2 pl-3 mr-8 font-extrabold uppercase cursor-pointer select-none" for="id-brands-${ item.slug }">
+                        <input type="checkbox" id="id-makes-${ item.slug }" name="inp_makes" value="${ item.slug }" data-label="${ item.name.toUpperCase() }" @change="change">
+                        <label class="flex items-center flex-1 py-2 pl-3 mr-8 font-extrabold uppercase cursor-pointer select-none" for="id-makes-${ item.slug }">
                             <span><img src="${ item.logo }" class="w-10 mr-2"></span>
                             <b>${ item.name.toUpperCase() }</b>
                         </label>

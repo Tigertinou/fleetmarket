@@ -1,6 +1,7 @@
 export default class RangeSlider {
     constructor(el) {
         this.slider = el;
+        el.slider = this;
 
         this.step = parseInt(el.dataset.step || 1);
         this.min = parseInt(el.dataset.min || 0);
@@ -38,6 +39,7 @@ export default class RangeSlider {
         this.inputFrom.name = `${el.dataset.name}_min`;
         this.inputFrom.value = this.minValue;
         this.inputFrom.isRangeSliderInput = true;
+        this.inputFrom.hasChanged = true;
         this.inputFrom.updateRangeSlider = () => {
             if (this.inputFrom.value !== this.from.value) {
                 this.from.value = this.inputFrom.value;
@@ -52,6 +54,7 @@ export default class RangeSlider {
         this.inputTo.name = `${el.dataset.name}_max`;
         this.inputTo.value = this.maxValue;
         this.inputTo.isRangeSliderInput = true;
+        this.inputTo.hasChanged = true;
         this.inputTo.updateRangeSlider = () => {
             if (this.inputTo.value !== this.to.value) {
                 this.to.value = this.inputTo.value;
@@ -86,7 +89,22 @@ export default class RangeSlider {
         this.change();
     }
 
+    reset() {
+        this.inputFrom.value = this.minValue;
+        this.inputTo.value = this.maxValue;
+        this.from.value = this.minValue;
+        this.to.value = this.maxValue;
+        this.inputFrom.hasChanged = false;
+        this.inputTo.hasChanged = false;
+        this.fillSlider();
+        this.change();
+    }
+
     change() {
+        if(this.inputFrom.value!== this.from.value || this.inputTo.value !== this.to.value) {
+            this.inputFrom.hasChanged = true;
+            this.inputTo.hasChanged = true;
+        }
         this.inputFrom.value = this.from.value;
         this.inputTo.value = this.to.value;
         this.slider.querySelectorAll('.text-min').forEach(el => {

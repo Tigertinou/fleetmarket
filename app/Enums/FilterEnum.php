@@ -4,11 +4,11 @@ namespace App\Enums;
 
 use Illuminate\Support\Facades\Cache;
 use App\Models\FilterFacet;
-use App\Models\Brand;
+use App\Models\Makes;
 
 enum FilterEnum: string
 {
-    case Brands    = 'brands';
+    case Makes    = 'makes';
     case FuelType  = 'fueltype';
     case BodyType  = 'bodytype';
     case Gearbox   = 'gearbox';
@@ -21,7 +21,7 @@ enum FilterEnum: string
     public function label(string $locale = 'fr'): string
     {
         return match ($this) {
-            self::Brands    => $locale === 'nl' ? 'Merk' : 'Marque',
+            self::Makes    => $locale === 'nl' ? 'Merk' : 'Marque',
             self::FuelType  => $locale === 'nl' ? 'Brandstoftype' : 'Carburant',
             self::BodyType  => $locale === 'nl' ? 'Koetswerk' : 'Type de carrosserie',
             self::Gearbox   => $locale === 'nl' ? 'Versnellingsbak' : 'Boîte de vitesses',
@@ -36,7 +36,7 @@ enum FilterEnum: string
     public function filterSearchCode(): string
     {
         return match ($this) {
-            self::Brands    => 'makeUrlCode',
+            self::Makes    => 'makeUrlCode',
             self::FuelType  => 'fuelType',
             self::BodyType  => 'bodyType',
             self::Gearbox   => 'gearboxType',

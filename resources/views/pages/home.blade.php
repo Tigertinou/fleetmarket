@@ -15,8 +15,8 @@
     <x-utils.container class="py-4 md:py-6">
         <div class="text-center">
             <h2 class="h1">Quelle marque préférez-vous ?</h2>
-            <p>Choisissez parmi les <span class="brands-count"></span> marques du marché belge</p>
-            <div class="flex flex-wrap justify-center max-w-screen-xl mx-auto my-4" id="brands-grid"></div>
+            <p>Choisissez parmi les <span class="makes-count"></span> marques du marché belge</p>
+            <div class="flex flex-wrap justify-center max-w-screen-xl mx-auto my-4" id="makes-grid"></div>
         </div>
     </x-utils.container>
 
@@ -60,16 +60,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     window.api.motork.getMakes().then(function (makes) {
-        const list = document.querySelector('#brands-grid');
+        const list = document.querySelector('#makes-grid');
         if(list!=null){
             makes.forEach(item => {
                 let el = document.createElement('a');
-                el.href = `{{ localized_route('pages.vehicles.search') }}?brands=${ item.slug }`;
+                el.href = `/{{ app()->getLocale() }}/${ item.slug }`;
                 el.setAttribute('class', 'bg-white flex items-center justify-center outline-1 outline-gray-200 p-4 cursor-pointer hover:bg-gray-50 ');
                 el.innerHTML = `<img src="${ item.logo }" class="w-20 md:w-24">`;
                 list.appendChild(el);
             });
-            document.querySelector('.brands-count').textContent = makes.length;
+            document.querySelector('.makes-count').textContent = makes.length;
         }
     }).catch(function (error) {
         console.error('Error fetching makes:', error);

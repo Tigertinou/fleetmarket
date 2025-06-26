@@ -17,11 +17,11 @@
     @foreach ( $vehicles['data'] as $key => $vehicle)
         <x-vehicles.card :vehicle="$vehicle" :show-compare-button="true" :show-more-button="true" />
 
-        
+
     @endforeach
 </div>
 <div class="pt-4">
-    <x-utils.pagination :total-pages="$vehicles['totalPages']" :per-page="$vehicles['perPage']" :current-page="$vehicles['currentPage']" :total="$vehicles['total']"/>
+    <x-utils.pagination :total-pages="$vehicles['totalPages']" :per-page="$vehicles['perPage']" :current-page="$vehicles['currentPage']" :total="$vehicles['totalSubmodels']" :tl-elements="__('modèles')"/>
 </div>
 {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 {{-- <pre>{{ json_encode($vehicles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
