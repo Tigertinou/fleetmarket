@@ -63,7 +63,7 @@ switch ($size) {
 }
 @endphp
 <a href="{{ $url }}" {{ $attributes->merge(['class' => $def_class]) }}>
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center h-full">
         @if($icon ?? false)
             <div class="align-middle {{ $def_class_icon }}"><i class="icon {{ $icon }} inline-block"></i></div>
         @endif

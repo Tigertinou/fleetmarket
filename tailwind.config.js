@@ -39,5 +39,7 @@ module.exports = {
     'fill-efficiency-F',
     'fill-efficiency-G',
   ],
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide'),
+  ],
 }

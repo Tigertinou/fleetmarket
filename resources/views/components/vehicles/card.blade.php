@@ -9,7 +9,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
         <div class="flex flex-col md:flex-row">
             <div class="relative md:max-w-xs">
                 <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon icon-camera bottom-3 right-3"></a>
-                <a href="{{ $model_link }}"><img src="{{ $vehicle['model']['covers'][0]['cover500'] }}" class="object-cover w-full aspect-3/2"></a>
+                <a href="{{ $model_link }}"><img src="{{ $vehicle['model']['mainImage']['image400'] }}" class="object-cover w-full aspect-3/2"></a>
             </div>
             <div class="flex flex-col flex-1 gap-2 p-4">
                 <div class="flex-1">
