@@ -147,7 +147,7 @@ $breadcrumb = [
         </div>
 
         <div class="mt-8"><b>Box</b></div>
-        <div class="mt-4 select-none" x-data="{ 
+        <div class="mt-4 select-none" x-data="{
             change(target){
                 $el.querySelectorAll('[name=inp_radio]').forEach( (el) => {
                     const data = Alpine.$data(el).active = (el==target);
@@ -161,13 +161,13 @@ $breadcrumb = [
             }}">
             <x-utils.box x-data="{active : false}">
                 <div class="flex gap-3" @click="select($event.target)">
-                    <x-forms.elements.radio name="inp_radio" value="1" @change="change($event.target)" size="md" class="pt-0.5 -ml-2"/> 
+                    <x-forms.elements.radio name="inp_radio" value="1" @change="change($event.target)" size="md" class="pt-0.5 -ml-2"/>
                     <div class="flex-1"><b>Box default</b><br><small>Cum ducimus dolorem in velit Quis sed nisi voluptas 33 galisum dolor sed dolore repellat ut perspiciatis temporibus qui expedita excepturi. Et consequatur iusto ea sunt quas hic tenetur quidem a explicabo esse ut illum illo et repellendus vero aut porro nisi.</small></div>
                 </div>
             </x-utils.box>
             <x-utils.box class="mt-2" x-data="{active : true}">
                 <div class="flex gap-3" @click="select($event.target)">
-                    <x-forms.elements.radio name="inp_radio" value="2" @change="change($event.target)" size="md" class="pt-0.5 -ml-2" checked/> 
+                    <x-forms.elements.radio name="inp_radio" value="2" @change="change($event.target)" size="md" class="pt-0.5 -ml-2" checked/>
                     <div class="flex-1"><b>Box active</b><br><small>Cum ducimus dolorem in velit Quis sed nisi voluptas 33 galisum dolor sed dolore repellat ut perspiciatis temporibus qui expedita excepturi. Et consequatur iusto ea sunt quas hic tenetur quidem a explicabo esse ut illum illo et repellendus vero aut porro nisi.</small></div>
                 </div>
             </x-utils.box>

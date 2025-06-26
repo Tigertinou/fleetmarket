@@ -5,6 +5,7 @@
 $def_class = 'box block rounded-xl px-6 py-4';
 switch ($color) {
     case 'default':
+    case 'bordered':
         $def_class .= " border-2 border-gray-200";
     break;
     case 'theme':
@@ -23,6 +24,6 @@ switch ($color) {
     break;
 }
 @endphp
-<div {{ $attributes->merge(['class' => $def_class]) }} :class="active ? 'border-theme' : ''">
+<div {{ $attributes->merge(['class' => $def_class]) }}>
     {!! $slot !!}
 </div>

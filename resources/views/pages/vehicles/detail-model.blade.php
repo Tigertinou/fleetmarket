@@ -6,6 +6,7 @@ $breadcrumb = [
     ['label' => $vehicle['model']['modelName'] ]
 ];
 @endphp
+
 @push(\App\Support\Stack::COVER)
     <div>
         <div>
@@ -14,6 +15,7 @@ $breadcrumb = [
         </div>
     </div>
 @endpush
+
 <x-layouts.app :title="'Page'" :$breadcrumb>
 
     <x-utils.container class="border-b border-gray-200">
@@ -41,14 +43,14 @@ $breadcrumb = [
             <h2 class="mb-2 text-2xl">Configurez votre voiture</h2>
             <p class="text-xs">Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.</p>
             <div class="flex flex-col gap-4 mt-6 md:flex-row">
-                <x-utils.button size="lg" r-icon="icon-chevron-right" color="bordered" class="flex-1 w-full hover:outline-2 hover:outline-theme" align="center">
+                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme">
                     <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Finition</span>
                     Sélectionner la <b class="font-semibold">finition</b>
-                </x-utils.button>
-                <x-utils.button size="lg" r-icon="icon-chevron-right" color="bordered" class="flex-1 w-full hover:outline-2 hover:outline-theme" align="center">
+                </x-utils.box>
+                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme">
                     <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Moteur</span>
                     Sélectionner le <b class="font-semibold">moteur</b>
-                </x-utils.button>
+                </x-utils.box>
                 <x-utils.button size="md" color="theme" class="flex-1 w-full" align="center">
                     Configurez votre <b class="font-semibold">voiture</b><br>
                 </x-utils.button>
@@ -57,33 +59,50 @@ $breadcrumb = [
     </x-utils.container>
 
     @if(isset($vehicle['model']['images']))
-        <x-utils.container class="py-4 overflow-auto md:py-2 bg-gray-50 snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;">
-            <div class="flex gap-3 flex-nowrap">
-                @foreach ($vehicle['model']['images'] as $image)
-                    @if(isset($image['image800']))
-                        <div class="relative h-120 aspect-9/16 md:aspect-4/3 md:h-96">
-                            <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon icon-expand bottom-3 right-3"></a>
-                            <img src="{{ $image['image800'] }}" class="object-cover w-full h-full snap-center">
-                        </div>
-                    @endif
-                @endforeach
+        <div x-data="{
+                expanded: false,
+                init() {
+                    this.scroller = $el.children[0];
+                    this.scroller.scrollTo(0,0);
+                },
+                expand (event) {
+                    this.expanded = true;
+                },
+                collapse (event) {
+                    this.expanded = false;
+                },
+                back () {
+                    this.scroller.scrollBy({
+                        left: -this.scroller.clientWidth,
+                        behavior: 'smooth'
+                    });
+                },
+                next () {
+                    this.scroller.scrollBy({
+                        left: this.scroller.clientWidth,
+                        behavior: 'smooth'
+                    });
+                }
+            }" class="py-4  flex flex-col" :class="expanded ? 'fixed bg-black text-white top-0 left-0 right-0 bottom-0 z-100 h-screen w-screen' : 'bg-gray-50'">
+            <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
+                <div class="flex flex-nowrap" :class="expanded ? 'w-screen h-full' : 'gap-3 px-4 h-120 md:h-96'" style="width:fit-content;">
+                    @foreach ($vehicle['model']['images'] as $image)
+                        @if(isset($image['image800']))
+                            <div class="relative h-full" :class="expanded ? 'w-screen flex items-center' : 'aspect-9/16 md:aspect-4/3 w-full'">
+                                <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon top-3 right-3" :class="expanded ? 'icon-times text-xl fixed top-4 right-4' : 'icon-expand'" @click="( expanded ? collapse(event) : expand(event) ) "></a>
+                                <img src="{{ $image['image800'] }}" loading="lazy" class=" w-full h-full snap-center" @click="expand" :class="expanded ? 'object-contain max-h-[80vh]' : 'object-cover'">
+                            </div>
+                        @endif
+                    @endforeach
+                    <div>&nbsp;</div>
+                </div>
             </div>
-        </x-utils.container>
+            <div class="flex items-center justify-center max-w-screen-xl gap-4 px-4 mx-auto mt-4">
+                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-left hover:opacity-90" @click="back" :class="expanded ? '' : 'bg-white'"></div>
+                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-right hover:opacity-90" @click="next" :class="expanded ? '' : 'bg-white'"></div>
+            </div>
+        </div>
     @endif
-
-
-    {{-- @if(isset($vehicle['model']['mosaic']))
-        <x-utils.container class="py-4 overflow-auto md:py-2 bg-gray-50 snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;">
-            <div class="flex gap-3 flex-nowrap">
-                @foreach ($vehicle['model']['mosaic'] as $image)
-                    <div class="relative h-120 aspect-9/16 md:aspect-4/3 md:h-96">
-                        <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon icon-expand bottom-3 right-3"></a>
-                        <img src="{{ $image['image400'] }}" class="object-cover w-full h-full snap-center">
-                    </div>
-                @endforeach
-            </div>
-        </x-utils.container>
-    @endif --}}
 
     <x-utils.container class="py-4 md:py-2">
         <div>
