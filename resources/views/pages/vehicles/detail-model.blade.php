@@ -47,7 +47,7 @@ $breadcrumb = [
     <x-utils.container class="py-6">
         <div class="text-center md:text-left">
             <h2 class="mb-2 text-2xl">Configurez votre voiture</h2>
-            <p class="text-xs">Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.</p>
+            <p class="text-xs md:text-sm">Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.</p>
             <div class="flex flex-col gap-4 mt-6 md:flex-row">
                 <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme">
                     <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Finition</span>
@@ -69,12 +69,90 @@ $breadcrumb = [
     @if(isset($submodeColors) && isset($submodeColors['data']['external']) && count($submodeColors['data']['external']) > 0)
         <x-utils.container class="py-4 md:py-2">
             <div>
-                <h2 class="text-2xl">Couleurs</h2>
+                <h2 class="mb-6 text-2xl text-center md:text-left">Couleurs</h2>
                 <x-vehicles.colors-selector :colors="$submodeColors['data']['external']"></x-vehicles.colors-selector>
             </div>
         </x-utils.container>
     @endif
 
-     {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodeColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>--}}
+    <x-utils.container class="py-4 bg-gray-100 md:py-2">
+        <div>
+            <h2 class="mb-6 text-2xl text-center md:text-left">Spécifications techniques</h2>
+            <div class="mb-4 text-xs md:text-base">
+                @php
+                    $specs = array(
+                        'min_power_hp' => null,
+                        'max_power_hp' => null,
+                        'min_power_kw' => null,
+                        'max_power_kw' => null,
+                        'min_co2' => null,
+                        'max_co2' => null,
+                        'min_cyl' => null,
+                        'max_cyl' => null,
+                        'min_consumption' => null,
+                        'max_consumption' => null,
+                        'min_autonomy' => null,
+                        'max_autonomy' => null,
+                        'min_electric_consumption' => null,
+                        'max_electric_consumption' => 0
+                    );
+                    [$specs['min_power_hp'], $specs['max_power_hp']] = minmax(array_map(fn($v) => $v['engine']['HP'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_power_kw'], $specs['max_power_kw']] = minmax(array_map(fn($v) => $v['engine']['kw'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_co2'], $specs['max_co2']] = minmax(array_map(fn($v) => $v['omologation']['emissions']['combined'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_cyl'], $specs['max_cyl']] = minmax(array_map(fn($v) => $v['engine']['cm3'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_consumption'], $specs['max_consumption']] = minmax(array_map(fn($v) => $v['omologation']['consumption']['combined'] ?? $v['consumption']['combined'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_autonomy'], $specs['max_autonomy']] = minmax(array_map(fn($v) => $v['battery']['autonomy'] ?? $v['omologation']['range']['combined'] ?? null, $vehicle['model']['versions'])) ?? [null, null];
+                    [$specs['min_electric_consumption'], $specs['max_electric_consumption']] = minmax(array_map(fn($v) => $v['omologation']['electricConsumption']['combined'] ?? null, $vehicle['model']['versions'])) ?? [null, 0];
+                @endphp
+                <ul class="flex flex-col cursor-default gap-y-2 gap-x-1 specs-list">
+                    <li class=" hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Puissance</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_power_hp'] }} - {{ $specs['max_power_hp'] }} <small>HP</small> / {{ $specs['min_power_kw'] }} - {{ $specs['max_power_kw'] }} <small>CV</small></span>
+                    </li>
+                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Émissions de CO2</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_co2'] }} - {{ $specs['max_co2'] }} <small>g/Km**</small></span>
+                    </li>
+                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Cylindrée</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_cyl'] }} - {{ $specs['max_cyl'] }} <small>cm3</small></span>
+                    </li>
+                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Consommation de carburant mixte</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_consumption'] }} - {{ $specs['max_consumption'] }} <small>l/100km**</small></span>
+                    </li>
+                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Autonomie</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_autonomy'] }} - {{ $specs['max_autonomy'] }} <small>Km</small></span>
+                    </li>
+                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                        <span>Consommation électrique mixte</span>
+                        <span class="dots"></span>
+                        <span class="font-normal">{{ $specs['min_electric_consumption'] }} - {{ $specs['max_electric_consumption'] }} <small>kWh/100km**</small></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </x-utils.container>
+
+    <x-utils.container class="py-4 md:py-2">
+        <div>
+            <h2 class="text-2xl text-center md:text-left">Finitions</h2>
+            <div></div>
+        </div>
+    </x-utils.container>
+
+
+    @foreach ($vehicle['model']['versions'] as $version)
+        {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($specs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+        {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($version, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+    @endforeach
+
+     {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
 </x-layouts.app>
