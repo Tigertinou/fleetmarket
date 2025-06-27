@@ -9,7 +9,8 @@ $breadcrumb = [
 
 @push(\App\Support\Stack::COVER)
     <div>
-        <div>
+        <div class="relative">
+            <img src="{{ $make['logo'] }}" class="absolute w-10 md:w-24 md:order-1 invert right-4 top-4" alt="{{ $vehicle['model']['makeName'] }} logo">
             <img src="{{ $vehicle['model']['covers'][0]['cover1600'] }}" class="hidden object-cover w-full md:block">
             <img src="{{ $vehicle['model']['covers'][0]['cover500'] }}" class="object-cover w-full md:hidden">
         </div>
@@ -20,7 +21,7 @@ $breadcrumb = [
 
     <x-utils.container class="border-b border-gray-200">
         <div class="flex flex-col items-center justify-between -my-2 md:gap-4 md:flex-row">
-            <div class="flex flex-row items-center w-full my-4 md:gap-4 justify-beetween md:w-auto md:my-0">
+            <div class="flex flex-row items-center w-full my-4 md:gap-4 justify-beetween md:w-auto">
                 <div class="flex-1 md:order-2">
                     <h1 class="flex flex-wrap gap-x-2 h1" style="margin:0;">
                         <span>{{ $vehicle['model']['makeName'] }}</span>
@@ -31,14 +32,13 @@ $breadcrumb = [
                             <span class="text-xs font-light underline">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
                         @endif
                     </p>
-                    {{-- <p class="text-sm md:text-md">Découvrez les modèles de la marque {{ $make['name'] }} disponibles en Belgique, {{ strftime('%B %Y') }}</p> --}}
                 </div>
                 <img src="{{ $make['logo'] }}" class="self-start w-20 md:w-24 md:order-1" alt="{{ $vehicle['model']['makeName'] }} logo">
             </div>
             @if(isset($vehicle['summary']['minPrice']))
                 <div class="flex items-center w-full gap-4 md:w-auto">
                     <div class="flex-1 text-xs">Prix à partir de</div>
-                    <div class="text-xs"><span class="mr-1 text-3xl font-extrabold md:text-3xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
+                    <div class="text-xs"><a href="#versions" class="mr-1 text-3xl font-extrabold md:text-3xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> TTC*</div>
                 </div>
             @endif
         </div>
@@ -66,13 +66,15 @@ $breadcrumb = [
 
     <x-vehicles.gallery :images="$vehicle['model']['images']" />
 
-    <x-utils.container class="py-4 md:py-2">
-        <div>
-            <h2 class="text-2xl">Couleurs</h2>
+    @if(isset($submodeColors) && isset($submodeColors['data']['external']) && count($submodeColors['data']['external']) > 0)
+        <x-utils.container class="py-4 md:py-2">
+            <div>
+                <h2 class="text-2xl">Couleurs</h2>
+                <x-vehicles.colors-selector :colors="$submodeColors['data']['external']"></x-vehicles.colors-selector>
+            </div>
+        </x-utils.container>
+    @endif
 
-        </div>
-    </x-utils.container>
-
-    {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+     <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodeColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>{{-- --}}
 
 </x-layouts.app>

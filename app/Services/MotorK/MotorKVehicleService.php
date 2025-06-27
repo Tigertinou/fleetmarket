@@ -177,6 +177,25 @@ class MotorKVehicleService
         return $res;
     }
 
+    public function getSubmodelColors(string $submodelId): array
+    {
+        $res = [
+            'status' => '404',
+            'total' => 0,
+            'data' => []
+        ];
+        if (!empty($submodelId)) {
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/coloursForSubmodel/" . $submodelId);
+            $res['status'] = $response->status();
+            if ($response->successful()) {
+                $json = $response->json();
+                $res['data'] = $json['response'] ?? [];
+            }
+        }
+        return $res;
+    }
+
+
    /*  public function getSubmodel(string $submodelSlug): array
     {
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models/{$makeSlug}");

@@ -27,8 +27,17 @@ class VehicleDetailModelController extends Controller
 
         $vehicles = $motorK->getModelBySlug($makeSlug, $modelSlug);
 
+        if( !$vehicles || empty($vehicles['data']) ) {
+            abort(404, 'Model not found');
+        }
+
+        $modelId = $vehicles['data'][0]['model']['modelId'] ?? null;
+        $submodelId = $vehicles['data'][0]['model']['submodelId'] ?? null;
+
+        $submodeColors = $motorK->getSubmodelColors($submodelId);
+
         //$vehicle = null;
 
-        return view('pages.vehicles.detail-model', compact( 'make','vehicles' ));
+        return view('pages.vehicles.detail-model', compact( 'make', 'modelId', 'submodelId', 'vehicles', 'submodeColors' ));
     }
 }

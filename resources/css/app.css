@@ -63,6 +63,42 @@ details[open] summary::after {
     transform: rotate(180deg);
 }
 
+
+.color-metallic,
+.color-opac {
+    position:relative;
+    overflow: hidden;
+}
+.color-metallic:before {
+    content : '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    right:0;
+    background: linear-gradient(45deg, #FFFFFF33 0%, #FFFFFF33 40%, transparent 40%, transparent 60%,#FFFFFF33 60%, #FFFFFF33 70%, transparent 70%, transparent 100%);
+}
+/* .color-metallic:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    right:0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
+} */
+.color-opac:before {
+    content : '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    right:0;
+    background: linear-gradient(-135deg, #00000011 0%, #00000011 50%, transparent 50%, transparent 100%);
+}
 /****** range-slider *****/
 .range-slider {
     display: flex;
