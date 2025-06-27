@@ -140,9 +140,12 @@ $breadcrumb = [
         </div>
     </x-utils.container>
 
-    <div class="px-0 py-4 mx-auto overflow-hidden">
+    <div class="px-0 py-6 mx-auto overflow-hidden">
         <div>
-            <h2 class="px-4 m-auto text-2xl text-center md:text-left md:max-w-screen-xl">Finitions</h2>
+            <div class="px-4 m-auto text-center md:text-left md:max-w-screen-xl">
+                <h2 class="text-2xl">Finitions</h2>
+                <p class="text-xs md:text-sm">Choisissez votre finition et commencez à configurer votre {{ $vehicle['model']['makeName'] }}</p>
+            </div>
             @php
                 $finitions = collect($vehicle['model']['versions'])
                 ->groupBy('trimName')
@@ -173,9 +176,9 @@ $breadcrumb = [
             <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
                 <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
                     @foreach ($finitions as $trimName => $minPrice)
-                        <div class="relative max-w-[70vw] py-4 pr-4 px-6 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme">
-                            <div class="text-xl font-black">{{ $trimName }}</div>
-                            <div class="flex items-center justify-between w-full">
+                        <div class="relative max-w-[70vw] h-40 bg-black text-white border-2 border-white rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme flex flex-col items-center">
+                            <div class="flex items-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center">{{ $trimName }}</div>
+                            <div class="flex items-center justify-between w-full p-4 bg-white/10">
                                 <div class="flex-1 text-xs">Prix à partir de</div>
                                 <div class="text-xs"><a href="#versions" class="mr-1 text-base font-extrabold md:text-base">{{ number_format($minPrice, 0, ',', '.') . ' €' }}</a></div>
                             </div>
