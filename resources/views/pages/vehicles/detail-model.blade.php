@@ -20,14 +20,20 @@ $breadcrumb = [
 
     <x-utils.container class="border-b border-gray-200">
         <div class="flex flex-col items-center justify-between -my-2 md:gap-4 md:flex-row">
-            <div class="flex flex-row items-center w-full md:gap-4 justify-beetween md:w-auto">
+            <div class="flex flex-row items-center w-full my-4 md:gap-4 justify-beetween md:w-auto md:my-0">
                 <div class="flex-1 md:order-2">
-                    <h1 class="flex flex-wrap gap-2 h1" style="margin:0;">
+                    <h1 class="flex flex-wrap gap-x-2 h1" style="margin:0;">
                         <span>{{ $vehicle['model']['makeName'] }}</span>
-                        <span><b class="font-normal">{{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}</b></span></h1>
+                        <span><b class="font-normal">{{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}</b></span>
+                    </h1>
+                    <p>
+                        @if(isset($vehicle['summary']['numVersions']))
+                            <span class="text-xs font-light underline">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
+                        @endif
+                    </p>
                     {{-- <p class="text-sm md:text-md">Découvrez les modèles de la marque {{ $make['name'] }} disponibles en Belgique, {{ strftime('%B %Y') }}</p> --}}
                 </div>
-                <img src="{{ $make['logo'] }}" class="w-30 md:w-24 md:order-1">
+                <img src="{{ $make['logo'] }}" class="self-start w-20 md:w-24 md:order-1" alt="{{ $vehicle['model']['makeName'] }} logo">
             </div>
             @if(isset($vehicle['summary']['minPrice']))
                 <div class="flex items-center w-full gap-4 md:w-auto">
@@ -58,51 +64,7 @@ $breadcrumb = [
         </div>
     </x-utils.container>
 
-    @if(isset($vehicle['model']['images']))
-        <div x-data="{
-                expanded: false,
-                init() {
-                    this.scroller = $el.children[0];
-                    this.scroller.scrollTo(0,0);
-                },
-                expand (event) {
-                    this.expanded = true;
-                },
-                collapse (event) {
-                    this.expanded = false;
-                },
-                back () {
-                    this.scroller.scrollBy({
-                        left: -this.scroller.clientWidth,
-                        behavior: 'smooth'
-                    });
-                },
-                next () {
-                    this.scroller.scrollBy({
-                        left: this.scroller.clientWidth,
-                        behavior: 'smooth'
-                    });
-                }
-            }" class="py-4  flex flex-col" :class="expanded ? 'fixed bg-black text-white top-0 left-0 right-0 bottom-0 z-100 h-screen w-screen' : 'bg-gray-50'">
-            <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
-                <div class="flex flex-nowrap" :class="expanded ? 'w-screen h-full' : 'gap-3 px-4 h-120 md:h-96'" style="width:fit-content;">
-                    @foreach ($vehicle['model']['images'] as $image)
-                        @if(isset($image['image800']))
-                            <div class="relative h-full" :class="expanded ? 'w-screen flex items-center' : 'aspect-9/16 md:aspect-4/3 w-full'">
-                                <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon top-3 right-3" :class="expanded ? 'icon-times text-xl fixed top-4 right-4' : 'icon-expand'" @click="( expanded ? collapse(event) : expand(event) ) "></a>
-                                <img src="{{ $image['image800'] }}" loading="lazy" class=" w-full h-full snap-center" @click="expand" :class="expanded ? 'object-contain max-h-[80vh]' : 'object-cover'">
-                            </div>
-                        @endif
-                    @endforeach
-                    <div>&nbsp;</div>
-                </div>
-            </div>
-            <div class="flex items-center justify-center max-w-screen-xl gap-4 px-4 mx-auto mt-4">
-                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-left hover:opacity-90" @click="back" :class="expanded ? '' : 'bg-white'"></div>
-                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-right hover:opacity-90" @click="next" :class="expanded ? '' : 'bg-white'"></div>
-            </div>
-        </div>
-    @endif
+    <x-vehicles.gallery :images="$vehicle['model']['images']" />
 
     <x-utils.container class="py-4 md:py-2">
         <div>
