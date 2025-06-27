@@ -140,12 +140,58 @@ $breadcrumb = [
         </div>
     </x-utils.container>
 
-    <x-utils.container class="py-4 md:py-2">
+    <div class="px-0 py-4 mx-auto overflow-hidden">
         <div>
-            <h2 class="text-2xl text-center md:text-left">Finitions</h2>
-            <div></div>
+            <h2 class="px-4 m-auto text-2xl text-center md:text-left md:max-w-screen-xl">Finitions</h2>
+            @php
+                $finitions = collect($vehicle['model']['versions'])
+                ->groupBy('trimName')
+                ->map(function ($versions) {
+                    return $versions->min('price');
+                });
+            @endphp
+            <div x-data="{
+                init() {
+                    this.scroller = $el.children[0];
+                    this.scroller.scrollTo(0,0);
+                },
+                back () {
+                    this.scroller.scrollBy({
+                        left: -this.scroller.clientWidth,
+                        behavior: 'smooth'
+                    });
+                },
+                next () {
+                    this.scroller.scrollBy({
+                        left: this.scroller.clientWidth,
+                        behavior: 'smooth'
+                    });
+                }
+            }" class="flex flex-col @if($finitions->count() < 4) md:max-w-screen-xl mx-auto @endif">
+            {{-- <div class="flex flex-col h-120 md:h-96"> --}}
+            {{-- <div class="flex flex-col h-80"> --}}
+            <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
+                <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
+                    @foreach ($finitions as $trimName => $minPrice)
+                        <div class="relative max-w-[70vw] py-4 pr-4 px-6 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme">
+                            <div class="text-xl font-black">{{ $trimName }}</div>
+                            <div class="flex items-center justify-between w-full">
+                                <div class="flex-1 text-xs">Prix à partir de</div>
+                                <div class="text-xs"><a href="#versions" class="mr-1 text-base font-extrabold md:text-base">{{ number_format($minPrice, 0, ',', '.') . ' €' }}</a></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <div class="flex items-center justify-center max-w-screen-xl gap-4 px-4 mx-auto mt-0">
+                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-left hover:opacity-90" @click="back" :class="expanded ? 'text-3xl' : 'bg-white'"></div>
+                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-right hover:opacity-90" @click="next" :class="expanded ? 'text-3xl' : 'bg-white'"></div>
+            </div>
         </div>
-    </x-utils.container>
+    </div>
+
+
+    <div class="h-20"></div>
 
 
     @foreach ($vehicle['model']['versions'] as $version)
@@ -153,6 +199,6 @@ $breadcrumb = [
         {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($version, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
     @endforeach
 
-     {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+      {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
 </x-layouts.app>
