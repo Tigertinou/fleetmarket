@@ -75,6 +75,6 @@ $breadcrumb = [
         </x-utils.container>
     @endif
 
-     <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodeColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>{{-- --}}
+     {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodeColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>--}}
 
 </x-layouts.app>
