@@ -64,12 +64,12 @@ details[open] summary::after {
 }
 
 
-.color-metallic,
-.color-opac {
+.vcolors-metallic,
+.vcolors-opac {
     position:relative;
     overflow: hidden;
 }
-.color-metallic:before {
+.vcolors-metallic:before {
     content : '';
     position: absolute;
     top: 0;
@@ -79,7 +79,7 @@ details[open] summary::after {
     right:0;
     background: linear-gradient(45deg, #FFFFFF33 0%, #FFFFFF33 40%, transparent 40%, transparent 60%,#FFFFFF33 60%, #FFFFFF33 70%, transparent 70%, transparent 100%);
 }
-/* .color-metallic:after {
+/* .vcolors-metallic:after {
     content: '';
     position: absolute;
     top: 0;
@@ -89,7 +89,7 @@ details[open] summary::after {
     right:0;
     background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
 } */
-.color-opac:before {
+.vcolors-opac:before {
     content : '';
     position: absolute;
     top: 0;
