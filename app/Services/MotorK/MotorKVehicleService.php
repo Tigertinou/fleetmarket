@@ -47,6 +47,7 @@ class MotorKVehicleService
             'facets' => '',
             'q' => '',
             'sort' => '',
+            'key' => '',
         ];
 
         $q = [];
@@ -95,9 +96,13 @@ class MotorKVehicleService
                     case 'withMedias':
                         $queryParams['withMedias'] = (int)($filter['values'][0]['code'] ?? 1);
                     break;
+                    case 'key':
+                        $q[] = '(makeName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '* OR modelName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '*  OR submodelName:*' . $filter['values'][0]['code'] . '* OR bodyType:*' . strtolower($filter['values'][0]['code']) . '*)';
+                    break;
                 }
             }
         }
+/* var_dump($q); */
 
         $queryParams['q'] = implode(' AND ', $q);
 

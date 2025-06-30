@@ -131,6 +131,9 @@ class VehicleSearchController extends Controller
         if(isset($query['offset']) && $query['offset'] != '') {
             $filters[] = [ 'type' => 'offset', 'values' => [ [ 'code' => $query['offset'] ] ] ];
         }
+        if(isset($query['key']) && $query['key'] != '') {
+            $filters[] = [ 'type' => 'key', 'values' => [ [ 'code' => $query['key'] ] ] ];
+        }
 
         return $filters;
     }

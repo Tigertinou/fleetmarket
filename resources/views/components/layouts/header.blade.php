@@ -1,8 +1,8 @@
 {{-- Header --}}
-<header class="sticky top-0 bg-white border-b border-gray-200 z-100" 
-x-data="{ 
-        navOpen: false, 
-        globalSearchOpen: false, 
+<header class="sticky top-0 bg-white border-b border-gray-200 z-100"
+x-data="{
+        navOpen: false,
+        globalSearchOpen: false,
         toggleGlobalSearch(){
             this.globalSearchOpen = !this.globalSearchOpen;
             if (this.globalSearchOpen) {
@@ -12,7 +12,7 @@ x-data="{
                     $refs.inpGlobalSearch.select();
                 }, 100);
             }
-        }, 
+        },
         globalSearch(key){
             document.location.href=`{{ localized_route('pages.vehicles.search') }}?key=${key}`;
         }
@@ -21,8 +21,8 @@ x-data="{
     {{-- Container --}}
     <div class="relative flex items-center max-w-screen-xl px-4 mx-auto min-h-18 md:min-h-24 whitespace-nowrap">
         {{-- Logo --}}
-        <div class="items-center justify-center flex-1 order-1 md:order-1 md:flex-none md:mr-4 flex" x-show="!globalSearchOpen">
-            <a href="{{ localized_route('pages.home') }}" class="block mr-auto w-auto self-start pl-1">
+        <div class="flex items-center justify-center flex-1 order-1 md:order-1 md:flex-none md:mr-4" x-show="!globalSearchOpen">
+            <a href="{{ localized_route('pages.home') }}" class="self-start block w-auto pl-1 mr-auto">
                 <img src="{{ asset('assets/images/logo.svg') }}" alt="FleetMarket logo" class="h-8 md:my-2 md:mr-4 md:h-10">
             </a>
         </div>
@@ -37,7 +37,7 @@ x-data="{
         </nav>
         <div id="global-search" class="flex self-stretch flex-1" x-show="globalSearchOpen" x-cloak>
             <div class="self-center pr-2 text-lg text-gray-400 icon icon-search"></div>
-            <input x-ref="inpGlobalSearch" class="self-stretch flex-1 border-0 outline-0 text-sm" name="inp_global_search" placeholder="Recherche par marques, modèle ou mot-clé" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input x-ref="inpGlobalSearch" class="self-stretch flex-1 text-sm border-0 outline-0" name="inp_global_search" placeholder="Recherche par marques, modèle ou mot-clé" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         <div class="order-2 mx-2 md:order-3">
             <a href="javascript:void(0);" @Click="toggleGlobalSearch" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>
@@ -45,7 +45,6 @@ x-data="{
         <div class="order-3 mx-2 md:order-4" x-show="!globalSearchOpen">
             <a href="javascript:void(0);" x-on:click="navOpen = ! navOpen" class="hover:text-theme"><span class="text-xl icon" :class="navOpen ? 'icon-times' : 'icon-burger'"></span></a>
         </div>
-        {{--  --}}
         <div x-show="navOpen && !globalSearchOpen" x-cloak>
             <ul class="fixed bottom-0 right-0 z-10 flex flex-col w-full gap-3 px-8 py-6 transition-all duration-300 ease-in-out bg-white border-b border-gray-200 shadow-xl md:absolute md:bottom-auto justify-top md:border top-18 nowrap md:w-auto md:top-24 md:text-sm">
                 <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">Actualités</a></li>
