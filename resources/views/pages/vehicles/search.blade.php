@@ -164,9 +164,9 @@ window.loadSearchResults = function(params = window.location.search) {
             })
         }
         const facets = response.headers.get('X-Facets');
+        window.xMainData.facets = [];
         if (facets !== null) {
             const facetsData = JSON.parse(facets);
-            window.xMainData.facets = [];
             for(const facetType of facetsData) {
                 for(const facet of facetType.values) {
                     if(facet.label!=null && facet.label!=''){
@@ -178,6 +178,21 @@ window.loadSearchResults = function(params = window.location.search) {
                         });
                     }
                 }
+            }
+        }
+        document.querySelectorAll('[name="inp_global_search"]').forEach((el) => { el.value = '';});
+        if(document.location.search.includes('key=')) {
+            const key = params.get('key');
+            if(key) {
+                window.xMainData.facets.push({
+                    id: `facet-key-${key}`,
+                    type: 'key',
+                    code: key,
+                    label: key
+                });
+                document.querySelectorAll('[name="inp_global_search"]').forEach((el) => {
+                    el.value = key;
+                });
             }
         }
         return response.text();

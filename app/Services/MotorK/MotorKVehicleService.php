@@ -97,7 +97,15 @@ class MotorKVehicleService
                         $queryParams['withMedias'] = (int)($filter['values'][0]['code'] ?? 1);
                     break;
                     case 'key':
-                        $q[] = '(makeName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '* OR modelName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '*  OR submodelName:*' . $filter['values'][0]['code'] . '* OR bodyType:*' . strtolower($filter['values'][0]['code']) . '*)';
+                        $q[] = '(' .
+                        'makeName:*' . $filter['values'][0]['code'] . '*' .
+                        ' OR makeName:*' . strtolower($filter['values'][0]['code']) . '*' .
+                        ' OR makeName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '*' .
+                        ' OR modelName:*' . $filter['values'][0]['code'] . '*' .
+                        ' OR modelName:*' . strtolower($filter['values'][0]['code']) . '*' .
+                        ' OR modelName:*' . ucfirst(strtolower($filter['values'][0]['code'])) . '*' .
+                        ' OR bodyType:*' . strtolower($filter['values'][0]['code']) . '*' .
+                        ')';
                     break;
                 }
             }
