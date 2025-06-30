@@ -176,9 +176,9 @@ $breadcrumb = [
             <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
                 <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
                     @foreach ($finitions as $trimName => $minPrice)
-                        <div class="relative max-w-[70vw] h-40 bg-black text-white border-2 border-white rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme flex flex-col items-center">
+                        <div class="relative max-w-[70vw] h-40 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme flex flex-col items-center">
                             <div class="flex items-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center">{{ $trimName }}</div>
-                            <div class="flex items-center justify-between w-full p-4 bg-white/10">
+                            <div class="flex items-center justify-between w-full p-4 border-t border-gray-100">
                                 <div class="flex-1 text-xs">Prix à partir de</div>
                                 <div class="text-xs"><a href="#versions" class="mr-1 text-base font-extrabold md:text-base">{{ number_format($minPrice, 0, ',', '.') . ' €' }}</a></div>
                             </div>
