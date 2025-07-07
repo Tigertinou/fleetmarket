@@ -1,0 +1,42 @@
+{
+  "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.eot": {
+    "file": "assets/fleetmarket-1J81dClQ.eot",
+    "src": "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.eot"
+  },
+  "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.svg": {
+    "file": "assets/fleetmarket-w3CIrzWv.svg",
+    "src": "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.svg"
+  },
+  "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.ttf": {
+    "file": "assets/fleetmarket-Da_ouz8G.ttf",
+    "src": "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.ttf"
+  },
+  "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.woff": {
+    "file": "assets/fleetmarket-C5CsYHh6.woff",
+    "src": "public/assets/fonts/fleetmarket.v1.1/fonts/fleetmarket.woff"
+  },
+  "public/assets/fonts/fleetmarket.v1.1/styles.css": {
+    "file": "assets/styles-DeuKGB6K.css",
+    "src": "public/assets/fonts/fleetmarket.v1.1/styles.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-DF3Ad4_X.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Nq9S-xt9.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-DF3Ad4_X.css"
+    ]
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-BvKYq-XP.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}
