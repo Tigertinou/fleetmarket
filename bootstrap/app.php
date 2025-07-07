@@ -17,5 +17,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ])->trustProxies('*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        ////
     })->create();
