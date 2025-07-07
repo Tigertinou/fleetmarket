@@ -7,6 +7,7 @@
         showAll: false,
         init() {
             this.select({ target : this.$el.querySelector('.vcolors-item') });
+            this.preloadImages();
         },
         select (event) {
             this.selected = event.target;
@@ -15,6 +16,15 @@
             }
             $el.querySelector('.vcolors-label').innerHTML = `<b>${this.selected.dataset.group}</b> : ${this.selected.dataset.description}`;
 
+        },
+        preloadImages () {
+            const images = Array.from(this.$el.querySelectorAll('.vcolors-item')).map(el => el.dataset.image);
+            for (const image of images) {
+                if(image && image != '') {
+                    const img = new Image();
+                    img.src = image;
+                }
+            }
         }
     }" class="flex flex-col items-center justify-center w-full max-w-3xl mx-auto my-0">
         <div class="relative flex flex-col items-center w-full max-w-3xl p-4 pb-6 overflow-hidden border-gray-200 justify-items-stretch border-1 rounded-xl">

@@ -155,24 +155,21 @@ $breadcrumb = [
             @endphp
             <div x-data="{
                 init() {
-                    this.scroller = $el.children[0];
-                    this.scroller.scrollTo(0,0);
+                    $el.children[0].scrollTo(0,0);
                 },
                 back () {
-                    this.scroller.scrollBy({
-                        left: -this.scroller.clientWidth,
+                    $el.children[0].scrollBy({
+                        left: -$el.children[0].clientWidth,
                         behavior: 'smooth'
                     });
                 },
                 next () {
-                    this.scroller.scrollBy({
-                        left: this.scroller.clientWidth,
+                    $el.children[0].scrollBy({
+                        left: $el.children[0].clientWidth,
                         behavior: 'smooth'
                     });
                 }
             }" class="flex flex-col @if($finitions->count() < 4) md:max-w-screen-xl mx-auto @endif">
-            {{-- <div class="flex flex-col h-120 md:h-96"> --}}
-            {{-- <div class="flex flex-col h-80"> --}}
             <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
                 <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
                     @foreach ($finitions as $trimName => $minPrice)
@@ -193,15 +190,14 @@ $breadcrumb = [
         </div>
     </div>
 
-
     <div class="h-20"></div>
 
 
-    @foreach ($vehicle['model']['versions'] as $version)
-        {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($specs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
-        {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($version, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+    {{-- @foreach ($vehicle['model']['versions'] as $version)
+        <pre class="max-w-full overflow-auto text-xs">{{ json_encode($specs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+        <pre class="max-w-full overflow-auto text-xs">{{ json_encode($version, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
     @endforeach
 
-      {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+    <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
 </x-layouts.app>

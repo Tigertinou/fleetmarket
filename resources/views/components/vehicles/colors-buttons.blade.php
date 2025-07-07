@@ -27,3 +27,6 @@
         <span class="flex items-center justify-center w-12 h-12 border-4 border-white rounded-full cursor-pointer outline-2 outline-gray-100" @click="showAll=!showAll"><i class="text-2xl icon " :class="showAll ? 'icon-minus' : 'icon-plus'"></i></span>
     @endif
 </div>
+<script>
+
+</script>
