@@ -49,15 +49,15 @@ $breadcrumb = [
             <h2 class="mb-2 text-2xl">Configurez votre voiture</h2>
             <p class="text-xs md:text-sm">Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.</p>
             <div class="flex flex-col gap-4 mt-6 md:flex-row">
-                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme">
+                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme" href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}#versions">
                     <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Finition</span>
                     Sélectionner la <b class="font-semibold">finition</b>
                 </x-utils.box>
-                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme">
+                <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme" href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}#motor">
                     <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Moteur</span>
                     Sélectionner le <b class="font-semibold">moteur</b>
                 </x-utils.box>
-                <x-utils.button size="md" color="theme" class="flex-1 w-full" align="center">
+                <x-utils.button size="md" color="theme" class="flex-1 w-full" align="center" url="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}">
                     Configurez votre <b class="font-semibold">voiture</b><br>
                 </x-utils.button>
             </div>
@@ -149,8 +149,8 @@ $breadcrumb = [
             @php
                 $finitions = collect($vehicle['model']['versions'])
                 ->groupBy('trimName')
-                ->map(function ($versions) {
-                    return $versions->min('price');
+                ->map(function ($version) {
+                    return $version;
                 });
             @endphp
             <div x-data="{
@@ -172,14 +172,14 @@ $breadcrumb = [
             }" class="flex flex-col @if($finitions->count() < 4) md:max-w-screen-xl mx-auto @endif">
             <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
                 <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
-                    @foreach ($finitions as $trimName => $minPrice)
-                        <div class="relative max-w-[70vw] h-40 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:outline-theme flex flex-col items-center">
-                            <div class="flex items-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center uppercase">{{ $trimName }}</div>
-                            <div class="flex items-center justify-between w-full p-4 border-t border-gray-100">
-                                <div class="flex-1 text-xs">Prix à partir de</div>
-                                <div class="text-xs"><a href="#versions" class="mr-1 text-base font-extrabold md:text-base">{{ number_format($minPrice, 0, ',', '.') . ' €' }}</a></div>
-                            </div>
-                        </div>
+                    @foreach ($finitions as $finition)
+                        <a href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}?version={{$finition[0]['versionHistoricalId']}}" class="block relative max-w-[70vw] h-40 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:border-white hover:outline-theme flex flex-col items-center">
+                            <span class="flex items-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center uppercase">{{ $finition[0]['trimName'] }}</span>
+                            <span class="flex items-center justify-between w-full p-4 border-t border-gray-100">
+                                <span class="flex-1 text-xs">Prix à partir de</span>
+                                <span class="text-xs"><span class="mr-1 text-base font-extrabold md:text-base">{{ number_format($finition[0]['minPrice'], 0, ',', '.') . ' €' }}</span></span>
+                            </span>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -191,7 +191,7 @@ $breadcrumb = [
     </div>
 
     <div class="h-20"></div>
-
+<script>console.log(@json($finitions))</script>
 
     {{-- @foreach ($vehicle['model']['versions'] as $version)
         <pre class="max-w-full overflow-auto text-xs">{{ json_encode($specs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>

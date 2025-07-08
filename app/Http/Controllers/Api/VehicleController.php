@@ -39,6 +39,16 @@ class VehicleController extends Controller
         return response()->json($facets);
     }
 
+    public function getVersionDetails(string $versionId){
+        $version = $this->service->getVersionDetails($versionId);
+
+        if (!$version) {
+            return response()->json(['error' => 'Version not found'], 404);
+        }
+
+        return response()->json($version);
+    }
+
     /*public function searchVehicles(array $filters): array
     {
         $query = http_build_query($filters);

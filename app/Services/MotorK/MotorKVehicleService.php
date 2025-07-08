@@ -208,6 +208,19 @@ class MotorKVehicleService
         return $res;
     }
 
+    public function getVersionDetails(string $versionId): array
+    {
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/version/{$versionId}");
+        $res = [
+            'status' => $response->status(),
+            'data' => []
+        ];
+        if ($response->successful()) {
+            $json = $response->json();
+            $res['data'] = $json['response']['searchResults']['versions'][0] ?? [];
+        }
+        return $res;
+    }
 
    /*  public function getSubmodel(string $submodelSlug): array
     {

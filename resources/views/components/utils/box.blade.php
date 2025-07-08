@@ -1,5 +1,6 @@
 @props([
     "color" => 'default',
+    "href" => '',
 ])
 @php
 $def_class = 'box block rounded-xl px-6 py-4';
@@ -24,6 +25,6 @@ switch ($color) {
     break;
 }
 @endphp
-<div {{ $attributes->merge(['class' => $def_class]) }}>
+<{{ $href!='' ? 'a href=' . $href . '' : 'div'}} {{ $attributes->merge(['class' => $def_class]) }}>
     {!! $slot !!}
-</div>
+</{{ $href!='' ? 'a' : 'div'}}>

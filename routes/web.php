@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VehicleSearchController;
 use App\Http\Controllers\VehicleDetailModelController;
 use App\Http\Controllers\VehicleDetailSubmodelController;
+use App\Http\Controllers\VehicleConfiguratorController;
 use App\Http\Middleware\SetLocale;
 
 Route::redirect('/', '/fr/');
@@ -30,6 +31,8 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middlewar
     Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');
 
     Route::get('/{make:slug}/{model:slug}', VehicleDetailModelController::class)->name('pages.vehicles.detail.model');
+
+    Route::get('/{make:slug}/{model:slug}/configurator', VehicleConfiguratorController::class)->name('pages.vehicles.configurator');
 
     Route::get('/{make:slug}/{model:slug}/{submodel:slug}', VehicleDetailSubmodelController::class)->name('pages.vehicles.detail.submodel');
 
