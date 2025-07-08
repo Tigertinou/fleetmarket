@@ -17,8 +17,21 @@
     <meta name="theme-color" content="#ffffff">
 
     <title>{{ $title ?? 'FleetMarket' }}</title>
+
+    <script>
+    Number.prototype.toEuro = function (options = {}) {
+        return this.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: options.decimals ?? 0, ...options });
+    };
+    String.prototype.toEuro = function (options = {}) {
+        const value = parseFloat(this.replace(/[^0-9.-]+/g, ''));
+        if (isNaN(value)) { return this; }
+        return value.toEuro(options);
+    }
+    </script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     @vite([
         'resources/css/app.css',
         /* 'resources/sass/app.scss',  */
