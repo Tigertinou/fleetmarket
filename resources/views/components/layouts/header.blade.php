@@ -1,8 +1,9 @@
 {{-- Header --}}
-<header class="sticky top-0 bg-white border-b border-gray-200 z-100"
+<header id="header" class="top-0 bg-white border-b border-gray-200 z-100"
 x-data="{
         navOpen: false,
         globalSearchOpen: false,
+        sticky : true,
         toggleGlobalSearch(){
             this.globalSearchOpen = !this.globalSearchOpen;
             if (this.globalSearchOpen) {
@@ -16,7 +17,7 @@ x-data="{
         globalSearch(key){
             document.location.href=`{{ localized_route('pages.vehicles.search') }}?key=${key}`;
         }
-    }" x-init="init()">
+    }" x-init="init()" :class="sticky ? 'sticky' : ''">
     {{-- Mobile search --}}
     {{-- Container --}}
     <div class="relative flex items-center max-w-screen-xl px-4 mx-auto min-h-18 md:min-h-24 whitespace-nowrap">
