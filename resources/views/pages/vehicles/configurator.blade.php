@@ -8,40 +8,59 @@ $breadcrumb = [
 ];
 $versionSelected = $vehicle['model']['versions'][0]['versionHistoricalId'] ?? null;
 
-$finitions = collect($vehicle['model']['versions'])
+$finitions_detail = collect($vehicle['model']['versions'])
 ->groupBy('trimName')
 ->sortBy('price')
 ->map(function ($versions) {
     return $versions;
 });
 
-$engines = collect($vehicle['model']['versions'])
+$motors_detail = collect($vehicle['model']['versions'])
 ->groupBy('versionName')
 ->sortBy('price')
 ->map(function ($versions) {
     return $versions;
 });
 
-$finitions_options = collect($vehicle['model']['versions'])
+$finitions = collect($vehicle['model']['versions'])
 ->sortBy('price')
 ->groupBy('trimName')
-->map(function ($version) {
+->map(function ($versions) {
     return array(
-        'trimCode' => $version[0]['trimCode'],
-        'trimName' => $version[0]['trimName'],
-        'versionHistoricalId' => $version[0]['versionHistoricalId'],
-        'price' => $version[0]['price'],
-        'fuelType' => $version[0]['fuelType'],
+        'trimCode' => $versions->first()['trimCode'],
+        'trimName' => $versions->first()['trimName'],
+        'versionHistoricalId' => $versions->first()['versionHistoricalId'],
+        'price' => $versions->first()['price'],
+        'fuelTypes' => $versions->pluck('fuelType')->unique()->values()->all(),
+        );
+});
+
+$motors = collect($vehicle['model']['versions'])
+->groupBy('versionName')
+->map(function ($versions) {
+    return array(
+        'trimCode' => $versions->first()['trimCode'],
+        'trimName' => $versions->first()['trimName'],
+        'versionUrlCode' => $versions->first()['versionUrlCode'],
+        'versionName' => $versions->first()['versionName'],
+        'versionHistoricalId' => $versions->first()['versionHistoricalId'],
+        'price' => $versions->first()['priceMsrp'],
+        'fuelType' => $versions->first()['fuelType'],
         /* 'engineCode' => $version[0]['engineCode'],
         'engineName' => $version[0]['engineName'] */
         );
 });
+
+$finitionSelected = $finitions->first()['trimCode'] ?? null;
+$motorSelected = $motors->first()['versionUrlCode'] ?? null;
+
 @endphp
 
 <x-layouts.app :title="'Page'" :$breadcrumb>
     <div id="main" x-data="{
         activeTab : 'models',
-        finitionSelected : null,
+        finitionSelected : '{{ $finitionSelected }}',
+        motorSelected : '{{ $motorSelected }}',
         versionSelected : {{ $versionSelected }},
         coverImage : '{{ $submodeColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
         coverLabel : '',
@@ -107,13 +126,13 @@ $finitions_options = collect($vehicle['model']['versions'])
                 </div>
             </div>
             {{-- *************************************** RIGHT *************************************** --}}
-            <div class="py-6 border-gray-200 md:px-4 md:border-l md:overflow-visible z-100 md:w-sm md:relative md:h-auto md:z-5">
+            <div class="py-6 border-gray-200 md:px-4 md:border-l md:overflow-visible z-100 md:w-lg md:relative md:h-auto md:z-5">
                 <h2 class="text-2xl">Configuration</h2>
                 {{-- ************* FINITIONS ************* --}}
                 <h3 class="text-lg font-semibold">Finitions</h3>
                 <div class="flex flex-col gap-3 mt-4 select-none" x-data="{
                     change(target){
-                        $el.querySelectorAll('[name=inp_radio]').forEach( (el) => {
+                        $el.querySelectorAll('[type=radio]').forEach( (el) => {
                             const data = Alpine.$data(el).active = (el==target);
                         });
                     },
@@ -121,21 +140,24 @@ $finitions_options = collect($vehicle['model']['versions'])
                         const radio = target.closest('.box').querySelector('[type=radio]');
                         if(radio!=null){
                             radio.click();
+                            finitionSelected = radio.value;
                         }
                     },
                     init () {
-                        $el.querySelectorAll('[name=inp_finition]').forEach( (el) => {
-                            const data = Alpine.$data(el).active = (el.value == '{{ $versionSelected }}');
+                        $el.querySelectorAll('[type=radio]').forEach( (el) => {
+                            if(el.value == finitionSelected){
+                                this.select(el);
+                            }
                         });
-                    }">
-                    @foreach ($finitions_options as $finition)
-                        <x-utils.box x-data="{active : false}" x-bind:class="active ? 'border-theme' : 'border-gray-200'" color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:border-white hover:outline-theme" @click="select($event.target)">
+                    }}">
+                    @foreach ($finitions as $finition)
+                        <x-utils.box x-data="{active : ( finitionSelected == '{{ $finition['trimCode'] }}' )}" x-bind:class="active ? 'border-theme' : 'border-gray-200'" color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:border-white hover:outline-theme">
                             <div class="flex gap-3" @click="select($event.target)">
                                 <x-forms.elements.radio name="inp_finition" value="{{ $finition['trimCode'] }}" @change="change($event.target)" size="md" class="pt-0.5 -ml-2 "/>
                                 <div class="flex w-full gap-1 leading-5 justify-stretch">
                                     <div class="flex-1">
                                         <b class="font-semibold uppercase">{{ $finition['trimName'] }}</b>
-                                        <br><small><b class="uppercase">{{ $finition['fuelType']}}</b></small>
+                                        <br><small><b class="uppercase">{{ implode(' / ',$finition['fuelTypes'])}}</b></small>
                                     </div>
                                     <div class="justify-end text-right">
                                         <span class="flex-1 text-xs whitespace-nowrap">à partir de</span><br>
@@ -149,6 +171,43 @@ $finitions_options = collect($vehicle['model']['versions'])
 
                 {{-- ************* MOTEURS ************* --}}
                 <h3 class="mt-4 text-lg font-semibold">Moteurs</h3>
+                <div class="flex flex-col gap-3 mt-4 select-none" x-data="{
+                    change(target){
+                        $el.querySelectorAll('[type=radio]').forEach( (el) => {
+                            const data = Alpine.$data(el).active = (el==target);
+                        });
+                    },
+                    select(target){
+                        const radio = target.closest('.box').querySelector('[type=radio]');
+                        if(radio!=null){
+                            radio.click();
+                        }
+                    },
+                    init () {
+                        $el.querySelectorAll('[type=radio]').forEach( (el) => {
+                            if(el.value == motorSelected){
+                                this.select(el);
+                            }
+                        });
+                    }}">
+                    @foreach ($motors as $motor)
+                        <x-utils.box x-data="{active : ( motorSelected == '{{ $motor['versionUrlCode'] }}' )}" x-show="finitionSelected == '{{ $motor['trimCode'] }}'" x-bind:class="active ? 'border-theme' : 'border-gray-200'" color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:border-white hover:outline-theme">
+                            <div class="flex gap-3" @click="select($event.target)">
+                                <x-forms.elements.radio name="inp_motor" value="{{ $motor['versionUrlCode'] }}" @change="change($event.target)" size="md" class="pt-0.5 -ml-2 "/>
+                                <div class="flex w-full gap-1 leading-5 justify-stretch">
+                                    <div class="flex-1">
+                                        <b class="font-semibold uppercase">{{ $motor['versionName'] }}</b>
+                                        <br><small><b class="uppercase">{{ $motor['fuelType']}}</b></small>
+                                    </div>
+                                    <div class="justify-end text-right">
+                                        <span class="flex-1 text-xs whitespace-nowrap">à partir de</span><br>
+                                        <span class="text-xs whitespace-nowrap"><span class="text-base font-extrabold md:text-base">{{ number_format($finition['price'], 0, ',', '.') . ' €' }}</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </x-utils.box>
+                    @endforeach
+                </div>
 
             </div>
         </div>
@@ -171,11 +230,12 @@ window.selectVersion = function (versionId) {
     }); */
 };
 document.addEventListener('DOMContentLoaded', function () {
+
     window.selectVersion({{ $versionSelected }});
     console.log(@json($vehicle['model']['versions']));
-    console.log(@json($engines));
+    console.log(@json($motors));
     console.log(@json($finitions));
-    console.log(@json($finitions_options));
+    console.log(@json($finitions_detail));
 
 });
 </script>
