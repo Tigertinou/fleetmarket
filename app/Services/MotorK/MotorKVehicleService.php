@@ -3,7 +3,9 @@
 namespace App\Services\MotorK;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use App\Enums\FilterEnum;
+
 
 class MotorKVehicleService
 {
@@ -203,6 +205,14 @@ class MotorKVehicleService
             if ($response->successful()) {
                 $json = $response->json();
                 $res['data'] = $json['response'] ?? [];
+                $res['data']['external'] = collect($res['data']['external'])->map(function ($item) {
+                    $item['code'] = $item['equipmentId'] ?? Str::slug($item['description']);
+                    return $item;
+                });
+                $res['data']['interior'] = collect($res['data']['interior'])->map(function ($item) {
+                    $item['code'] = $item['equipmentId'] ?? Str::slug($item['description']);
+                    return $item;
+                });
                 $res['total']['external'] = count($json['response']['external'] ?? []);
                 $res['total']['interior'] = count($json['response']['interior'] ?? []);
             }

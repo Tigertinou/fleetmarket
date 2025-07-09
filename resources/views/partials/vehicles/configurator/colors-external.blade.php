@@ -31,9 +31,9 @@
         }
     }
 }" class="flex flex-col items-center justify-center w-full max-w-3xl mx-auto my-0">
-    <div class="flex w-full gap-4 items-start">
-        <div class="text-xs flex-1" x-html="vcolorsLabel"></div>
-        <div class="font-bold text-xs border-2 border-theme py-1 px-2 rounded-lg" x-text="'+' + price.toEuro()"></div>
+    <div class="flex items-start w-full gap-4">
+        <div class="flex-1 text-xs" x-html="vcolorsLabel"></div>
+        <div class="px-2 py-1 text-xs font-bold border-2 rounded-lg" :class="price > 0 ? 'border-theme' : 'text-gray-400 border-gray-200'" x-text="'+' + price.toEuro()"></div>
     </div>
     <x-vehicles.colors-buttons :colors="$submodelColors['data']['external']"></x-vehicles.colors-selector>
 </div>

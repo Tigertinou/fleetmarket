@@ -20,7 +20,7 @@
         data-description="{{$color['description']}}"
         data-group="{{$color['group']}}"
         data-price="{{$color['msrpPrice']}}"
-        data-value="{{ $color['equipmentId'] ?? $color['manufacturerCode'] }}"
+        data-value="{{ $color['code'] }}"
         data-image="{{ $color['colorImage']['image800'] ?? '' }}"
         @click="select"></span>
     @endforeach

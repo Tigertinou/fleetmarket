@@ -121,7 +121,7 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
                         </h1>
                         <p>
                             @if(isset($vehicle['summary']['numVersions']))
-                                <span class="text-xs font-light underline">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
+                                <span class="text-xs font-light underline cursor-pointer" @click="document.querySelector(`[data-tab='FINITIONS']`).click()">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
                             @endif
                         </p>
                     </div>
@@ -184,12 +184,12 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 
                 {{-- ************* COLORS - EXTERIEUR ************* --}}
                 <div data-enter-tab="EXTERNAL"></div>
-                <h3 class="mt-4 text-lg font-semibold">Couleurs extérieur</h3>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">Couleurs extérieur</h3>
                 @include('partials.vehicles.configurator.colors-external')
 
                 {{-- ************* COLORS - INTERIEUR ************* --}}
                 <div data-enter-tab="INTERIOR"></div>
-                <h3 class="mt-4 text-lg font-semibold">Couleurs intérieur</h3>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">Couleurs intérieur</h3>
                 @include('partials.vehicles.configurator.colors-interior')
 
             </div>
@@ -206,7 +206,7 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
                     <small x-text="version?.versionName"></small>
                 </div>
                 <div class="flex items-center w-full gap-4 px-4 py-3 bg-gray-100 md:w-md md:relative">
-                    <div class="flex-1 leading-4">
+                    <div class="flex-1 leading-4 cursor-pointer" @click="document.querySelector(`[data-tab='RESUME']`).click()">
                         <span class="text-xs font-normal">à partir de</span><br>
                         <span class="text-2xl font-bold" x-text="total.total.toEuro()">-</span><small> TTC*</small>
                     </div>
@@ -235,22 +235,19 @@ window.applyTotal = function() {
     mainData.total.shipping = 950;
     if(mainData.colorExternalSelected!=null){
         colorExternal = window.colors.data['external'].filter(function (v) {
-            return v.equipmentId == mainData.colorExternalSelected || v.manufacturerCode == mainData.colorExternalSelected;
+            return v.code == mainData.colorExternalSelected;
         })[0];
         if(colorExternal!=null){
             mainData.total.options += parseFloat(colorExternal.msrpPrice);
         }
-        console.log('colorExternalSelected',mainData.colorExternalSelected);
     }
     if(mainData.colorInteriorSelected!=null){
         colorInterior = window.colors.data['interior'].filter(function (v) {
-            return v.equipmentId == mainData.colorInteriorSelected || v.manufacturerCode == mainData.colorInteriorSelected;
+            return v.code == mainData.colorInteriorSelected;
         })[0];
-        console.log(colorInterior);
         if(colorInterior!=null){
             mainData.total.options += parseFloat(colorInterior.msrpPrice);
         }
-        console.log('colorInteriorSelected',mainData.colorInteriorSelected);
     }
     mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
 };
@@ -296,11 +293,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if(tab != window.active_tab) {
             window.active_tab = tab;
             Alpine.$data(document.getElementById('main')).activeTab = tab;
+            document.querySelectorAll('[data-tab="'+tab+'"]')[0].scrollIntoView({
+                behavior: 'smooth',
+                inline: 'center',
+                block: 'nearest'
+            });
         }
     });
     document.querySelectorAll('[data-tab]').forEach( (el) => {
         el.addEventListener('click', () => {
-            var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height + 50;
+            var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height;
             scrollTo({
                 top: document.querySelectorAll(`[data-enter-tab="${el.dataset.tab}"]`)[0].offsetTop - offset,
                 behavior: 'smooth'
