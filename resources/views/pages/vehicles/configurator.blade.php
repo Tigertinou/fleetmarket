@@ -63,12 +63,16 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 <x-layouts.app :title="'Page'" :$breadcrumb>
     <div id="main" x-data="{
         onStickyCover : false,
-        activeTab : 'models',
+        activeTab : 'MODEL',
+        coverImage : '{{ $submodelColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
+        coverLabel : '<b>{{ $vehicle['model']['makeName'] }}</b> {{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}',
         versionHistoricalId : {{ $versionHistoricalId }},
         finitionSelected : '{{ $finitionSelected }}',
         motorSelected : '{{ $motorSelected }}',
-        coverImage : '{{ $submodeColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
-        coverLabel : '<b>{{ $vehicle['model']['makeName'] }}</b> {{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}',
+        coverColorLabel : null,
+        colorExternalSelected : null,
+        colorInteriorSelected : null,
+        optionsSelected : [],
         version : null,
         total : {
             base: 0,
@@ -77,10 +81,10 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
             total: 0
         },
         init() {
-            this.$el.querySelectorAll('.vcolors-image').forEach( (el) => {
+            this.$el.querySelectorAll('.cover-image').forEach( (el) => {
                 el.style.backgroundImage = 'url(' + this.coverImage + ')';
             });
-            this.$el.querySelectorAll('.vcolors-label').forEach( (el) => {
+            this.$el.querySelectorAll('.cover-label').forEach( (el) => {
                 el.innerHTML = this.coverLabel;
             });
         },
@@ -103,9 +107,11 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 
         <div class="flex flex-col max-w-screen-xl gap-4 px-4 mx-auto md:flex-row">
             {{-- *************************************** LEFT *************************************** --}}
-            <div class="flex-1 pt-6 md:pb-6">
+            <div class="flex-1 pt-6 border-b border-gray-200 md:pb-6 md:border-b-0">
 
                 <div x-intersect:leave="onStickyCover=true" x-intersect:enter="onStickyCover=false" ></div>
+
+                <div data-enter-tab="MODEL"></div>
 
                 <div class="flex flex-row flex-wrap w-full mb-4 md:items-center md:gap-4 justify-beetween md:w-auto">
                     <div class="flex-1 order-1">
@@ -134,8 +140,9 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 
                     <div data-move-desktop="resume">
 
+                        <div data-enter-tab="RESUME"></div>
                         <div class="flex flex-col w-full gap-4 md:my-4 lg:flex-row">
-                            <div class="md:hidden border-t-4 pt-6 mt-6 order-1 leading-none">
+                            <div class="order-1 pt-6 mt-6 -mb-2 leading-none border-t border-gray-200 md:hidden">
                                 <h2 class="text-2xl font-bold">Récapitulatif</h2>
                             </div>
                             <div class="flex-1 order-3 md:order-1">
@@ -160,23 +167,28 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 
             </div>
             {{-- *************************************** RIGHT *************************************** --}}
-            <div class="md:py-6 border-gray-200 md:px-4 md:border-l md:w-md md:relative md:h-auto md:z-5">
-                <h2 class="text-2xl font-normal">Configurer</h2>
+            <div class="border-gray-200 md:py-6 md:px-4 md:border-l md:w-md md:relative md:h-auto md:z-5">
+
+                <h2 class="text-2xl md:font-normal">Configurer</h2>
 
                 {{-- ************* FINITIONS ************* --}}
-                <h3 class="text-lg font-semibold">Finitions</h3>
+                <div data-enter-tab="FINITIONS"></div>
+                <h3 class="text-lg font-semibold" >Finitions</h3>
                 @include('partials.vehicles.configurator.finitions')
 
 
                 {{-- ************* MOTEURS ************* --}}
+                <div data-enter-tab="MOTORS"></div>
                 <h3 class="mt-4 text-lg font-semibold">Moteurs</h3>
                 @include('partials.vehicles.configurator.motors')
 
                 {{-- ************* COLORS - EXTERIEUR ************* --}}
+                <div data-enter-tab="EXTERNAL"></div>
                 <h3 class="mt-4 text-lg font-semibold">Couleurs extérieur</h3>
                 @include('partials.vehicles.configurator.colors-external')
 
                 {{-- ************* COLORS - INTERIEUR ************* --}}
+                <div data-enter-tab="INTERIOR"></div>
                 <h3 class="mt-4 text-lg font-semibold">Couleurs intérieur</h3>
                 @include('partials.vehicles.configurator.colors-interior')
 
@@ -185,8 +197,6 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
                 {{-- ************* RESUME - MOBILE ************* --}}
             </div>
         </div>
-
-        
 
         <div class="sticky bottom-0 z-30 bg-white border-t border-gray-200">
             <div class="flex flex-col items-center max-w-screen-xl mx-auto md:flex-row md:px-4">
@@ -214,54 +224,112 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
 
     </div>
 </x-layouts.app>
+{{--@dump($submodelColors)--}}
+@dump($vehicle['model']['submodelId'])
 <script>
 
-window.selectVersion = function (versionId) {
+window.applyTotal = function() {
+    const mainData = Alpine.$data(document.getElementById('main'));
+    mainData.total.base = mainData.version.price;
+    mainData.total.options = 0;
+    mainData.total.shipping = 950;
+    if(mainData.colorExternalSelected!=null){
+        colorExternal = window.colors.data['external'].filter(function (v) {
+            return v.equipmentId == mainData.colorExternalSelected || v.manufacturerCode == mainData.colorExternalSelected;
+        })[0];
+        if(colorExternal!=null){
+            mainData.total.options += parseFloat(colorExternal.msrpPrice);
+        }
+        console.log('colorExternalSelected',mainData.colorExternalSelected);
+    }
+    if(mainData.colorInteriorSelected!=null){
+        colorInterior = window.colors.data['interior'].filter(function (v) {
+            return v.equipmentId == mainData.colorInteriorSelected || v.manufacturerCode == mainData.colorInteriorSelected;
+        })[0];
+        console.log(colorInterior);
+        if(colorInterior!=null){
+            mainData.total.options += parseFloat(colorInterior.msrpPrice);
+        }
+        console.log('colorInteriorSelected',mainData.colorInteriorSelected);
+    }
+    mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
+};
 
-    console.log('selectVersion', versionId);
+window.selectVersion = function (versionId) {
     version = window.versions.filter(function (v) {
         return v.versionHistoricalId == versionId;
     })[0];
     const mainData = Alpine.$data(document.getElementById('main'));
     mainData.version = version;
-    mainData.total.base = version.price;
-    mainData.total.options = 0;
-    mainData.total.shipping = 950;
-    mainData.total.total = version.price + mainData.total.options + mainData.total.shipping;
-/* .toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }) */
-    console.log('version', version);
+    window.applyTotal();
 };
+
 document.addEventListener('DOMContentLoaded', function () {
 
     window.versions = @json($vehicle['model']['versions']);
+    window.colors = @json($submodelColors);
     Alpine.$data(document.getElementById('header')).sticky = false;
     window.selectVersion({{ $versionHistoricalId }});
 
-    console.log(window.versions);
+    console.log(@json($vehicle));
+    console.log('submodelColors',@json($submodelColors));
     /*{{--
     console.log('motors',@json($motors));
     console.log('finitions',@json($finitions));
     console.log('finitions_detail',@json($finitions_detail)); --}}*/
 
+
+    /********************** TABS **********************/
+    document.addEventListener('scroll', function () {
+        window.active_tab = window.active_tab || Alpine.$data(document.getElementById('main')).activeTab;
+        var tab = window.active_tab;
+        var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height + 50;
+        if(offset==null){
+            offset = (window.innerHeight || document.documentElement.clientHeight) * 0.5;
+        }
+        document.querySelectorAll('[data-enter-tab]').forEach( (el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < offset) {
+                tab = el.getAttribute('data-enter-tab');
+            }
+        });
+        if(tab != window.active_tab) {
+            window.active_tab = tab;
+            Alpine.$data(document.getElementById('main')).activeTab = tab;
+        }
+    });
+    document.querySelectorAll('[data-tab]').forEach( (el) => {
+        el.addEventListener('click', () => {
+            var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height + 50;
+            scrollTo({
+                top: document.querySelectorAll(`[data-enter-tab="${el.dataset.tab}"]`)[0].offsetTop - offset,
+                behavior: 'smooth'
+            });
+            window.active_tab = el.getAttribute('data-tab');
+            Alpine.$data(document.getElementById('main')).activeTab = window.active_tab;
+        });
+    },{ once: true });
+
 });
+
 
 </script>
 
 
-{{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodeColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
+{{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodelColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
 {{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 {{--
 window.api.motork.getVersionDetails(versionId).then(function (version) {
         console.log(version.versionId);
-        // document.querySelector('.vcolors-image').style.backgroundImage = 'url(' + submodeColors.data.external[0].colorImage.image800 + ')';
-        // document.querySelector('.vcolors-label').innerHTML = submodeColors.data.external[0].colorGroup + ' : ' + submodeColors.data.external[0].colorDescription;
+        // document.querySelector('.vcolors-image').style.backgroundImage = 'url(' + submodelColors.data.external[0].colorImage.image800 + ')';
+        // document.querySelector('.vcolors-label').innerHTML = submodelColors.data.external[0].colorGroup + ' : ' + submodelColors.data.external[0].colorDescription;
     }).catch(function (error) {
         console.error('Error fetching version:', error);
     });
 
-    /* window.api.motork.getSubmodeColors({ versionId: versionId }).then(function (submodeColors) {
-        console.log(submodeColors);
+    /* window.api.motork.getsubmodelColors({ versionId: versionId }).then(function (submodelColors) {
+        console.log(submodelColors);
 
     }); */
 

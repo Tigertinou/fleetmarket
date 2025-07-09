@@ -66,11 +66,11 @@ $breadcrumb = [
 
     <x-vehicles.gallery :images="$vehicle['model']['images']" />
 
-    @if(isset($submodeColors) && isset($submodeColors['data']['external']) && count($submodeColors['data']['external']) > 0)
+    @if(isset($submodelColors) && isset($submodelColors['data']['external']) && count($submodelColors['data']['external']) > 0)
         <x-utils.container class="py-4 md:py-2">
             <div>
                 <h2 class="mb-6 text-2xl text-center md:text-left">Couleurs</h2>
-                <x-vehicles.colors-selector :colors="$submodeColors['data']['external']"></x-vehicles.colors-selector>
+                <x-vehicles.colors-selector :colors="$submodelColors['data']['external']"></x-vehicles.colors-selector>
             </div>
         </x-utils.container>
     @endif

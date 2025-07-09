@@ -34,10 +34,10 @@ class VehicleDetailModelController extends Controller
         $modelId = $vehicles['data'][0]['model']['modelId'] ?? null;
         $submodelId = $vehicles['data'][0]['model']['submodelId'] ?? null;
 
-        $submodeColors = $motorK->getSubmodelColors($submodelId);
+        $submodelColors = $motorK->getSubmodelColors($submodelId);
 
         //$vehicle = null;
 
-        return view('pages.vehicles.detail-model', compact( 'make', 'modelId', 'submodelId', 'vehicles', 'submodeColors' ));
+        return view('pages.vehicles.detail-model', compact( 'make', 'modelId', 'submodelId', 'vehicles', 'submodelColors' ));
     }
 }

@@ -194,7 +194,7 @@ class MotorKVehicleService
     {
         $res = [
             'status' => '404',
-            'total' => 0,
+            'total' => [],
             'data' => []
         ];
         if (!empty($submodelId)) {
@@ -203,6 +203,8 @@ class MotorKVehicleService
             if ($response->successful()) {
                 $json = $response->json();
                 $res['data'] = $json['response'] ?? [];
+                $res['total']['external'] = count($json['response']['external'] ?? []);
+                $res['total']['interior'] = count($json['response']['interior'] ?? []);
             }
         }
         return $res;

@@ -4,7 +4,7 @@
 <div class="flex flex-wrap items-center justify-center gap-2 p-2 mt-4 mb-2 ">
     @foreach ($colors as $key => $color)
         @php
-            $c = $color['primaryHex'] ?? '#000000';
+            $c = $color['primaryHex'] ?? $color['baseColourHex'] ?? '#000000';
             $cClass = '';
             if(preg_match('/m[ée]tal/iu', $color['group']) === 1){
                 $cClass = 'vcolors-metallic';
@@ -16,10 +16,11 @@
         style="background:{{ $c }};"
         title="{{$color['description']}} - {{$color['group']}}"
         :class="(selected == $el ? 'outline-theme' : 'outline-gray-200') @if($key > 4)+ (showAll ? '' : ' hidden')@endif"
-        data-color="{{ $color['primaryHex'] }}"
+        data-color="{{ $color['primaryHex'] ?? $color['baseColourHex'] }}"
         data-description="{{$color['description']}}"
         data-group="{{$color['group']}}"
-        data-price="{{$color['basePrice']}}"
+        data-price="{{$color['msrpPrice']}}"
+        data-value="{{ $color['equipmentId'] ?? $color['manufacturerCode'] }}"
         data-image="{{ $color['colorImage']['image800'] ?? '' }}"
         @click="select"></span>
     @endforeach
