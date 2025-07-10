@@ -256,7 +256,7 @@ class MotorKVehicleService
             'status' => 404,
             'data' => []
         ];
-        $response = Http::post("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/add", [
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/add", [
             'idEquipment' => $equipmentId,
             'config' => $config,
         ]);
@@ -264,6 +264,9 @@ class MotorKVehicleService
         if ($response->successful()) {
             $json = $response->json();
             $res['data'] = $json['response'] ?? [];
+            $res['versionId'] = $versionId ?? '';
+            $res['idEquipment'] = $equipmentId ?? '';
+            $res['config'] = $config ?? '';
         }
         return $res;
     }
@@ -274,7 +277,7 @@ class MotorKVehicleService
             'status' => 404,
             'data' => []
         ];
-        $response = Http::post("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/remove", [
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/remove", [
             'idEquipment' => $equipmentId,
             'config' => $config,
         ]);

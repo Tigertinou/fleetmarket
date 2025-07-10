@@ -44,43 +44,5 @@
             </div>
         </details>
     </template>
-
-    {{-- <template x-for="(section, sectionKey) in options">
-        <li>
-            <span x-text="sectionKey"></span>
-            <ul>
-                <template x-for="(subSection, subSectionKey) in section">
-                    <li x-text="subSectionKey">
-                        <ul>
-                            <template x-for="(equipment, equipmentKey) in subSection">
-                                <li x-text="equipment.description"></li>
-                            </template>
-                        </ul>
-                    </li>
-                </template>
-            </ul>
-        </li>
-    </template> --}}
-    {{-- <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-2">
-            <label for="options-select" class="text-sm font-semibold">Select Options</label>
-            <select id="options-select" x-model="selectedOption" class="form-select">
-                <option value="">-- Select an option --</option>
-                <template x-for="option in options" :key="option.id">
-                    <option :value="option.id" x-text="option.name"></option>
-                </template>
-            </select>
-        </div>
-
-        <button @click="addOption()" class="btn btn-primary">Add Option</button>
-
-        <div class="mt-4">
-            <h4 class="text-lg font-semibold">Selected Options</h4>
-            <ul>
-                <template x-for="option in selectedOptions" :key="option.id">
-                    <li x-text="option.name"></li>
-                </template>
-            </ul>
-        </div>
-    </div> --}}
+    <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
 </div>

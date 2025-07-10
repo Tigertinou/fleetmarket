@@ -8,7 +8,7 @@ $breadcrumb = [
 
 $finitionSelected = $finitions->first()['trimCode'] ?? null;
 $motorSelected = $motors->first()['versionUrlCode'] ?? null;
-$versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
+$versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoricalId'] ?? null;
 @endphp
 
 <x-layouts.app :title="'Page'" :$breadcrumb>
@@ -24,6 +24,7 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
         colorExternalSelected : null,
         colorInteriorSelected : null,
         equipmentsSelected : [],
+        optionsModalOpen : false,
         version : null,
         total : {
             base: 0,
@@ -189,73 +190,70 @@ window.configurator = {
     versions: [],
     colors: [],
     applyTotal: function() {
-        const mainData = Alpine.$data(document.getElementById('main'));
-        if(mainData?.version == null) {
+        if(window.xMainData?.version == null) {
             return;
         }
-        mainData.total.base = mainData.version.price || 0;
-        mainData.total.options = 0;
-        mainData.total.shipping = 950;
-        if(mainData.colorExternalSelected!=null){
+        window.xMainData.total.base = window.xMainData.version.price || 0;
+        window.xMainData.total.options = 0;
+        window.xMainData.total.shipping = 950;
+        if(window.xMainData.colorExternalSelected!=null){
             colorExternal = window.configurator.colors.data['external'].filter(function (v) {
-                return v.code == mainData.colorExternalSelected;
+                return v.code == window.xMainData.colorExternalSelected;
             })[0];
             if(colorExternal!=null){
-                mainData.total.options += parseFloat(colorExternal.msrpPrice);
+                window.xMainData.total.options += parseFloat(colorExternal.msrpPrice);
             }
         }
-        if(mainData.colorInteriorSelected!=null){
+        if(window.xMainData.colorInteriorSelected!=null){
             colorInterior = window.configurator.colors.data['interior'].filter(function (v) {
-                return v.code == mainData.colorInteriorSelected;
+                return v.code == window.xMainData.colorInteriorSelected;
             })[0];
             if(colorInterior!=null){
-                mainData.total.options += parseFloat(colorInterior.msrpPrice);
+                window.xMainData.total.options += parseFloat(colorInterior.msrpPrice);
             }
         }
-        if(mainData.equipmentsSelected && mainData.equipmentsSelected.length > 0) {
-            mainData.equipmentsSelected.forEach(function (equipment) {
+        if(window.xMainData.equipmentsSelected && window.xMainData.equipmentsSelected.length > 0) {
+            window.xMainData.equipmentsSelected.forEach(function (equipment) {
                 if(equipment.msrp > 0) {
-                    mainData.total.options += parseFloat(equipment.msrp);
+                    window.xMainData.total.options += parseFloat(equipment.msrp);
                 }
             });
         }
-        mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
+        window.xMainData.total.total = window.xMainData.version.price + window.xMainData.total.options + window.xMainData.total.shipping;
     },
     selectVersion: function(versionId) {
         version = window.configurator.versions.filter(function (v) {
             return v.versionHistoricalId == versionId;
         })[0];
-        const mainData = Alpine.$data(document.getElementById('main'));
-        mainData.version = version;
+        window.xMainData.version = version;
         window.configurator.loadEquipments();
         window.configurator.applyTotal();
     },
     loadEquipments: function() {
-        const mainData = Alpine.$data(document.getElementById('main'));
-        if(mainData?.version == null) {
+        if(window.xMainData?.version == null) {
             return;
         }
-        const version = mainData.version;
+        const version = window.xMainData.version;
 
         document.querySelectorAll('#options-list').forEach(function (el) {
             Alpine.$data(el).options = {};
             window.api.motork.getEquipments(version.versionId).then(function (result) {
                 window.configurator.options = result.data;
                 Alpine.$data(el).options = window.configurator.options;
-                if(mainData.equipmentsSelected.length > 0) {
-                    /* mainData.equipmentsSelected.forEach((equipment) => {
+                if(window.xMainData.equipmentsSelected.length > 0) {
+                    /* window.xMainData.equipmentsSelected.forEach((equipment) => {
                         const eq = window.configurator.options.find(e => e.idEquipment == equipment.idEquipment);
                         if(eq) {
                             eq.selected = true;
                         }
                     }); */
                 } else {
-                    mainData.equipmentsSelected = window.configurator.options.filter(e => e.type == 'STANDARD');
+                    /* window.xMainData.equipmentsSelected = window.configurator.options.filter(e => e.type == 'STANDARD'); */
                 }
                 /* if(version.equipments && version.equipments.length > 0) {
-                    mainData.equipmentsSelected = version.equipments.map(e => e.code);
+                    window.xMainData.equipmentsSelected = version.equipments.map(e => e.code);
                 } else {
-                    mainData.equipmentsSelected = [];
+                    window.xMainData.equipmentsSelected = [];
                 } */
                 console.log('options', window.configurator.options);
             });
@@ -263,31 +261,45 @@ window.configurator = {
 
     },
     addEquipment: function(equipment) {
-        const mainData = Alpine.$data(document.getElementById('main'));
-        if(mainData?.version == null) {
+        if(window.xMainData?.version == null) {
             return;
         }
         console.log('addEquipment', equipment.idEquipment, equipment);
-        if(!mainData.equipmentsSelected.includes(equipment)) {
-            window.api.motork.addEquipment(mainData.version.versionId, equipment.idEquipment, mainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result) => {
+        if(!window.xMainData.equipmentsSelected.includes(equipment)) {
+            window.api.motork.addEquipment(window.xMainData.version.versionId, equipment.idEquipment, window.xMainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result) => {
                 console.log('addEquipment', result);
-                mainData.equipmentsSelected.push(equipment);
-                // window.configurator.loadEquipments();
-                window.configurator.applyTotal();
+                if(result?.data?.status == 'OK'){
+                    window.xMainData.equipmentsSelected.push(equipment);
+                    // window.configurator.loadEquipments();
+                    window.configurator.applyTotal();
+                } else {
+                    document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
+                        el.checked = false;
+                        Alpine.$data(el.closest('[x-data]')).checked = false;
+                    });
+                    const modal = document.querySelector('#options-modal');
+                    if(modal) {
+                        modal.querySelector('[data-area="title"]').innerHTML = `Conflit d\'ajout d'équipement`;
+                        modal.querySelector('[data-area="content"]').innerHTML = `Une erreur est survenue lors de l'ajout de l'équipement.<br>
+                        <b>Developpement in progress ...</b><br>&nbsp;<br>
+                        ${JSON.stringify(result?.data)}`;
+                        window.xMainData.optionsModalOpen = true;
+                    }
+                    console.error('Error adding equipment:', result?.data);
+                }
             });
         }
     },
     removeEquipment: function(equipment) {
-        const mainData = Alpine.$data(document.getElementById('main'));
-        if(mainData?.version == null) {
+        if(window.xMainData?.version == null) {
             return;
         }
         console.log('removeEquipment', equipment.idEquipment, equipment);
-        const index = mainData.equipmentsSelected.indexOf(equipment);
+        const index = window.xMainData.equipmentsSelected.indexOf(equipment);
         if(index > -1) {
-            window.api.motork.removeEquipment(mainData.version.versionId, equipment.idEquipment, mainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result)  => {
+            window.api.motork.removeEquipment(window.xMainData.version.versionId, equipment.idEquipment, window.xMainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result)  => {
                 console.log('removeEquipment', result);
-                mainData.equipmentsSelected.splice(mainData.equipmentsSelected.indexOf(equipment), 1);
+                window.xMainData.equipmentsSelected.splice(window.xMainData.equipmentsSelected.indexOf(equipment), 1);
                 // window.configurator.loadEquipments();
                 window.configurator.applyTotal();
             });
@@ -296,7 +308,7 @@ window.configurator = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-
+    window.xMainData = document.querySelector('#main')._x_dataStack[0];
     window.configurator.versions = @json($vehicle['model']['versions']);
     window.configurator.colors = @json($submodelColors);
     Alpine.$data(document.getElementById('header')).sticky = false;
