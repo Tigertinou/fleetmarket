@@ -23,7 +23,7 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
         coverColorLabel : null,
         colorExternalSelected : null,
         colorInteriorSelected : null,
-        optionsSelected : [],
+        equipmentsSelected : [],
         version : null,
         total : {
             base: 0,
@@ -212,6 +212,13 @@ window.configurator = {
                 mainData.total.options += parseFloat(colorInterior.msrpPrice);
             }
         }
+        if(mainData.equipmentsSelected && mainData.equipmentsSelected.length > 0) {
+            mainData.equipmentsSelected.forEach(function (equipment) {
+                if(equipment.msrp > 0) {
+                    mainData.total.options += parseFloat(equipment.msrp);
+                }
+            });
+        }
         mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
     },
     selectVersion: function(versionId) {
@@ -220,31 +227,72 @@ window.configurator = {
         })[0];
         const mainData = Alpine.$data(document.getElementById('main'));
         mainData.version = version;
-        window.configurator.loadOptions();
+        window.configurator.loadEquipments();
         window.configurator.applyTotal();
     },
-    loadOptions: function() {
+    loadEquipments: function() {
         const mainData = Alpine.$data(document.getElementById('main'));
         if(mainData?.version == null) {
             return;
         }
         const version = mainData.version;
 
-        if(version.equipments && version.equipments.length > 0) {
-            mainData.optionsSelected = version.equipments.map(e => e.code);
-        } else {
-            mainData.optionsSelected = [];
-        }
-
         document.querySelectorAll('#options-list').forEach(function (el) {
+            Alpine.$data(el).options = {};
             window.api.motork.getEquipments(version.versionId).then(function (result) {
                 window.configurator.options = result.data;
                 Alpine.$data(el).options = window.configurator.options;
+                if(mainData.equipmentsSelected.length > 0) {
+                    /* mainData.equipmentsSelected.forEach((equipment) => {
+                        const eq = window.configurator.options.find(e => e.idEquipment == equipment.idEquipment);
+                        if(eq) {
+                            eq.selected = true;
+                        }
+                    }); */
+                } else {
+                    mainData.equipmentsSelected = window.configurator.options.filter(e => e.type == 'STANDARD');
+                }
+                /* if(version.equipments && version.equipments.length > 0) {
+                    mainData.equipmentsSelected = version.equipments.map(e => e.code);
+                } else {
+                    mainData.equipmentsSelected = [];
+                } */
                 console.log('options', window.configurator.options);
             });
         });
 
     },
+    addEquipment: function(equipment) {
+        const mainData = Alpine.$data(document.getElementById('main'));
+        if(mainData?.version == null) {
+            return;
+        }
+        console.log('addEquipment', equipment.idEquipment, equipment);
+        if(!mainData.equipmentsSelected.includes(equipment)) {
+            window.api.motork.addEquipment(mainData.version.versionId, equipment.idEquipment, mainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result) => {
+                console.log('addEquipment', result);
+                mainData.equipmentsSelected.push(equipment);
+                // window.configurator.loadEquipments();
+                window.configurator.applyTotal();
+            });
+        }
+    },
+    removeEquipment: function(equipment) {
+        const mainData = Alpine.$data(document.getElementById('main'));
+        if(mainData?.version == null) {
+            return;
+        }
+        console.log('removeEquipment', equipment.idEquipment, equipment);
+        const index = mainData.equipmentsSelected.indexOf(equipment);
+        if(index > -1) {
+            window.api.motork.removeEquipment(mainData.version.versionId, equipment.idEquipment, mainData.equipmentsSelected.map(e => e.idEquipment).join(',')).then((result)  => {
+                console.log('removeEquipment', result);
+                mainData.equipmentsSelected.splice(mainData.equipmentsSelected.indexOf(equipment), 1);
+                // window.configurator.loadEquipments();
+                window.configurator.applyTotal();
+            });
+        }
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function () {

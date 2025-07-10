@@ -250,6 +250,42 @@ class MotorKVehicleService
         return $res;
     }
 
+    public function addEquipment(string $versionId, string $equipmentId, string $config = '')
+    {
+        $res = [
+            'status' => 404,
+            'data' => []
+        ];
+        $response = Http::post("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/add", [
+            'idEquipment' => $equipmentId,
+            'config' => $config,
+        ]);
+        $res['status'] = $response->status();
+        if ($response->successful()) {
+            $json = $response->json();
+            $res['data'] = $json['response'] ?? [];
+        }
+        return $res;
+    }
+
+    public function removeEquipment(string $versionId, string $equipmentId, string $config = '')
+    {
+        $res = [
+            'status' => 404,
+            'data' => []
+        ];
+        $response = Http::post("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/remove", [
+            'idEquipment' => $equipmentId,
+            'config' => $config,
+        ]);
+        $res['status'] = $response->status();
+        if ($response->successful()) {
+            $json = $response->json();
+            $res['data'] = $json['response'] ?? [];
+        }
+        return $res;
+    }
+
    /*  public function getSubmodel(string $submodelSlug): array
     {
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models/{$makeSlug}");

@@ -15,4 +15,34 @@ class EquipmentsController extends Controller
         return response()->json($this->service->getEquipments($vehicleId));
     }
 
+    public function addEquipment(string $vehicleId): JsonResponse
+    {
+
+        $data = request()->validate([
+            'idEquipment' => 'required|string',
+            'config' => 'nullable|string',
+        ]);
+
+        $result = $this->service->addEquipment($vehicleId, $data['idEquipment'], $data['config'] ?? '');
+        if ($result) {
+            return response()->json($result);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Failed to add equipment'], 400);
+    }
+
+    public function removeEquipment(string $vehicleId): JsonResponse
+    {
+        $data = request()->validate([
+            'idEquipment' => 'required|string',
+            'config' => 'nullable|string',
+        ]);
+
+        $result = $this->service->removeEquipment($vehicleId, $data['idEquipment'], $data['config'] ?? '');
+        if ($result) {
+            return response()->json($result);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Failed to remove equipment'], 400);
+    }
 }
