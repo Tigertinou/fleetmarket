@@ -285,7 +285,7 @@ window.configurator = {
                         ${JSON.stringify(result?.data)}`;
                         window.xMainData.optionsModalOpen = true;
                     }
-                    console.error('Error adding equipment:', result?.data);
+                    /* console.error('Error adding equipment:', result?.data); */
                 }
             });
         }
