@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\VehicleController;
-use App\Http\Controllers\Api\ConfigurationController;
+use App\Http\Controllers\Api\EquipmentsController;
 use App\Http\Controllers\Api\ComparisonController;
 use App\Http\Controllers\Api\QuoteController;
 
@@ -17,8 +17,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/versions/{submodel}', [VehicleController::class, 'listVersions']);
     Route::get('/version/{id}', [VehicleController::class, 'getVersionDetails']);
 
-    Route::post('/configure/add', [ConfigurationController::class, 'addEquipment']);
-    Route::post('/configure/remove', [ConfigurationController::class, 'removeEquipment']);
+    Route::get('/equipments/{vehicleId}', [EquipmentsController::class, 'listEquipments']);
+    Route::post('/equipments/{vehicleId}/add', [EquipmentsController::class, 'addEquipment']);
+    Route::post('/equipments/{vehicleId}/remove', [EquipmentsController::class, 'removeEquipment']);
 
     Route::post('/compare', [ComparisonController::class, 'compare']);
     Route::post('/quote', [QuoteController::class, 'generateQuote']);

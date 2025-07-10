@@ -1,5 +1,4 @@
 @php
-$vehicle = $vehicles['data'][0];
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
     ['url' => localized_route('pages.vehicles.search.make', [ 'make' => $vehicle['model']['makeUrlCode'] ]), 'label' => $vehicle['model']['makeName'], 'class' => 'font-semibold text-black'],
@@ -146,13 +145,6 @@ $breadcrumb = [
                 <h2 class="text-2xl">Finitions</h2>
                 <p class="text-xs md:text-sm">Choisissez votre finition et commencez à configurer votre {{ $vehicle['model']['makeName'] }}</p>
             </div>
-            @php
-                $finitions = collect($vehicle['model']['versions'])
-                ->groupBy('trimName')
-                ->map(function ($version) {
-                    return $version;
-                });
-            @endphp
             <div x-data="{
                 init() {
                     $el.children[0].scrollTo(0,0);
@@ -173,11 +165,14 @@ $breadcrumb = [
             <div class="flex-1 max-w-full overflow-auto cursor-pointer select-none snap-x snap-mandatory scrollbar-hide" style="-ms-overflow-style: none; scrollbar-width: none;" >
                 <div class="flex gap-3 px-4 py-4 flex-nowrap" style="width:fit-content;">
                     @foreach ($finitions as $finition)
-                        <a href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}?version={{$finition[0]['versionHistoricalId']}}" class="block relative max-w-[70vw] h-40 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:border-white hover:outline-theme flex flex-col items-center">
-                            <span class="flex items-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center uppercase">{{ $finition[0]['trimName'] }}</span>
+                        <a href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}?version={{$finition['versionHistoricalId']}}" class="block relative max-w-[70vw] h-40 bg-white border-2 border-gray-200 rounded-lg w-96 snap-center hover:outline-2 hover:border-white hover:outline-theme flex flex-col items-center">
+                            <span class="flex flex-col items-center justify-center flex-1 p-4 px-6 text-2xl font-semibold leading-7 text-center uppercase">
+                                {{ $finition['trimName'] }}<br>
+                                <small class="text-xs font-normal uppercase">{{ implode(' / ',$finition['fuelTypes'])}}</small>
+                            </span>
                             <span class="flex items-center justify-between w-full p-4 border-t border-gray-100">
                                 <span class="flex-1 text-xs">Prix à partir de</span>
-                                <span class="text-xs"><span class="mr-1 text-base font-extrabold md:text-base">{{ number_format($finition[0]['minPrice'], 0, ',', '.') . ' €' }}</span></span>
+                                <span class="text-xs"><span class="mr-1 text-base font-extrabold md:text-base">{{ number_format($finition['price'], 0, ',', '.') . ' €' }}</span></span>
                             </span>
                         </a>
                     @endforeach
@@ -191,13 +186,5 @@ $breadcrumb = [
     </div>
 
     <div class="h-20"></div>
-<script>console.log(@json($finitions))</script>
-
-    {{-- @foreach ($vehicle['model']['versions'] as $version)
-        <pre class="max-w-full overflow-auto text-xs">{{ json_encode($specs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
-        <pre class="max-w-full overflow-auto text-xs">{{ json_encode($version, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
-    @endforeach
-
-    <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
 
 </x-layouts.app>

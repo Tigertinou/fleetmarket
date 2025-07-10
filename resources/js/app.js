@@ -39,8 +39,46 @@ window.dataMove = function(){
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    /********************** DATAMOVE **********************/
     window.dataMove();
     window.addEventListener('resize', function () {
         window.dataMove();
     });
+
+    /********************** TABS **********************/
+    document.addEventListener('scroll', function () {
+        window.active_tab = window.active_tab || Alpine.$data(document.getElementById('main')).activeTab;
+        var tab = window.active_tab;
+        var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height + 50;
+        if(offset==null){
+            offset = (window.innerHeight || document.documentElement.clientHeight) * 0.5;
+        }
+        document.querySelectorAll('[data-enter-tab]').forEach( (el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < offset) {
+                tab = el.getAttribute('data-enter-tab');
+            }
+        });
+        if(tab != window.active_tab) {
+            window.active_tab = tab;
+            Alpine.$data(document.getElementById('main')).activeTab = tab;
+            document.querySelectorAll('[data-tab="'+tab+'"]')[0].scrollIntoView({
+                behavior: 'smooth',
+                inline: 'center',
+                block: 'nearest'
+            });
+        }
+    });
+    document.querySelectorAll('[data-tab]').forEach( (el) => {
+        el.addEventListener('click', () => {
+            var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height;
+            scrollTo({
+                top: document.querySelectorAll(`[data-enter-tab="${el.dataset.tab}"]`)[0].offsetTop - offset,
+                behavior: 'smooth'
+            });
+            window.active_tab = el.getAttribute('data-tab');
+            Alpine.$data(document.getElementById('main')).activeTab = window.active_tab;
+        });
+    },{ once: true });
 });

@@ -19,7 +19,7 @@
         coverColorLabel = this.vcolorsLabel;
         this.price = this.selected.dataset.price;
         colorExternalSelected = this.selected.dataset.value;
-        window.applyTotal();
+        window.configurator.applyTotal();
     },
     preloadImages () {
         const images = Array.from(this.$el.querySelectorAll('.vcolors-item')).map(el => el.dataset.image);

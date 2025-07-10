@@ -31,13 +31,72 @@ class VehicleConfiguratorController extends Controller
             abort(404, 'Model not found');
         }
 
-        $modelId = $vehicles['data'][0]['model']['modelId'] ?? null;
-        $submodelId = $vehicles['data'][0]['model']['submodelId'] ?? null;
+        $vehicle = $vehicles['data'][0];
+        $modelId = $vehicle['model']['modelId'] ?? null;
+        $submodelId = $vehicle['model']['submodelId'] ?? null;
 
         $submodelColors = $motorK->getSubmodelColors($submodelId);
 
-        //$vehicle = null;
+        $finitions = collect($vehicle['model']['versions'])
+        ->sortBy('price')
+        ->groupBy('trimName')
+        ->map(function ($versions) {
+            return array(
+                'trimCode' => $versions->first()['trimCode'],
+                'trimName' => $versions->first()['trimName'],
+                'versionHistoricalId' => $versions->first()['versionHistoricalId'],
+                'price' => $versions->first()['price'],
+                'fuelTypes' => $versions->pluck('fuelType')->unique()->values()->all(),
+                'versionUrlCode' => $versions->first()['versionUrlCode'],
+                );
+        });
 
-        return view('pages.vehicles.configurator', compact( 'make', 'modelId', 'submodelId', 'vehicles', 'submodelColors' ));
+        $motors = collect($vehicle['model']['versions'])
+        ->sortBy('price')
+        ->groupBy('versionName')
+        ->map(function ($versions) {
+            return array(
+                'trimCode' => $versions->first()['trimCode'],
+                'trimName' => $versions->first()['trimName'],
+                'versionUrlCode' => $versions->first()['versionUrlCode'],
+                'versionName' => $versions->first()['versionName'],
+                'versionHistoricalId' => $versions->first()['versionHistoricalId'],
+                'price' => $versions->first()['price'],
+                'fuelType' => $versions->first()['fuelType'],
+                'gearboxType' => $versions->first()['gearboxType'],
+                'traction' => $versions->first()['traction'],
+                /* 'engineCode' => $version[0]['engineCode'],
+                'engineName' => $version[0]['engineName'] */
+                );
+        });
+
+        return view('pages.vehicles.configurator', compact(
+            'vehicle',
+            'make',
+            'modelId',
+            'submodelId',
+            'submodelColors',
+            'finitions',
+            'motors',
+        ));
+    }
+
+    public function partialOptions(Request $request, MotorKVehicleService $motorKService)
+    {
+
+        $params = $request->query();
+        $options = [];
+
+        if(isset($params['versionId'])){
+            $results = $motorKService->getEquipments($params['versionId']);
+            if($results['status']==200 && count($results['data'] ?? []) > 0){
+                $options = $results['data'];
+            }
+        }
+
+        return response(view('partials.vehicles.configurator.options', compact(
+            'options'
+        )));
+
     }
 }

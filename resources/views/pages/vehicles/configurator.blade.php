@@ -1,5 +1,4 @@
 @php
-$vehicle = $vehicles['data'][0];
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
     ['url' => localized_route('pages.vehicles.search.make', [ 'make' => $vehicle['model']['makeUrlCode'] ]), 'label' => $vehicle['model']['makeName'], 'class' => 'font-semibold text-black'],
@@ -7,57 +6,9 @@ $breadcrumb = [
     ['label' => 'Configurateur' ]
 ];
 
-/* $finitions_detail = collect($vehicle['model']['versions'])
-->groupBy('trimName')
-->sortBy('price')
-->map(function ($versions) {
-    return $versions;
-});
-
-$motors_detail = collect($vehicle['model']['versions'])
-->groupBy('versionName')
-->sortBy('price')
-->map(function ($versions) {
-    return $versions;
-}); */
-
-$finitions = collect($vehicle['model']['versions'])
-->sortBy('price')
-->groupBy('trimName')
-->map(function ($versions) {
-    return array(
-        'trimCode' => $versions->first()['trimCode'],
-        'trimName' => $versions->first()['trimName'],
-        'versionHistoricalId' => $versions->first()['versionHistoricalId'],
-        'price' => $versions->first()['price'],
-        'fuelTypes' => $versions->pluck('fuelType')->unique()->values()->all(),
-        'versionUrlCode' => $versions->first()['versionUrlCode'],
-        );
-});
-
-$motors = collect($vehicle['model']['versions'])
-->sortBy('price')
-->groupBy('versionName')
-->map(function ($versions) {
-    return array(
-        'trimCode' => $versions->first()['trimCode'],
-        'trimName' => $versions->first()['trimName'],
-        'versionUrlCode' => $versions->first()['versionUrlCode'],
-        'versionName' => $versions->first()['versionName'],
-        'versionHistoricalId' => $versions->first()['versionHistoricalId'],
-        'price' => $versions->first()['price'],
-        'fuelType' => $versions->first()['fuelType'],
-        'gearboxType' => $versions->first()['gearboxType'],
-        'traction' => $versions->first()['traction'],
-        /* 'engineCode' => $version[0]['engineCode'],
-        'engineName' => $version[0]['engineName'] */
-        );
-});
-
 $finitionSelected = $finitions->first()['trimCode'] ?? null;
 $motorSelected = $motors->first()['versionUrlCode'] ?? null;
 $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
-
 @endphp
 
 <x-layouts.app :title="'Page'" :$breadcrumb>
@@ -192,6 +143,11 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
                 <h3 class="mt-4 mb-2 text-lg font-semibold">Couleurs intérieur</h3>
                 @include('partials.vehicles.configurator.colors-interior')
 
+                {{-- ************* OPTIONS ************* --}}
+                <div data-enter-tab="OPTIONS"></div>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">Options</h3>
+                @include('partials.vehicles.configurator.options')
+
             </div>
             <div data-move-mobile="resume">
                 {{-- ************* RESUME - MOBILE ************* --}}
@@ -225,48 +181,78 @@ $versionHistoricalId = $motors->first()['versionHistoricalId'] ?? null;
     </div>
 </x-layouts.app>
 {{--@dump($submodelColors)--}}
-@dump($vehicle['model']['submodelId'])
+
 <script>
 
-window.applyTotal = function() {
-    const mainData = Alpine.$data(document.getElementById('main'));
-    mainData.total.base = mainData.version.price;
-    mainData.total.options = 0;
-    mainData.total.shipping = 950;
-    if(mainData.colorExternalSelected!=null){
-        colorExternal = window.colors.data['external'].filter(function (v) {
-            return v.code == mainData.colorExternalSelected;
-        })[0];
-        if(colorExternal!=null){
-            mainData.total.options += parseFloat(colorExternal.msrpPrice);
+window.configurator = {
+    options: [],
+    versions: [],
+    colors: [],
+    applyTotal: function() {
+        const mainData = Alpine.$data(document.getElementById('main'));
+        if(mainData?.version == null) {
+            return;
         }
-    }
-    if(mainData.colorInteriorSelected!=null){
-        colorInterior = window.colors.data['interior'].filter(function (v) {
-            return v.code == mainData.colorInteriorSelected;
-        })[0];
-        if(colorInterior!=null){
-            mainData.total.options += parseFloat(colorInterior.msrpPrice);
+        mainData.total.base = mainData.version.price || 0;
+        mainData.total.options = 0;
+        mainData.total.shipping = 950;
+        if(mainData.colorExternalSelected!=null){
+            colorExternal = window.configurator.colors.data['external'].filter(function (v) {
+                return v.code == mainData.colorExternalSelected;
+            })[0];
+            if(colorExternal!=null){
+                mainData.total.options += parseFloat(colorExternal.msrpPrice);
+            }
         }
-    }
-    mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
-};
+        if(mainData.colorInteriorSelected!=null){
+            colorInterior = window.configurator.colors.data['interior'].filter(function (v) {
+                return v.code == mainData.colorInteriorSelected;
+            })[0];
+            if(colorInterior!=null){
+                mainData.total.options += parseFloat(colorInterior.msrpPrice);
+            }
+        }
+        mainData.total.total = mainData.version.price + mainData.total.options + mainData.total.shipping;
+    },
+    selectVersion: function(versionId) {
+        version = window.configurator.versions.filter(function (v) {
+            return v.versionHistoricalId == versionId;
+        })[0];
+        const mainData = Alpine.$data(document.getElementById('main'));
+        mainData.version = version;
+        window.configurator.loadOptions();
+        window.configurator.applyTotal();
+    },
+    loadOptions: function() {
+        const mainData = Alpine.$data(document.getElementById('main'));
+        if(mainData?.version == null) {
+            return;
+        }
+        const version = mainData.version;
 
-window.selectVersion = function (versionId) {
-    version = window.versions.filter(function (v) {
-        return v.versionHistoricalId == versionId;
-    })[0];
-    const mainData = Alpine.$data(document.getElementById('main'));
-    mainData.version = version;
-    window.applyTotal();
+        if(version.equipments && version.equipments.length > 0) {
+            mainData.optionsSelected = version.equipments.map(e => e.code);
+        } else {
+            mainData.optionsSelected = [];
+        }
+
+        document.querySelectorAll('#options-list').forEach(function (el) {
+            window.api.motork.getEquipments(version.versionId).then(function (result) {
+                window.configurator.options = result.data;
+                Alpine.$data(el).options = window.configurator.options;
+                console.log('options', window.configurator.options);
+            });
+        });
+
+    },
 };
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    window.versions = @json($vehicle['model']['versions']);
-    window.colors = @json($submodelColors);
+    window.configurator.versions = @json($vehicle['model']['versions']);
+    window.configurator.colors = @json($submodelColors);
     Alpine.$data(document.getElementById('header')).sticky = false;
-    window.selectVersion({{ $versionHistoricalId }});
+    window.configurator.selectVersion({{ $versionHistoricalId }});
 
     console.log(@json($vehicle));
     console.log('submodelColors',@json($submodelColors));
@@ -275,64 +261,5 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('finitions',@json($finitions));
     console.log('finitions_detail',@json($finitions_detail)); --}}*/
 
-
-    /********************** TABS **********************/
-    document.addEventListener('scroll', function () {
-        window.active_tab = window.active_tab || Alpine.$data(document.getElementById('main')).activeTab;
-        var tab = window.active_tab;
-        var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height + 50;
-        if(offset==null){
-            offset = (window.innerHeight || document.documentElement.clientHeight) * 0.5;
-        }
-        document.querySelectorAll('[data-enter-tab]').forEach( (el) => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < offset) {
-                tab = el.getAttribute('data-enter-tab');
-            }
-        });
-        if(tab != window.active_tab) {
-            window.active_tab = tab;
-            Alpine.$data(document.getElementById('main')).activeTab = tab;
-            document.querySelectorAll('[data-tab="'+tab+'"]')[0].scrollIntoView({
-                behavior: 'smooth',
-                inline: 'center',
-                block: 'nearest'
-            });
-        }
-    });
-    document.querySelectorAll('[data-tab]').forEach( (el) => {
-        el.addEventListener('click', () => {
-            var offset = document.getElementById('tabs').getBoundingClientRect().top + document.getElementById('tabs').getBoundingClientRect().height;
-            scrollTo({
-                top: document.querySelectorAll(`[data-enter-tab="${el.dataset.tab}"]`)[0].offsetTop - offset,
-                behavior: 'smooth'
-            });
-            window.active_tab = el.getAttribute('data-tab');
-            Alpine.$data(document.getElementById('main')).activeTab = window.active_tab;
-        });
-    },{ once: true });
-
 });
-
-
 </script>
-
-
-{{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($submodelColors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
-
-{{-- <pre class="max-w-full overflow-auto text-xs">{{ json_encode($vehicle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre> --}}
-{{--
-window.api.motork.getVersionDetails(versionId).then(function (version) {
-        console.log(version.versionId);
-        // document.querySelector('.vcolors-image').style.backgroundImage = 'url(' + submodelColors.data.external[0].colorImage.image800 + ')';
-        // document.querySelector('.vcolors-label').innerHTML = submodelColors.data.external[0].colorGroup + ' : ' + submodelColors.data.external[0].colorDescription;
-    }).catch(function (error) {
-        console.error('Error fetching version:', error);
-    });
-
-    /* window.api.motork.getsubmodelColors({ versionId: versionId }).then(function (submodelColors) {
-        console.log(submodelColors);
-
-    }); */
-
---}}

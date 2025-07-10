@@ -1,7 +1,7 @@
 <div id="select-motor" class="flex flex-col gap-3 mt-4 select-none" x-data="{
     change(target){
         versionHistoricalId = target.closest('[data-versionHistoricalId]').getAttribute('data-versionHistoricalId');
-        window.selectVersion(versionHistoricalId);
+        window.configurator.selectVersion(versionHistoricalId);
         $el.querySelectorAll('[type=radio]').forEach( (el) => {
             const data = Alpine.$data(el).active = (el==target);
         });

@@ -30,14 +30,35 @@ class VehicleDetailModelController extends Controller
         if( !$vehicles || empty($vehicles['data']) ) {
             abort(404, 'Model not found');
         }
-
-        $modelId = $vehicles['data'][0]['model']['modelId'] ?? null;
-        $submodelId = $vehicles['data'][0]['model']['submodelId'] ?? null;
+        $vehicle = $vehicles['data'][0];
+        $modelId = $vehicle['model']['modelId'] ?? null;
+        $submodelId = $vehicle['model']['submodelId'] ?? null;
 
         $submodelColors = $motorK->getSubmodelColors($submodelId);
 
+        $finitions = collect($vehicle['model']['versions'])
+        ->sortBy('price')
+        ->groupBy('trimName')
+        ->map(function ($versions) {
+            return array(
+                'trimCode' => $versions->first()['trimCode'],
+                'trimName' => $versions->first()['trimName'],
+                'versionHistoricalId' => $versions->first()['versionHistoricalId'],
+                'price' => $versions->first()['price'],
+                'fuelTypes' => $versions->pluck('fuelType')->unique()->values()->all(),
+                'versionUrlCode' => $versions->first()['versionUrlCode'],
+                );
+        });
         //$vehicle = null;
 
-        return view('pages.vehicles.detail-model', compact( 'make', 'modelId', 'submodelId', 'vehicles', 'submodelColors' ));
+        return view('pages.vehicles.detail-model', compact(
+            'vehicle',
+            'make',
+            'modelId',
+            'submodelId',
+            'vehicles',
+            'submodelColors',
+            'finitions',
+        ));
     }
 }

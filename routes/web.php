@@ -26,6 +26,7 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middlewar
 
     Route::prefix('/partials')->group(function () {
         Route::get('/vehicles/search/results', [VehicleSearchController::class, 'partialResult'])->name('vehicles.search.partial');
+        Route::get('/vehicles/configurator/options', [VehicleConfiguratorController::class, 'partialOptions'])->name('vehicles.configurator.options.partial');
     });
 
     Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');

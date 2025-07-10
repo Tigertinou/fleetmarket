@@ -46,16 +46,19 @@ export default class MotorkApi {
     }
 
     // CONFIGURATION
+    async getEquipments(vehicleId) {
+      return await this.fetchJson(`${this.baseUrl}/equipments/${vehicleId}`);
+    }
 
     async addEquipment(vehicleId, currentConfig, toAdd) {
-      return await this.fetchJson(`${this.baseUrl}/configure/add`, {
+      return await this.fetchJson(`${this.baseUrl}/equipments/${vehicleId}/add`, {
         method: 'POST',
         body: JSON.stringify({ vehicleId, config: currentConfig, toAdd }),
       });
     }
 
     async removeEquipment(vehicleId, currentConfig, toRemove) {
-      return await this.fetchJson(`${this.baseUrl}/configure/remove`, {
+      return await this.fetchJson(`${this.baseUrl}/equipments/${vehicleId}/remove`, {
         method: 'POST',
         body: JSON.stringify({ vehicleId, config: currentConfig, toRemove }),
       });

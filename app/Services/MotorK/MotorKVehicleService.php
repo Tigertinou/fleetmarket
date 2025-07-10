@@ -112,7 +112,6 @@ class MotorKVehicleService
                 }
             }
         }
-/* var_dump($q); */
 
         $queryParams['q'] = implode(' AND ', $q);
 
@@ -230,6 +229,23 @@ class MotorKVehicleService
         if ($response->successful()) {
             $json = $response->json();
             $res['data'] = $json['response']['searchResults']['versions'][0] ?? [];
+        }
+        return $res;
+    }
+
+    public function getEquipments(string $versionId): array
+    {
+        $res = [
+            'status' => 404,
+            'data' => []
+        ];
+        if(isset($versionId)){
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}");
+            $res['status'] = $response->status();
+            if ($response->successful()) {
+                $json = $response->json();
+                $res['data'] = $json['response'] ?? [];
+            }
         }
         return $res;
     }

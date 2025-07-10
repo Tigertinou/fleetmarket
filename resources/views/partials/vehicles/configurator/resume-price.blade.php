@@ -13,8 +13,9 @@
             de la voiture</div>
         <div class="self-end" x-text="total.shipping.toEuro()">-</div>
     </div>
-    <div class="flex mt-2">
+    <div class="flex items-center mt-2">
         <div class="flex-1 font-bold">Prix total</div>
-        <div class="self-end font-bold" x-text="total.total.toEuro()">-</div>
+        <div class="self-end text-lg font-bold" x-html="total.total.toEuro()">-</div>
     </div>
+    <div><small>* Tous les prix affichés sont TTC</small></div>
 </x-utils.box>
