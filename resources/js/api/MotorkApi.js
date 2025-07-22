@@ -46,6 +46,10 @@ export default class MotorkApi {
     }
 
     // CONFIGURATION
+    async getColors(vehicleId) {
+        return await this.fetchJson(`${this.baseUrl}/colors/${vehicleId}`);
+    }
+
     async getEquipments(vehicleId) {
       return await this.fetchJson(`${this.baseUrl}/equipments/${vehicleId}`);
     }

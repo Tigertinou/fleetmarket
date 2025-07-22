@@ -233,6 +233,23 @@ class MotorKVehicleService
         return $res;
     }
 
+    public function getColors(string $versionId): array
+    {
+        $res = [
+            'status' => 404,
+            'data' => []
+        ];
+        if(isset($versionId)){
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/colours/{$versionId}");
+            $res['status'] = $response->status();
+            if ($response->successful()) {
+                $json = $response->json();
+                $res['data'] = $json['response'] ?? [];
+            }
+        }
+        return $res;
+    }
+
     public function getEquipments(string $versionId): array
     {
         $res = [
@@ -257,7 +274,7 @@ class MotorKVehicleService
             'data' => []
         ];
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/add", [
-            'idEquipment' => $equipmentId,
+            'toAdd' => $equipmentId,
             'config' => $config,
         ]);
         $res['status'] = $response->status();
@@ -278,7 +295,7 @@ class MotorKVehicleService
             'data' => []
         ];
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/remove", [
-            'idEquipment' => $equipmentId,
+            'toRemove' => $equipmentId,
             'config' => $config,
         ]);
         $res['status'] = $response->status();

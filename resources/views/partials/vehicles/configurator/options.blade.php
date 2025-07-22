@@ -1,6 +1,7 @@
 <div id="options-list" x-data="{
     showStandard: true,
     change (equipment,target) {
+    console.log(equipment);
         Alpine.$data(target.closest('[x-data]')).checked = target.checked;
         if(target.checked){
             window.configurator.addEquipment(equipment);
