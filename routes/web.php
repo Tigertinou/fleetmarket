@@ -5,6 +5,7 @@ use App\Http\Controllers\VehicleSearchController;
 use App\Http\Controllers\VehicleDetailModelController;
 use App\Http\Controllers\VehicleDetailSubmodelController;
 use App\Http\Controllers\VehicleConfiguratorController;
+use App\Http\Controllers\VehicleContactController;
 use App\Http\Middleware\SetLocale;
 
 Route::redirect('/', '/fr/');
@@ -27,6 +28,7 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middlewar
     Route::prefix('/partials')->group(function () {
         Route::get('/vehicles/search/results', [VehicleSearchController::class, 'partialResult'])->name('vehicles.search.partial');
         Route::get('/vehicles/configurator/options', [VehicleConfiguratorController::class, 'partialOptions'])->name('vehicles.configurator.options.partial');
+        Route::get('/vehicles/contact/form', [VehicleContactController::class, 'partialContactForm'])->name('vehicles.contact.form.partial');
     });
 
     Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');

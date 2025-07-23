@@ -27,6 +27,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         colorInteriorSelected : null,
         equipmentsSelected : [],
         optionsModalOpen : false,
+        sendModal : false,
         version : null,
         total : {
             base: 0,
@@ -170,7 +171,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                         <span class="text-2xl font-bold" x-text="total.total.toEuro()">-</span><small> TTC*</small>
                     </div>
                     <div class="w-1/2">
-                        <x-utils.button label="Continuer" r-icon="icon-chevron-right" class="w-full max-w-sm"></x-utils.button>
+                        <x-utils.button label="Continuer" r-icon="icon-chevron-right" class="w-full max-w-sm" @click="window.configurator.continue()"></x-utils.button>
                     </div>
                 </div>
             </div>
@@ -182,6 +183,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         </div>
 
         <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
+        <x-layouts.modal ref="sendModal" id="send-modal"></x-layouts.modal>
     </div>
 </x-layouts.app>
 {{--@dump($submodelColors)--}}
@@ -189,6 +191,17 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
 <script>
 
 window.configurator = {
+    continue : async function(){
+        const modal = document.querySelector('#send-modal');
+        const response = await fetch(`/{{ app()->getLocale() }}/partials/vehicles/contact/form`);
+        if (!response.ok) {
+            throw new Error(error.message || 'Erreur');
+            return;
+        }
+        modal.querySelector('[data-area="title"]').innerHTML = `Votre demande de devis`;
+        modal.querySelector('[data-area="content"]').innerHTML = await response.text();
+        window.xMainData.sendModalOpen = true;
+    },
     options: [],
     versions: [],
     colors: [],
