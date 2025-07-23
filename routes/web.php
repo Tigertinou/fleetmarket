@@ -11,9 +11,9 @@ use App\Http\Middleware\SetLocale;
 Route::redirect('/', '/fr/');
 
 Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middleware' => [SetLocale::class]], function () {
-    Route::get('/', function () {
-        return view('pages.home');
-    })->name('pages.home');
+    Route::get('/', function () { return view('pages.home'); })->name('pages.home');
+
+    Route::get('/privacy-policy', function () { return view('pages.legals'); })->name('pages.legals');
 
     Route::get('/recherche',VehicleSearchController::class)->name('pages.vehicles.search');
 
@@ -38,6 +38,7 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middlewar
     Route::get('/{make:slug}/{model:slug}/configurator', VehicleConfiguratorController::class)->name('pages.vehicles.configurator');
 
     Route::get('/{make:slug}/{model:slug}/{submodel:slug}', VehicleDetailSubmodelController::class)->name('pages.vehicles.detail.submodel');
+
 
     // Route::get('/{make:slug}/{model:slug}/{version:slug}', [VehicleController::class, 'showVersion'])->name('pages.vehicles.version');
 });

@@ -1,54 +1,130 @@
 
 <form x-data="{
-        showMessage: false
-    }" class="flex flex-col h-full" method="POST" action="" id="contact-form">
+        showMessage: false,
+        init() {
+            console.log('Contact form initialized');
+            const form = document.querySelector('#contact-form');
+            form.querySelector('input[name=inp_firstname]').value = 'Quentin';
+            form.querySelector('input[name=inp_lastname]').value = 'Ballinger';
+            form.querySelector('input[name=inp_email]').value = 'q.b@mouseonmove.com';
+            form.querySelector('input[name=inp_phone]').value = '+32477821572';
+            form.querySelector('input[name=inp_postcode]').value = '1020';
+        },
+        submitForm() {
+            const form = document.querySelector('#contact-form');
+            if (form.checkValidity()) {
+                const data = {
+                    make: makeSelected,
+                    model: modelSelected,
+                    finition: finitionSelected,
+                    motor: motorSelected,
+                    version: version?.versionName ?? '',
+                    colorExternal: colorExternalSelected?.description ?? '',
+                    colorInterior: colorInteriorSelected?.description ?? '',
+                    equipments: equipmentsSelected.map(e => e.idEquipment),
+                    total: total.total,
+                    firstname: form.inp_firstname.value,
+                    lastname: form.inp_lastname.value,
+                    email: form.inp_email.value,
+                    phone: form.inp_phone.value,
+                    postcode: form.inp_postcode.value,
+                    message: form.inp_message.value,
+                };
+                alert('Form data: ' + JSON.stringify(data, null, 2));
+                {{-- form.submit(); --}}
+            } else {
+                form.reportValidity();
+            }
+        }
+    }" class="flex flex-col h-full" method="POST" id="contact-form">
+    <input type="hidden" name="inp_data" value="">
     <div>
         <p class="mb-4 text-sm">Remplissez le formulaire ci-dessous pour nous contacter et recevoir votre devis.</p>
     </div>
-    <div class="flex-1">
+    <div class="flex-1 mb-4">
         <div class="flex flex-col gap-2 mb-4">
             <div class="flex-1">
-                <input type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Prénom *" required>
+                <input type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Prénom *" required>
             </div>
             <div class="flex-1">
-                <input type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Nom de famille *" required>
+                <input type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Nom de famille *" required>
             </div>
             <div class="flex-1">
-                <input type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Email *" required>
+                <input type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Email *" required>
             </div>
             <div class="flex-1">
-                <input type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Téléphone *" required>
+                <input type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Téléphone *" required>
             </div>
             <div class="flex-1">
-                <input type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Code postal*" required>
+                <input type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Code postal*" required>
+            </div>
+            <div>
+                <div class="mt-2 text-2xl">Récapitulatif</div>
+                <x-utils.box color="gray" class="w-full my-4 text-sm">
+                    <div class="pb-4 mt-2 mb-4 border-b border-gray-400">
+                        <span class="text-lg font-bold leading-4" x-text="makeSelected"></span> <span class="text-lg font-normal leading-4" x-text="modelSelected"></span><br>
+                        <span class="text-sm font-semibold" x-text="finitionSelected"></span><br>
+                        <span class="text-sm font-normal" x-text="version?.versionName ?? ''"></span>
+                    </div>
+                    <div class="flex">
+                        <div class="flex-1">Prix de base</div>
+                        <div class="self-end" x-text="total.base.toEuro()">-</div>
+                    </div>
+                    <div class="flex flex-col gap-2 py-2 my-2 text-xs border-gray-400 border-dashed border-y" >
+                        <template x-if="colorExternalSelected !== null">
+                            <div class="flex">
+                                <div class="flex-1" x-text="'+ ' + ( colorExternalSelected.description!=null ? colorExternalSelected.description : '')"></div>
+                                <div class="self-end" x-text="'+ ' + (colorExternalSelected.msrpPrice || 0).toEuro()">-</div>
+                            </div>
+                        </template>
+                        <template x-if="colorInteriorSelected !== null">
+                            <div class="flex">
+                                <div class="flex-1" x-text="'+ ' + ( colorInteriorSelected.description!=null ? colorInteriorSelected.description : '')"></div>
+                                <div class="self-end" x-text="'+ ' + (colorInteriorSelected.msrpPrice || 0).toEuro()">-</div>
+                            </div>
+                        </template>
+                        <template x-for="equipment in equipmentsSelected" >
+                            <div class="flex">
+                                <div class="flex-1" x-text="'+ ' + equipment.description"></div>
+                                <div class="self-end" x-text="'+ ' + ( equipment.msrp || 0).toEuro()">-</div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="flex">
+                        <div class="flex-1">Total des options configurées</div>
+                        <div class="self-end" x-text="total.options.toEuro()">-</div>
+                    </div>
+                    <div class="flex" x-show="total.shipping">
+                        <div class="flex-1">Frais de livraison incluant la contribution environnementale pour le recyclage
+                            de la voiture</div>
+                        <div class="self-end" x-text="total.shipping.toEuro()">-</div>
+                    </div>
+                    <div class="flex items-center mt-2">
+                        <div class="flex-1 font-bold">Prix total</div>
+                        <div class="self-end text-lg font-bold" x-html="total.total.toEuro()">-</div>
+                    </div>
+                    <div><small>* Tous les prix affichés sont TTC</small></div>
+                </x-utils.box>
             </div>
             <div class="flex-1">
-                <x-forms.elements.switch class="mb-2 text-sm" name="inp_display_message" label="Ajouter nu message" value="1" x-init="$watch(`toggled`, value => showMessage = value)"
+                <x-forms.elements.switch class="mb-2 text-sm" name="inp_display_message" label="Ajouter un message" value="1" x-init="$watch(`toggled`, value => showMessage = value)"
                 x-effect="toggled = showMessage"/>
                 <textarea name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage"></textarea>
             </div>
+            <div class="flex-1 text-xs">
+                En validant le formulaire, j'accepte la <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">Politique de confidentialité</a> et d'être contacté(e) pour recevoir la prestation du service sollicité.
+            </div>
+            <div class="flex-1">
+                <x-forms.elements.checkbox class="inline-block text-xs" name="inp_" size="sm" position="start" required>
+                    <span class="leading-2">J'accepte d'être contacté à des fins de marketing conformément à la <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">Politique de confidentialité</a> de FleetMarket</span>
+                </x-forms.elements.checkbox>
+            </div>
         </div>
-    {{--
-        email : <input type="email" name="email" required>
-        téléphone : <input type="tel" name="phone" required>
-        message : <textarea name="message" required></textarea>
-        <button type="submit">Envoyer</button>
-        <input type="hidden" name="versionId" value="{{ $versionId ?? '' }}">
-        <input type="hidden" name="vehicleId" value="{{ $vehicleId ?? '' }}">
-        <input type="hidden" name="makeId" value="{{ $makeId ?? '' }}">
-        <input type="hidden" name="modelId" value="{{ $modelId ?? '' }}">
-        <input type="hidden" name="versionName" value="{{ $versionName ?? '' }}">
-        <input type="hidden" name="vehicleName" value="{{ $vehicleName ?? '' }}">
-        <input type="hidden" name="makeName" value="{{ $makeName ?? '' }}">
-        <input type="hidden" name="modelName" value="{{ $modelName ?? '' }}">
-        <input type="hidden" name="options" value="{{ json_encode($options ?? []) }}">
-        <input type="hidden" name="locale" value="{{ app()->getLocale() }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="redirectUrl" value="{{ $redirectUrl ?? '' }}">
-        <input type="hidden" name="redirectUrlParams" value="{{ $redirectUrlParams ?? '' }}">
-        <input type="hidden" name="redirectUrlQuery" value="{{ $redirectUrlQuery ?? '' }}"> --}}
     </div>
-    <div>
-        <x-utils.button label="Envoyer" color="theme" class="w-full max-w-sm" @click="alert('ok')"></x-utils.button>
+    <div class="sticky bottom-0 bg-white">
+        <x-utils.button label="Demander mon devis" color="theme" class="w-full max-w-sm font-semibold" @click="submitForm()"></x-utils.button>
+    </div>
+    <div class="mt-2 bg-white">
+        <x-utils.button label="Retour" color="light" class="w-full max-w-sm" @click="contactModalOpen=false"></x-utils.button>
     </div>
 </form>

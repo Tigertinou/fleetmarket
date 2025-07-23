@@ -14,10 +14,15 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
 <x-layouts.app :title="'Page'" :$breadcrumb>
     <div id="main" x-data="{
         onStickyCover : false,
+        optionsModalOpen : false,
+        contactModalOpen : false,
         activeTab : 'MODEL',
         coverImage : '{{ $submodelColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
         coverLabel : '<b>{{ $vehicle['model']['makeName'] }}</b> {{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}',
+        makeSelected : '{{ $vehicle['model']['makeName'] }}',
+        modelSelected : '{{ $vehicle['model']['modelName'] }}',
         versionHistoricalId : ({{ $versionHistoricalId }}).toString(),
+        version : null,
         finitionSelected : '{{ $finitionSelected }}',
         motorSelected : '{{ $motorSelected }}',
         coverColorLabel : null,
@@ -26,9 +31,6 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         colorExternalSelected : null,
         colorInteriorSelected : null,
         equipmentsSelected : [],
-        optionsModalOpen : false,
-        sendModal : false,
-        version : null,
         total : {
             base: 0,
             options: 0,
@@ -183,7 +185,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         </div>
 
         <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
-        <x-layouts.modal ref="sendModal" id="send-modal"></x-layouts.modal>
+        <x-layouts.modal ref="contactModal" id="contact-modal"></x-layouts.modal>
     </div>
 </x-layouts.app>
 {{--@dump($submodelColors)--}}
@@ -192,15 +194,46 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
 
 window.configurator = {
     continue : async function(){
-        const modal = document.querySelector('#send-modal');
-        const response = await fetch(`/{{ app()->getLocale() }}/partials/vehicles/contact/form`);
-        if (!response.ok) {
-            throw new Error(error.message || 'Erreur');
-            return;
+        const modal = document.querySelector('#contact-modal');
+        if(!modal.classList.contains('loaded')) {
+            const response = await fetch(`/{{ app()->getLocale() }}/partials/vehicles/contact/form`);
+            if (!response.ok) {
+                throw new Error(error.message || 'Erreur');
+                return;
+            }
+            modal.querySelector('[data-area="title"]').innerHTML = `Votre demande de devis`;
+            modal.querySelector('[data-area="content"]').innerHTML = await response.text();
+            modal.classList.add('loaded');
         }
-        modal.querySelector('[data-area="title"]').innerHTML = `Votre demande de devis`;
-        modal.querySelector('[data-area="content"]').innerHTML = await response.text();
-        window.xMainData.sendModalOpen = true;
+        modal.querySelectorAll('[name="inp_data"]').forEach(function (el) {
+            el.value = JSON.stringify({
+                make: window.xMainData.makeSelected,
+                model: window.xMainData.modelSelected,
+                version: window.xMainData.versionHistoricalId,
+                finition: window.xMainData.finitionSelected,
+                motor: window.xMainData.motorSelected,
+                colorExternal: {
+                    code: window.xMainData.colorExternalSelected.code,
+                    description: window.xMainData.colorExternalSelected.description,
+                    price: window.xMainData.colorExternalSelected.msrpPrice || 0
+                },
+                colorInterior:{
+                    code: window.xMainData.colorInteriorSelected.code,
+                    description: window.xMainData.colorInteriorSelected.description,
+                    price: window.xMainData.colorInteriorSelected.msrpPrice || 0
+                },
+                equipments: (window.xMainData.equipmentsSelected || []).map(e => {
+                    return {
+                        idEquipment: e.idEquipment,
+                        code: e.code,
+                        description: e.description,
+                        price: e.msrp || 0
+                    };
+                }),
+            });
+            console.log('inp_data', el.value);
+        });
+        window.xMainData.contactModalOpen = true;
     },
     options: [],
     versions: [],
