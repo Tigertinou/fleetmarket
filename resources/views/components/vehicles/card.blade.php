@@ -63,27 +63,26 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                     </div>
                 @endif
                 <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100 md:justify-end md:flex-row">
-                    <div class="md:flex-1"><a href="" class="text-xs font-semibold underline">Comparer avec un autre vehicule</a></div>
+                    <div class="md:flex-1"><a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs font-semibold underline">Comparer avec un autre vehicule</a></div>
                     {{--<x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>--}}
                     <x-utils.button label="En savoir plus" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none" url="{{ $model_link }}"></x-utils.button>
                 </div>
             </div>
         </div>
         @if(isset($vehicle['model']['versions']) && count($vehicle['model']['versions']) > 0)
-            <div class="flex flex-wrap items-center gap-2 px-4 py-4 border-t border-gray-100">
-                @foreach ($vehicle['model']['versions'] as $version)
-                    @if ($loop->first)
+            @foreach ($vehicle['model']['versions'] as $version)
+                @if ($loop->first)
+                    <a href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}?version={{$version['versionHistoricalId']}}" class="flex flex-wrap items-center gap-2 px-4 py-4 border-t border-gray-100 hover:bg-gray-50">
                         <div class="flex items-start flex-1 flex-justify-start">
                             <x-utils.efficiency :value="$version['efficiencyClass'] ?? null" />
                             <span class="text-xs font-bold">{{ $version['versionName'] }}</span>
                         </div>
                         <div>
                             <div class="text-xs"><span class="mr-1 font-extrabold underline font-lg">{{ number_format($version['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
-
                         </div>
-                    @endif
-                @endforeach
-            </div>
+                    </a>
+                @endif
+            @endforeach
         @endif
     </div>
 </div>

@@ -8,6 +8,10 @@ window.api = {
     motork : new MotorkApi()
 };
 
+window.unavailable = function(){
+    alert('Bientôt disponible!')
+}
+
 window.dataMove = function(){
     if (window.innerWidth < 768) {
         document.querySelectorAll('[data-move-desktop]:not(.moved)').forEach(function (el) {

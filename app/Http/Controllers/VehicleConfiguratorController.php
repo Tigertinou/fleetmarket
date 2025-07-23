@@ -70,6 +70,23 @@ class VehicleConfiguratorController extends Controller
                 );
         });
 
+        $versionHistoricalId = $request->query('version') ?? null;
+        $finitionSelected = null;
+        $motorSelected = null;
+
+        if(isset($versionHistoricalId)){
+            foreach($finitions as $index => $finition){
+                if($versionHistoricalId==$finition['versionHistoricalId']){
+                    $finitionSelected = $finition['trimCode'];
+                }
+            }
+            foreach($motors as $index => $motor){
+                if($versionHistoricalId==$motor['versionHistoricalId']){
+                    $motorSelected = $motor['versionUrlCode'];
+                }
+            }
+        }
+
         return view('pages.vehicles.configurator', compact(
             'vehicle',
             'make',
@@ -78,6 +95,9 @@ class VehicleConfiguratorController extends Controller
             'submodelColors',
             'finitions',
             'motors',
+            'versionHistoricalId',
+            'finitionSelected',
+            'motorSelected'
         ));
     }
 

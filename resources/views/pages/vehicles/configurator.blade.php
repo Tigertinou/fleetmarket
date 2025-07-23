@@ -6,8 +6,8 @@ $breadcrumb = [
     ['label' => 'Configurateur' ]
 ];
 
-$finitionSelected = $finitions->first()['trimCode'] ?? null;
-$motorSelected = $motors->first()['versionUrlCode'] ?? null;
+$finitionSelected = $finitionSelected ?? $finitions->first()['trimCode'] ?? null;
+$motorSelected = $motorSelected ?? $motors->first()['versionUrlCode'] ?? null;
 $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoricalId'] ?? null;
 @endphp
 
@@ -17,10 +17,12 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         activeTab : 'MODEL',
         coverImage : '{{ $submodelColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
         coverLabel : '<b>{{ $vehicle['model']['makeName'] }}</b> {{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}',
-        versionHistoricalId : {{ $versionHistoricalId }},
+        versionHistoricalId : ({{ $versionHistoricalId }}).toString(),
         finitionSelected : '{{ $finitionSelected }}',
         motorSelected : '{{ $motorSelected }}',
         coverColorLabel : null,
+        colorExternalValue : null,
+        colorInteriorValue : null,
         colorExternalSelected : null,
         colorInteriorSelected : null,
         equipmentsSelected : [],
@@ -78,8 +80,8 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                         </p>
                     </div>
                     <div class="flex flex-col items-end justify-end order-3 w-full py-2 md:order-2 md:w-auto">
-                        <a href="" class="text-xs underline">Comparer des modèles<i class="ml-2 text-xl icon icon-eye"></i></a>
-                        <a href="" class="text-xs underline">Sauvegarder la configuration<i class="ml-2 text-xl icon icon-bookmark"></i></a>
+                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">Comparer des modèles<i class="ml-2 text-xl icon icon-eye"></i></a>
+                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">Sauvegarder la configuration<i class="ml-2 text-xl icon icon-bookmark"></i></a>
                     </div>
                     <img src="{{ $make['logo'] }}" class="self-start order-2 w-20 md:w-24 md:order-3" alt="{{ $vehicle['model']['makeName'] }} logo">
                 </div>
@@ -179,6 +181,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
             </div>--}}
         </div>
 
+        <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
     </div>
 </x-layouts.app>
 {{--@dump($submodelColors)--}}
@@ -195,21 +198,21 @@ window.configurator = {
         }
         window.xMainData.total.base = window.xMainData.version.price || 0;
         window.xMainData.total.options = 0;
-        window.xMainData.total.shipping = 950;
-        if(window.xMainData.colorExternalSelected!=null){
-            colorExternal = window.configurator.colors.data['external'].filter(function (v) {
-                return v.code == window.xMainData.colorExternalSelected;
+        window.xMainData.total.shipping = 0;
+        if(window.xMainData.colorExternalValue!=null){
+            window.xMainData.colorExternalSelected = window.configurator.colors.data['external'].filter(function (v) {
+                return v.code == window.xMainData.colorExternalValue;
             })[0];
-            if(colorExternal!=null){
-                window.xMainData.total.options += parseFloat(colorExternal.msrpPrice);
+            if(window.xMainData.colorExternalSelected!=null){
+                window.xMainData.total.options += parseFloat(window.xMainData.colorExternalSelected.msrpPrice);
             }
         }
-        if(window.xMainData.colorInteriorSelected!=null){
-            colorInterior = window.configurator.colors.data['interior'].filter(function (v) {
-                return v.code == window.xMainData.colorInteriorSelected;
+        if(window.xMainData.colorInteriorValue!=null){
+            window.xMainData.colorInteriorSelected = window.configurator.colors.data['interior'].filter(function (v) {
+                return v.code == window.xMainData.colorInteriorValue;
             })[0];
-            if(colorInterior!=null){
-                window.xMainData.total.options += parseFloat(colorInterior.msrpPrice);
+            if(window.xMainData.colorInteriorSelected!=null){
+                window.xMainData.total.options += parseFloat(window.xMainData.colorInteriorSelected.msrpPrice);
             }
         }
         if(window.xMainData.equipmentsSelected && window.xMainData.equipmentsSelected.length > 0) {
@@ -308,158 +311,14 @@ window.configurator = {
             equipment = window.configurator.retrieveEquipment(equipment);
         }
         if(!window.xMainData.equipmentsSelected.includes(equipment)) {
+            window.xMainData.equipmentsSelected.push(equipment);
             var config = window.xMainData.equipmentsSelected.map(e => e.idEquipment);
-            /* config.push(window.xMainData.colorExternalSelected); */
-            /* config.push(window.xMainData.colorExternalSelected); */
-            /* window.xMainData.colorExternalSelected */
-            const result = await window.api.motork.addEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
+            var result = await window.api.motork.addEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
             if(result?.data?.status == 'OK'){
-                window.xMainData.equipmentsSelected.push(equipment);
                 window.configurator.applyTotal();
             } else {
-                document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
-                    el.checked = false;
-                    Alpine.$data(el.closest('[x-data]')).checked = false;
-                });
-                const modal = document.querySelector('#options-modal');
-                if(modal) {
-                    const j = result?.data || {};
-                    adjustToAdd = [];
-                    adjustToRemove = [];
-
-                    modal.querySelector('[data-area="title"]').innerHTML = `Assistant`;
-                    var content = ``;
-                    content += `<div class="text-sm">L'équipement sélectionné nécessite quelques modifications.</div>`;
-                    content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez ajouter</div>`;
-                    for(var dtos of j.equipmentDTOs){
-                        if(dtos.id==result.idEquipment){
-                            content += `
-                            <div class="flex gap-2">
-                                <span class="mr-2 align-middle"><i class="inline-block icon icon-download"></i></span>
-                                <span class="flex-1 text-sm">${dtos.description}</span>
-                                <span class="text-sm font-bold">${dtos.price.toEuro()}</span>
-                            </div>`;
-                        }
-                    }
-                    content += `<div class="mt-4 mb-2 font-semibold">Ajustement requis</div>`;
-                    for(var alternative in j.alternatives.decision) {
-                        switch (alternative) {
-                            case 'REMOVE_ALL':
-                                console.log('REMOVE_ALL');
-                                console.log(j);
-                                console.log(j.alternatives.decision[alternative]);
-                                content += `<div class="mb-2 text-sm">Retirer ce(s) équipement(s) ?</div>`;
-                                for(var adjustment of j.alternatives.decision[alternative]) {
-                                    for(var value of adjustment.values) {
-                                        content += `
-                                        <div class="flex gap-2">
-                                            <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                            <span class="flex-1 text-sm">${value.description}</span>
-                                            <span class="text-sm font-bold">-${value.price.toEuro()}</span>
-                                        </div>`;
-                                        adjustToRemove.push(value.id);
-                                    }
-                                }
-                            break;
-                            case 'REMOVE_ONE_OF':
-                                console.log('REMOVE_ONE_OF');
-                                console.log(j);
-                                console.log(j.alternatives.decision[alternative]);
-                                content += `<div class="mb-2 text-sm">Supprimer l'un de ces équipements ?</div>`;
-                                for(var adjustment of j.alternatives.decision[alternative]) {
-                                    var value = adjustment.value;
-                                    content += `
-                                    <div class="flex gap-2">
-                                        <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                        <span class="flex-1 text-sm">${value.description}</span>
-                                        <span class="text-sm font-bold">-${value.price.toEuro()}</span>
-                                    </div>`;
-                                    adjustToRemove.push(value.id);
-                                }
-                            break;
-                            case 'ADD_ALL':
-                                console.log('ADD_ALL');
-                                console.log(j);
-                                console.log(j.alternatives.decision[alternative]);
-                                content += `<div class="mb-2 text-sm">Ajouter ce(s) équipement(s) ?</div>`;
-                                for(var adjustment of j.alternatives.decision[alternative]) {
-                                    for(var value of adjustment.values) {
-                                        content += `
-                                        <div class="flex gap-2">
-                                            <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                            <span class="flex-1 text-sm">${value.description}</span>
-                                            <span class="text-sm font-bold">-${value.price.toEuro()}</span>
-                                        </div>`;
-                                        adjustToAdd.push(value.id);
-                                    }
-                                }
-                            break;
-                            case 'ADD_ONE_OF':
-                                console.log('ADD_ONE_OF');
-                                console.log(j);
-                                console.log(j.alternatives.decision[alternative]);
-                                content += `<div class="mb-2 text-sm">Ajouter un de ces équipements ?</div>`;
-                                for(var adjustment of j.alternatives.decision[alternative]) {
-                                    var value = adjustment.value;
-                                    content += `
-                                    <div class="flex gap-2">
-                                        <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                        <span class="flex-1 text-sm">${value.description}</span>
-                                        <span class="text-sm font-bold">-${value.price.toEuro()}</span>
-                                    </div>`;
-                                    adjustToAdd.push(value.id);
-                                }
-                            break;
-                        }
-                    }
-
-                    adjustToAdd.push(result.idEquipment);
-
-                    window.configurator.acceptAlternative = async function(){
-                        await adjustToRemove.forEach(async (id) => {
-                            document.querySelectorAll('#id-equipments-' + id).forEach((el) => {
-                                el.checked = false;
-                                Alpine.$data(el.closest('[x-data]')).checked = false;
-                            });
-                            await window.configurator.removeEquipment(id);
-                        });
-                        await adjustToAdd.forEach(async (id) => {
-                            document.querySelectorAll('#id-equipments-' + id).forEach((el) => {
-                                el.checked = true;
-                                Alpine.$data(el.closest('[x-data]')).checked = true;
-                            });
-                            await window.configurator.addEquipment(id);
-                        });
-                        window.xMainData.optionsModalOpen = false;
-                    }
-
-                    window.configurator.rejectAlternative = async function(){
-                        await document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
-                            el.checked = false;
-                            Alpine.$data(el.closest('[x-data]')).checked = false;
-                        });
-                        window.configurator.removeEquipment(equipment.idEquipment);
-                        window.xMainData.optionsModalOpen = false;
-                    }
-
-                    content += `<div class="flex mt-4">
-                        <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm font-normal text-center transition-all duration-200 ease-in-out bg-gray-200 rounded-full hover:opacity-90" onclick="window.configurator.rejectAlternative()">
-                            <span class="flex items-center justify-center h-full">
-                                <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-ban"></i></span>
-                                <span>Annuler</span>
-                            </span>
-                        </a></div>
-                        <div class="flex-1"></div>
-                        <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm text-center text-white transition-all duration-200 ease-in-out rounded-full hover:opacity-90 bg-theme" onclick="window.configurator.acceptAlternative()">
-                            <span class="flex items-center justify-center h-full">
-                                <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-check-circle"></i></span>
-                                <span>Accepter</span>
-                            </span>
-                        </a></div>
-                        </div>`;
-                    window.xMainData.optionsModalOpen = true;
-                    modal.querySelector('[data-area="content"]').innerHTML = content;
-                }
+                window.xMainData.equipmentsSelected.splice(window.xMainData.equipmentsSelected.indexOf(equipment), 1);
+                window.configurator.modalAssistant('add',equipment, result.data);
             }
         }
     },
@@ -475,8 +334,152 @@ window.configurator = {
             window.xMainData.equipmentsSelected.splice(window.xMainData.equipmentsSelected.indexOf(equipment), 1);
             var config = window.xMainData.equipmentsSelected.map(e => e.idEquipment);
             config.push(equipment.idEquipment);
-            const result = await window.api.motork.removeEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
-            window.configurator.applyTotal();
+            var result = await window.api.motork.removeEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
+            if(result?.data?.status == 'OK'){
+                document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
+                    el.checked = false;
+                    Alpine.$data(el.closest('[x-data]')).checked = false;
+                });
+                window.configurator.applyTotal();
+            } else {
+                window.xMainData.equipmentsSelected.push(equipment);
+                window.configurator.modalAssistant('remove',equipment, result.data);
+            }
+        }
+    },
+    modalAssistant: function(action, equipment, data) {
+        document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
+            el.checked = false;
+            Alpine.$data(el.closest('[x-data]')).checked = false;
+        });
+        const modal = document.querySelector('#options-modal');
+        if(modal) {
+            adjustToAdd = [];
+            adjustToRemove = [];
+
+            modal.querySelector('[data-area="title"]').innerHTML = `Assistant`;
+            var content = ``;
+            content += `<div class="text-sm">L'équipement sélectionné nécessite quelques modifications.</div>`;
+            if(action == 'remove') {
+                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez retirer</div>`;
+            } else if (action == 'add') {
+                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez ajouter</div>`;
+            }
+            content += `
+                <div class="flex gap-2" title="${equipment.idEquipment}">
+                    <span class="mr-2 align-middle"><i class="inline-block icon icon-download"></i></span>
+                    <span class="flex-1 text-sm">${equipment.description}</span>
+                    <span class="text-sm font-bold">${equipment.msrp.toEuro()}</span>
+                </div>`;
+            content += `<div class="mt-4 mb-2 font-semibold">Ajustement requis</div>`;
+            for(var alternative in data.alternatives.decision) {
+                switch (alternative) {
+                    case 'REMOVE_ALL':
+                        content += `<div class="mb-2 text-sm">Retirer ce(s) équipement(s) ?</div>`;
+                        for(var adjustment of data.alternatives.decision[alternative]) {
+                            for(var value of adjustment.values) {
+                                content += `
+                                <div class="flex gap-2" title="${value.id}">
+                                    <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                    <span class="flex-1 text-sm">${value.description}</span>
+                                    <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                                </div>`;
+                                adjustToRemove.push(value.id);
+                            }
+                        }
+                    break;
+                    case 'REMOVE_ONE_OF':
+                        content += `<div class="mb-2 text-sm">Supprimer l'un de ces équipements ?</div>`;
+                        for(var adjustment of data.alternatives.decision[alternative]) {
+                            var value = adjustment.value;
+                            content += `
+                            <div class="flex gap-2" title="${value.id}">
+                                <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                <span class="flex-1 text-sm">${value.description}</span>
+                                <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                            </div>`;
+                            adjustToRemove.push(value.id);
+                        }
+                    break;
+                    case 'ADD_ALL':
+                        content += `<div class="mb-2 text-sm">Ajouter ce(s) équipement(s) ?</div>`;
+                        for(var adjustment of data.alternatives.decision[alternative]) {
+                            for(var value of adjustment.values) {
+                                content += `
+                                <div class="flex gap-2" title="${value.id}">
+                                    <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                    <span class="flex-1 text-sm">${value.description}</span>
+                                    <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                                </div>`;
+                                adjustToAdd.push(value.id);
+                            }
+                        }
+                    break;
+                    case 'ADD_ONE_OF':
+                        content += `<div class="mb-2 text-sm">Ajouter un de ces équipements ?</div>`;
+                        for(var adjustment of data.alternatives.decision[alternative]) {
+                            var value = adjustment.value;
+                            content += `
+                            <div class="flex gap-2" title="${value.id}">
+                                <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                <span class="flex-1 text-sm">${value.description}</span>
+                                <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                            </div>`;
+                            adjustToAdd.push(value.id);
+                        }
+                    break;
+                }
+            }
+            if(action == 'remove') {
+                adjustToRemove.push(equipment.idEquipment);
+            } else if (action == 'add') {
+                adjustToAdd.push(equipment.idEquipment);
+            }
+
+            window.configurator.acceptAlternative = async function(){
+                await adjustToRemove.forEach(async (id) => {
+                    document.querySelectorAll('#id-equipments-' + id).forEach((el) => {
+                        el.checked = false;
+                        Alpine.$data(el.closest('[x-data]')).checked = false;
+                    });
+                    await window.configurator.removeEquipment(id);
+                });
+                await adjustToAdd.forEach(async (id) => {
+                    document.querySelectorAll('#id-equipments-' + id).forEach((el) => {
+                        el.checked = true;
+                        Alpine.$data(el.closest('[x-data]')).checked = true;
+                    });
+                    await window.configurator.addEquipment(id);
+                });
+                window.xMainData.optionsModalOpen = false;
+            }
+
+            window.configurator.rejectAlternative = async function(){
+                await document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
+                    el.checked = false;
+                    Alpine.$data(el.closest('[x-data]')).checked = false;
+                });
+                window.configurator.removeEquipment(equipment.idEquipment);
+                window.xMainData.optionsModalOpen = false;
+            }
+
+            content += `<div class="flex mt-4">
+                <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm font-normal text-center transition-all duration-200 ease-in-out bg-gray-200 rounded-full hover:opacity-90" onclick="window.configurator.rejectAlternative()">
+                    <span class="flex items-center justify-center h-full">
+                        <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-ban"></i></span>
+                        <span>Annuler</span>
+                    </span>
+                </a></div>
+                <div class="flex-1"></div>
+                <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm text-center text-white transition-all duration-200 ease-in-out rounded-full hover:opacity-90 bg-theme" onclick="window.configurator.acceptAlternative()">
+                    <span class="flex items-center justify-center h-full">
+                        <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-check-circle"></i></span>
+                        <span>Accepter</span>
+                    </span>
+                </a></div>
+                </div>`;
+            window.xMainData.optionsModalOpen = true;
+            modal.querySelector('[data-area="content"]').innerHTML = content;
         }
     }
 };
@@ -496,4 +499,12 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('finitions_detail',@json($finitions_detail)); --}}*/
 
 });
+/*
+window.addEventListener('beforeunload', function (e) {
+    if (!hasStartedConfiguration) return;
+    console.log(e);
+    e.preventDefault();
+    e.returnValue = 'Êtes-vous sûr de vouloir stopper la configuration ?';
+    return 'Êtes-vous sûr de vouloir stopper la configuration ?';
+});*/
 </script>

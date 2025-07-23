@@ -62,6 +62,14 @@ $breadcrumb = [
             <x-forms.elements.radio class="inline-block" name="inp_radio_md" label="Radio (Disabled)" value="3" disabled/>
         </div>
 
+        <div class="mt-8"><b>Switch</b></div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-4">
+            <x-forms.elements.switch class="inline-block" name="inp_switch_simple" label="Large (lg) switch (checked)" value="1" size="lg"/>
+            <x-forms.elements.switch class="inline-block" name="inp_switch_simple" label="Default (md) switch (checked)" value="2" checked/>
+            <x-forms.elements.switch class="inline-block" name="inp_switch_simple" label="Small (sm) switch (checked)" value="3" size="sm"/>
+        </div>
+
         <div class="mt-8"><b>Select</b></div>
 
         <x-forms.elements.select class="mt-4" :options="

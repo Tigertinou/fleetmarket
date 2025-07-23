@@ -18,7 +18,7 @@
         }
         coverColorLabel = this.vcolorsLabel;
         this.price = this.selected.dataset.price;
-        colorInteriorSelected = this.selected.dataset.value;
+        colorInteriorValue = this.selected.dataset.value;
         window.configurator.applyTotal();
     },
     preloadImages () {

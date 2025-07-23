@@ -11,6 +11,9 @@
     },
     options: [],
  }">
+    <x-forms.elements.switch class="text-sm mb-2 flex-row-reverse" name="inp_display_standard" label="Afficher l'équipement standard" value="1" size="sm" checked
+    x-init="$watch(`toggled`, value => showStandard = value)"
+    x-effect="toggled = showStandard"/>
     <template x-for="(eqSection, eqSectionKey) in options" :key="eqSectionKey">
         <details>
             <summary class="pl-6 -ml-4 font-bold text-gray-800" x-text="eqSectionKey"></summary>
@@ -45,5 +48,4 @@
             </div>
         </details>
     </template>
-    <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
 </div>
