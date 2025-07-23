@@ -9,6 +9,14 @@ if (!function_exists('lang')) {
     }
 }
 
+if (!function_exists('__tl')) {
+    function __tl(string $key, string $fallback = null): string
+    {
+        $translation = __($key);
+        return $translation !== $key ? $translation : ($fallback ?? $key);
+    }
+}
+
 if (!function_exists('localized_route')) {
     function localized_route(string $name, array $parameters = [], bool $absolute = true): string
     {
