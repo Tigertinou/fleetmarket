@@ -10,7 +10,7 @@
     },
     options: [],
  }">
-    <x-forms.elements.switch class="flex-row-reverse mb-2 text-sm" name="inp_display_standard" label="Afficher l'équipement standard" value="1" size="sm" checked
+    <x-forms.elements.switch class="flex-row-reverse mb-3 text-sm" name="inp_display_standard" label="{{ __tl('Afficher l\'équipement standard') }}" value="1" size="sm" checked
     x-init="$watch(`toggled`, value => showStandard = value)"
     x-effect="toggled = showStandard"/>
     <template x-for="(eqSection, eqSectionKey) in options" :key="eqSectionKey">

@@ -16,11 +16,14 @@ class MotorKVehicleService
     {
         $this->baseUrl = config('motork.api_url');
         $this->apiKey = config('motork.api_key');
+        $this->lang = app()->getLocale();
+        $this->availableLang = ['fr', 'en'];
+        $this->lang = in_array(Str::lower($this->lang), $this->availableLang) ? Str::lower($this->lang) : 'en';
     }
 
     public function getMakes(): array
     {
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/makes");
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/makes?lang={$this->lang}");
         $json = $response->json();
         $res = [];
         foreach ($json['response'] as $item) {
@@ -117,7 +120,7 @@ class MotorKVehicleService
 
         $query = http_build_query($queryParams);
 
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?" . $query);
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/search?{$query}&lang={$this->lang}");
         $res = [
             'status' => $response->status(),
             'total' => 0,
@@ -169,9 +172,10 @@ class MotorKVehicleService
         $queryParams['q'] = implode(' AND ', $q);
         $query = http_build_query($queryParams);
 
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models?" . $query);
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models?{$query}&lang={$this->lang}");
         $res = [
             'status' => $response->status(),
+            'lang' => $this->lang,
             'total' => 0,
             'totalVersions' => 0,
             'data' => []
@@ -195,11 +199,12 @@ class MotorKVehicleService
     {
         $res = [
             'status' => '404',
+            'lang' => $this->lang,
             'total' => [],
             'data' => []
         ];
         if (!empty($submodelId)) {
-            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/coloursForSubmodel/" . $submodelId);
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/coloursForSubmodel/{$submodelId}?lang={$this->lang}");
             $res['status'] = $response->status();
             if ($response->successful()) {
                 $json = $response->json();
@@ -221,9 +226,10 @@ class MotorKVehicleService
 
     public function getVersionDetails(string $versionId): array
     {
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/version/{$versionId}");
+        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/version/{$versionId}?lang={$this->lang}");
         $res = [
             'status' => $response->status(),
+            'lang' => $this->lang,
             'data' => []
         ];
         if ($response->successful()) {
@@ -237,10 +243,11 @@ class MotorKVehicleService
     {
         $res = [
             'status' => 404,
+            'lang' => $this->lang,
             'data' => []
         ];
         if(isset($versionId)){
-            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/colours/{$versionId}");
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/colours/{$versionId}?lang={$this->lang}");
             $res['status'] = $response->status();
             if ($response->successful()) {
                 $json = $response->json();
@@ -254,10 +261,11 @@ class MotorKVehicleService
     {
         $res = [
             'status' => 404,
+            'lang' => $this->lang,
             'data' => []
         ];
         if(isset($versionId)){
-            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}");
+            $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}?lang={$this->lang}");
             $res['status'] = $response->status();
             if ($response->successful()) {
                 $json = $response->json();
@@ -271,9 +279,11 @@ class MotorKVehicleService
     {
         $res = [
             'status' => 404,
+            'lang' => $this->lang,
             'data' => []
         ];
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/add", [
+            'lang' => $this->lang,
             'toAdd' => $equipmentId,
             'config' => $config,
         ]);
@@ -292,9 +302,11 @@ class MotorKVehicleService
     {
         $res = [
             'status' => 404,
+            'lang' => $this->lang,
             'data' => []
         ];
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/equipments/{$versionId}/remove", [
+            'lang' => $this->lang,
             'toRemove' => $equipmentId,
             'config' => $config,
         ]);

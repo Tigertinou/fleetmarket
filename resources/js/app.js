@@ -12,6 +12,13 @@ window.unavailable = function(){
     alert('Bientôt disponible!')
 }
 
+window.changeLang = function(lang){
+    if (lang === window.lang) return;
+    const currentUrl = window.location.pathname;
+    const newUrl = currentUrl.replace(/\/(fr|nl)\//, `/${lang}/`);
+    window.location.href = newUrl;
+}
+
 window.dataMove = function(){
     if (window.innerWidth < 768) {
         document.querySelectorAll('[data-move-desktop]:not(.moved)').forEach(function (el) {

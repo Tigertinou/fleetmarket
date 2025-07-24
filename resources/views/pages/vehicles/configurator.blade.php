@@ -170,7 +170,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                 </div>
                 <div class="flex items-center w-full gap-4 px-4 py-3 bg-gray-100 md:w-md md:relative">
                     <div class="flex-1 leading-4 cursor-pointer" @click="document.querySelector(`[data-tab='RESUME']`).click()">
-                        <span class="text-xs font-normal">à partir de</span><br>
+                        <span class="text-xs font-normal">{{ __tl('à partir de') }}</span><br>
                         <span class="text-2xl font-bold" x-text="total.total.toEuro()">-</span><small> {{ __tl('TTC') }}*</small>
                     </div>
                     <div class="w-1/2">
@@ -410,25 +410,25 @@ window.configurator = {
             adjustToAdd = [];
             adjustToRemove = [];
 
-            modal.querySelector('[data-area="title"]').innerHTML = `Assistant`;
+            modal.querySelector('[data-area="title"]').innerHTML = `{{ __tl('Assistant') }}`;
             var content = ``;
-            content += `<div class="text-sm">L'équipement sélectionné nécessite quelques modifications.</div>`;
+            content += `<div class="text-sm">{{ __tl('L\'équipement sélectionné nécessite quelques modifications.') }}</div>`;
             if(action == 'remove') {
-                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez retirer</div>
+                content += `<div class="mt-4 mb-2 font-semibold">{{ __tl('Vous souhaitez retirer') }}</div>
                 <div class="flex gap-2" title="${equipment.idEquipment}">
                     <span class=text-xl align-middle"><i class="inline-block icon icon-minus-circle -mt-[0.4em]"></i></span>
                     <span class="flex-1 text-sm">${equipment.description}</span>
                     <span class="text-sm font-bold">-${equipment.msrp.toEuro()}</span>
                 </div>`;
             } else if (action == 'add') {
-                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez ajouter</div>
+                content += `<div class="mt-4 mb-2 font-semibold">{{ __tl('Vous souhaitez ajouter') }}</div>
                 <div class="flex gap-2" title="${equipment.idEquipment}">
                     <span class="text-xl align-middle"><i class="inline-block icon icon-plus-circle -mt-[0.4em]"></i></span>
                     <span class="flex-1 text-sm">${equipment.description}</span>
                     <span class="text-sm font-bold">+${equipment.msrp.toEuro()}</span>
                 </div>`;
             }
-            content += `<div class="mt-4 mb-2 font-semibold">Ajustement requis</div>`;
+            content += `<div class="mt-4 mb-2 font-semibold">{{ __tl('Ajustement requis') }}</div>`;
             const optionsList = Alpine.$data(document.querySelectorAll('#options-list')[0]).options;
             for(var alternative in data.alternatives.decision) {
 
@@ -466,7 +466,7 @@ window.configurator = {
 
                 switch (alternative) {
                     case 'REMOVE_ALL':
-                        content += `<div class="mb-2 text-sm"><b class="underline">Retirer</b> ce(s) équipement(s) :</div>`;
+                        content += `<div class="mb-2 text-sm">{!! __tl('<b class="underline">Retirer</b> ce(s) équipement(s) :') !!}</div>`;
                         content += `<div class="flex flex-col gap-2">`;
                         for(var adjustment of data.alternatives.decision[alternative]) {
                             for(var value of adjustment.values) {
@@ -482,7 +482,7 @@ window.configurator = {
                         content += `</div>`;
                     break;
                     case 'REMOVE_ONE_OF':
-                        content += `<div class="mb-2 text-sm"><b class="underline">Retirer</b> l'un de ces équipements :</div>`;
+                        content += `<div class="mb-2 text-sm">{!! __tl('<b class="underline">Retirer</b> l\'un de ces équipements :') !!}</div>`;
                         content += `<div class="flex flex-col gap-2">`;
                         data.alternatives.decision[alternative].forEach((adjustment, index) => {
                             var value = adjustment.value;
@@ -497,7 +497,7 @@ window.configurator = {
                         content += `</div>`;
                     break;
                     case 'ADD_ALL':
-                        content += `<div class="mb-2 text-sm"><b class="underline">Ajouter</b> ce(s) équipement(s) :</div>`;
+                        content += `<div class="mb-2 text-sm">{!! __tl('<b class="underline">Ajouter</b> ce(s) équipement(s) :') !!}</div>`;
                         content += `<div class="flex flex-col gap-2">`;
                         for(var adjustment of data.alternatives.decision[alternative]) {
                             for(var value of adjustment.values) {
@@ -513,7 +513,7 @@ window.configurator = {
                         content += `</div>`;
                     break;
                     case 'ADD_ONE_OF':
-                        content += `<div class="mb-2 text-sm"><b class="underline">Ajouter</b> un de ces équipements :</div>`;
+                        content += `<div class="mb-2 text-sm">{!! __tl('<b class="underline">Ajouter</b> un de ces équipements :') !!}</div>`;
                         content += `<div class="flex flex-col gap-2">`;
                         data.alternatives.decision[alternative].forEach((adjustment, index) => {
                             var value = adjustment.value;
@@ -572,14 +572,14 @@ window.configurator = {
                 <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm font-normal text-center transition-all duration-200 ease-in-out bg-gray-200 rounded-full hover:opacity-90" onclick="window.configurator.rejectAlternative()">
                     <span class="flex items-center justify-center h-full">
                         <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-ban"></i></span>
-                        <span>Annuler</span>
+                        <span>{{ __tl('Annuler') }}</span>
                     </span>
                 </a></div>
                 <div class="flex-1"></div>
                 <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm text-center text-white transition-all duration-200 ease-in-out rounded-full hover:opacity-90 bg-theme" onclick="window.configurator.acceptAlternative()">
                     <span class="flex items-center justify-center h-full">
                         <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-check-circle"></i></span>
-                        <span>Accepter</span>
+                        <span>{{ __tl('Accepter') }}</span>
                     </span>
                 </a></div>
                 </div>`;

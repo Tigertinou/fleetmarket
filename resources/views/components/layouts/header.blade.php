@@ -56,6 +56,10 @@ x-data="{
                 <li class="border-t border-gray-100"></li>
                 <li><a href="{{ localized_route('pages.elements') }}" class="hover:text-theme">Elements UIUX</a></li>
                 <li><a href="/assets/fonts/fleetmarket.v1.1/icons-reference.html" class="hover:text-theme">Icons</a></li>
+                <li class="flex items-end flex-1 gap-2">
+                    <a href="javascript:void(0);" onclick="window.changeLang('fr')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'fr' ? 'font-semibold' : 'font-normal border-gray-200' }}">Français</a>
+                    <a href="javascript:void(0);" onclick="window.changeLang('nl')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'nl' ? 'font-semibold' : 'font-normal border-gray-200' }}">Nederlands</a>
+                </li>
             </ul>
         </div>
     </div>

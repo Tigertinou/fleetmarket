@@ -39,27 +39,39 @@
     }" class="flex flex-col h-full" method="POST" id="contact-form">
     <input type="hidden" name="inp_data" value="">
     <div>
-        <p class="mb-4 text-sm">Remplissez le formulaire ci-dessous pour nous contacter et recevoir votre devis.</p>
+        <p class="mb-4 text-sm">{{ __tl('Remplissez le formulaire ci-dessous pour nous contacter et recevoir votre devis.') }}</p>
     </div>
     <div class="flex-1 mb-4">
         <div class="flex flex-col gap-2 mb-4">
             <div class="flex-1">
-                <input type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Prénom *" required>
+                <input type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Prénom') }} *" required>
             </div>
             <div class="flex-1">
-                <input type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Nom de famille *" required>
+                <input type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Nom de famille') }} *" required>
             </div>
             <div class="flex-1">
-                <input type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Email *" required>
+                <input type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Email') }} *" required>
             </div>
             <div class="flex-1">
-                <input type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Téléphone *" required>
+                <input type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Téléphone') }} *" required>
             </div>
             <div class="flex-1">
-                <input type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Code postal*" required>
+                <input type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Code postal') }} *" required>
+            </div>
+            <div class="flex-1">
+                <x-forms.elements.select class="rounded-sm text-theme" :options="
+                array(
+                    array( 'value' => '', 'name' => 'Aucune préférence' ),
+                    array( 'value' => 'fr', 'name' => 'Je souhaite communiquer en <b>français</b>' ),
+                    array( 'value' => 'nl', 'name' => 'Je souhaite communiquer en <b>néerlandais</b>' ),
+                    array( 'value' => 'en', 'name' => 'Je souhaite communiquer en <b>anglais</b>' ),
+                )" :values="app()->getLocale()" name="inp_lang" placeholder="Langue"/>
             </div>
             <div>
-                <div class="mt-2 text-2xl">Récapitulatif</div>
+                <div class="mt-4 text-2xl">{{ __tl('Objet de ma demande') }}</div>
+                <div>
+                    <p class="mt-2 mb-4 text-sm">{{ __tl('Les informations suivantes seront transmises.') }}</p>
+                </div>
                 <x-utils.box color="gray" class="w-full my-4 text-sm">
                     <div class="pb-4 mt-2 mb-4 border-b border-gray-400">
                         <span class="text-lg font-bold leading-4" x-text="makeSelected"></span> <span class="text-lg font-normal leading-4" x-text="modelSelected"></span><br>
@@ -67,7 +79,7 @@
                         <span class="text-sm font-normal" x-text="version?.versionName ?? ''"></span>
                     </div>
                     <div class="flex">
-                        <div class="flex-1">Prix de base</div>
+                        <div class="flex-1">{{ __tl('Prix de base') }}</div>
                         <div class="self-end" x-text="total.base.toEuro()">-</div>
                     </div>
                     <div class="flex flex-col gap-2 py-2 my-2 text-xs border-gray-400 border-dashed border-y" >
@@ -91,19 +103,19 @@
                         </template>
                     </div>
                     <div class="flex">
-                        <div class="flex-1">Total des options configurées</div>
+                        <div class="flex-1">{{ __tl('Total des options configurées') }}</div>
                         <div class="self-end" x-text="total.options.toEuro()">-</div>
                     </div>
                     <div class="flex" x-show="total.shipping">
-                        <div class="flex-1">Frais de livraison incluant la contribution environnementale pour le recyclage
-                            de la voiture</div>
+                        <div class="flex-1">{{ __tl('Frais de livraison incluant la contribution environnementale pour le recyclage
+                            de la voiture') }}</div>
                         <div class="self-end" x-text="total.shipping.toEuro()">-</div>
                     </div>
                     <div class="flex items-center mt-2">
-                        <div class="flex-1 font-bold">Prix total</div>
+                        <div class="flex-1 font-bold">{{ __tl('Prix total') }}</div>
                         <div class="self-end text-lg font-bold" x-html="total.total.toEuro()">-</div>
                     </div>
-                    <div><small>* Tous les prix affichés sont TTC</small></div>
+                    <div><small>{{ __tl('* Tous les prix affichés sont TTC') }}</small></div>
                 </x-utils.box>
             </div>
             <div class="flex-1">
@@ -112,19 +124,19 @@
                 <textarea name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage"></textarea>
             </div>
             <div class="flex-1 text-xs">
-                En validant le formulaire, j'accepte la <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">Politique de confidentialité</a> et d'être contacté(e) pour recevoir la prestation du service sollicité.
+                {{ __tl('En validant le formulaire, j\'accepte la') }} <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">{{ __tl('Politique de confidentialité') }}</a> {{ __tl('et d\'être contacté(e) pour recevoir la prestation du service sollicité.') }}
             </div>
             <div class="flex-1">
                 <x-forms.elements.checkbox class="inline-block text-xs" name="inp_" size="sm" position="start" required>
-                    <span class="leading-2">J'accepte d'être contacté à des fins de marketing conformément à la <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">Politique de confidentialité</a> de FleetMarket</span>
+                    <span class="leading-2">{{ __tl('J\'accepte d\'être contacté à des fins de marketing conformément à la') }} <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">{{ __tl('Politique de confidentialité') }}</a> {{ __tl('de FleetMarket') }}</span>
                 </x-forms.elements.checkbox>
             </div>
         </div>
     </div>
     <div class="sticky bottom-0 bg-white">
-        <x-utils.button label="Demander mon devis" color="theme" class="w-full max-w-sm font-semibold" @click="submitForm()"></x-utils.button>
+        <x-utils.button label="{{ __tl('Demander mon devis') }}" color="theme" class="w-full font-semibold" @click="submitForm()"></x-utils.button>
     </div>
     <div class="mt-2 bg-white">
-        <x-utils.button label="Retour" color="light" class="w-full max-w-sm" @click="contactModalOpen=false"></x-utils.button>
+        <x-utils.button label="{{ __tl('Retour') }}" color="light" class="w-full" @click="contactModalOpen=false"></x-utils.button>
     </div>
 </form>

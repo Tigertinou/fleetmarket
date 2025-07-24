@@ -19,6 +19,7 @@
     <title>{{ $title ?? 'FleetMarket' }}</title>
 
     <script>
+    window.lang = '{{ app()->getLocale() }}';
     Number.prototype.toEuro = function (options = {}) {
         return this.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: options.decimals ?? 0, ...options });
     };
