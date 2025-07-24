@@ -3,7 +3,7 @@ $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
     ['url' => localized_route('pages.vehicles.search.make', [ 'make' => $vehicle['model']['makeUrlCode'] ]), 'label' => $vehicle['model']['makeName'], 'class' => 'font-semibold text-black'],
     ['url' => localized_route('pages.vehicles.detail.model', [ 'make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode'] ]), 'label' => $vehicle['model']['modelName'], 'class' => 'font-semibold text-black'],
-    ['label' => 'Configurateur' ]
+    ['label' => __tl('Configurateur') ]
 ];
 
 $finitionSelected = $finitionSelected ?? $finitions->first()['trimCode'] ?? null;
@@ -78,13 +78,14 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                         </h1>
                         <p>
                             @if(isset($vehicle['summary']['numVersions']))
-                                <span class="text-xs font-light underline cursor-pointer" @click="document.querySelector(`[data-tab='FINITIONS']`).click()">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
+                                <span class="text-xs font-light underline cursor-pointer" @click="document.querySelector(`[data-tab='FINITIONS']`).click()">
+                                    {{ __tl('Disponible en :count version(s)',[ 'count' => $vehicle['summary']['numVersions']]) }}</span>
                             @endif
                         </p>
                     </div>
                     <div class="flex flex-col items-end justify-end order-3 w-full py-2 md:order-2 md:w-auto">
-                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">Comparer des modèles<i class="ml-2 text-xl icon icon-eye"></i></a>
-                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">Sauvegarder la configuration<i class="ml-2 text-xl icon icon-bookmark"></i></a>
+                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Comparer des modèles') }}<i class="ml-2 text-xl icon icon-eye"></i></a>
+                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Sauvegarder la configuration') }}<i class="ml-2 text-xl icon icon-bookmark"></i></a>
                     </div>
                     <img src="{{ $make['logo'] }}" class="self-start order-2 w-20 md:w-24 md:order-3" alt="{{ $vehicle['model']['makeName'] }} logo">
                 </div>
@@ -100,17 +101,17 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                         <div data-enter-tab="RESUME"></div>
                         <div class="flex flex-col w-full gap-4 md:my-4 lg:flex-row">
                             <div class="order-1 pt-6 mt-6 -mb-2 leading-none border-t border-gray-200 md:hidden">
-                                <h2 class="text-2xl font-bold">Récapitulatif</h2>
+                                <h2 class="text-2xl font-bold">{{ __tl('Récapitulatif') }}</h2>
                             </div>
                             <div class="flex-1 order-3 md:order-1">
                                 {{-- ************* RESUME - PRICE ************* --}}
-                                <h2 class="mb-4 text-2xl font-normal">Calcul de prix</h2>
+                                <h2 class="mb-4 text-2xl font-normal">{{ __tl('Calcul de prix') }}</h2>
                                 @include('partials.vehicles.configurator.resume-price')
 
                             </div>
                             <div class="flex-1 order-2 md:order-2">
                                 {{-- ************* RESUME - SPECS ************* --}}
-                                <h2 class="mb-4 text-2xl font-normal">Configuration</h2>
+                                <h2 class="mb-4 text-2xl font-normal">{{ __tl('Configuration') }}</h2>
                                 @include('partials.vehicles.configurator.resume-specs')
 
                             </div>
@@ -126,32 +127,32 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
             {{-- *************************************** RIGHT *************************************** --}}
             <div class="border-gray-200 md:py-6 md:px-4 md:border-l md:w-md md:relative md:h-auto md:z-5">
 
-                <h2 class="text-2xl md:font-normal">Configurer</h2>
+                <h2 class="text-2xl md:font-normal">{{ __tl('Configurer') }}</h2>
 
                 {{-- ************* FINITIONS ************* --}}
                 <div data-enter-tab="FINITIONS"></div>
-                <h3 class="text-lg font-semibold" >Finitions</h3>
+                <h3 class="text-lg font-semibold" >{{ __tl('Finitions') }}</h3>
                 @include('partials.vehicles.configurator.finitions')
 
 
                 {{-- ************* MOTEURS ************* --}}
                 <div data-enter-tab="MOTORS"></div>
-                <h3 class="mt-4 text-lg font-semibold">Moteurs</h3>
+                <h3 class="mt-4 text-lg font-semibold">{{ __tl('Moteurs') }}</h3>
                 @include('partials.vehicles.configurator.motors')
 
                 {{-- ************* COLORS - EXTERIEUR ************* --}}
                 <div data-enter-tab="EXTERNAL"></div>
-                <h3 class="mt-4 mb-2 text-lg font-semibold">Couleurs extérieur</h3>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">{{ __tl('Couleurs extérieur') }}</h3>
                 @include('partials.vehicles.configurator.colors-external')
 
                 {{-- ************* COLORS - INTERIEUR ************* --}}
                 <div data-enter-tab="INTERIOR"></div>
-                <h3 class="mt-4 mb-2 text-lg font-semibold">Couleurs intérieur</h3>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">{{ __tl('Couleurs intérieur') }}</h3>
                 @include('partials.vehicles.configurator.colors-interior')
 
                 {{-- ************* OPTIONS ************* --}}
                 <div data-enter-tab="OPTIONS"></div>
-                <h3 class="mt-4 mb-2 text-lg font-semibold">Options</h3>
+                <h3 class="mt-4 mb-2 text-lg font-semibold">{{ __tl('Options') }}</h3>
                 @include('partials.vehicles.configurator.options')
 
             </div>
@@ -170,10 +171,10 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                 <div class="flex items-center w-full gap-4 px-4 py-3 bg-gray-100 md:w-md md:relative">
                     <div class="flex-1 leading-4 cursor-pointer" @click="document.querySelector(`[data-tab='RESUME']`).click()">
                         <span class="text-xs font-normal">à partir de</span><br>
-                        <span class="text-2xl font-bold" x-text="total.total.toEuro()">-</span><small> TTC*</small>
+                        <span class="text-2xl font-bold" x-text="total.total.toEuro()">-</span><small> {{ __tl('TTC') }}*</small>
                     </div>
                     <div class="w-1/2">
-                        <x-utils.button label="Continuer" r-icon="icon-chevron-right" class="w-full max-w-sm" @click="window.configurator.continue()"></x-utils.button>
+                        <x-utils.button label="{{ __tl('Continuer') }}" r-icon="icon-chevron-right" class="w-full max-w-sm" @click="window.configurator.continue()"></x-utils.button>
                     </div>
                 </div>
             </div>
@@ -347,7 +348,7 @@ window.configurator = {
                 }
             }
         };
-        return {};
+        return null;
     },
     addEquipment: async function(equipment) {
         if(window.xMainData?.version == null) {
@@ -356,9 +357,14 @@ window.configurator = {
         if(typeof equipment != 'object'){
             equipment = window.configurator.retrieveEquipment(equipment);
         }
+        if(equipment?.idEquipment == null || equipment.idEquipment == '') {
+            console.error('Invalid equipment', equipment);
+            return;
+        }
         if(!window.xMainData.equipmentsSelected.includes(equipment)) {
             window.xMainData.equipmentsSelected.push(equipment);
             var config = window.xMainData.equipmentsSelected.map(e => e.idEquipment);
+            config = config.filter(i => i !== "" && i !== null);
             var result = await window.api.motork.addEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
             if(result?.data?.status == 'OK'){
                 window.configurator.applyTotal();
@@ -380,6 +386,7 @@ window.configurator = {
             window.xMainData.equipmentsSelected.splice(window.xMainData.equipmentsSelected.indexOf(equipment), 1);
             var config = window.xMainData.equipmentsSelected.map(e => e.idEquipment);
             config.push(equipment.idEquipment);
+            config = config.filter(i => i !== "" && i !== null);
             var result = await window.api.motork.removeEquipment(window.xMainData.version.versionId, equipment.idEquipment, config.join(','));
             if(result?.data?.status == 'OK'){
                 document.querySelectorAll('#id-equipments-' + equipment.idEquipment).forEach((el) => {
@@ -407,82 +414,134 @@ window.configurator = {
             var content = ``;
             content += `<div class="text-sm">L'équipement sélectionné nécessite quelques modifications.</div>`;
             if(action == 'remove') {
-                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez retirer</div>`;
-            } else if (action == 'add') {
-                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez ajouter</div>`;
-            }
-            content += `
+                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez retirer</div>
                 <div class="flex gap-2" title="${equipment.idEquipment}">
-                    <span class="mr-2 align-middle"><i class="inline-block icon icon-download"></i></span>
+                    <span class=text-xl align-middle"><i class="inline-block icon icon-minus-circle -mt-[0.4em]"></i></span>
                     <span class="flex-1 text-sm">${equipment.description}</span>
-                    <span class="text-sm font-bold">${equipment.msrp.toEuro()}</span>
+                    <span class="text-sm font-bold">-${equipment.msrp.toEuro()}</span>
                 </div>`;
+            } else if (action == 'add') {
+                content += `<div class="mt-4 mb-2 font-semibold">Vous souhaitez ajouter</div>
+                <div class="flex gap-2" title="${equipment.idEquipment}">
+                    <span class="text-xl align-middle"><i class="inline-block icon icon-plus-circle -mt-[0.4em]"></i></span>
+                    <span class="flex-1 text-sm">${equipment.description}</span>
+                    <span class="text-sm font-bold">+${equipment.msrp.toEuro()}</span>
+                </div>`;
+            }
             content += `<div class="mt-4 mb-2 font-semibold">Ajustement requis</div>`;
+            const optionsList = Alpine.$data(document.querySelectorAll('#options-list')[0]).options;
             for(var alternative in data.alternatives.decision) {
+
+                /* CREATE EQUIPMENT IF NOT EXIST */
+                data.alternatives.decision[alternative].forEach((adjustment, index) => {
+                    if(adjustment.values==null && adjustment.value!=null){
+                        adjustment.values = [];
+                        adjustment.values.push(adjustment.value);
+                    }
+                    adjustment.values.forEach((value) => {
+                        value.idEquipment = value.idEquipment || value.id;
+                        if(value.idEquipment!=null && value.idEquipment!='') {
+                            var retrieve_equipment = window.configurator.retrieveEquipment(value.idEquipment);
+                            if(!retrieve_equipment){
+                                let d = {
+                                    idEquipment: value.idEquipment,
+                                    basePrice: value.basePrice || value.price || 0,
+                                    code: value.code || '',
+                                    description: value.description,
+                                    manufactorCode: value.manufactorCode || '',
+                                    type: 'OPTION',
+                                    msrp: value.price || 0
+                                };
+                                if(optionsList['Extras'] == null) { optionsList['Extras'] = {}; }
+                                window.configurator.options['Extras'] = window.configurator.options['Extras'] || {};
+                                if(optionsList['Extras']['Options'] == null) {
+                                    optionsList['Extras']['Options'] = window.configurator.options['Extras']['Options'];
+                                }
+                                window.configurator.options['Extras']['Options'] = window.configurator.options['Extras']['Options'] || [];
+                                window.configurator.options['Extras']['Options'].push(d);
+                            }
+                        }
+                    });
+                });
+
                 switch (alternative) {
                     case 'REMOVE_ALL':
-                        content += `<div class="mb-2 text-sm">Retirer ce(s) équipement(s) ?</div>`;
+                        content += `<div class="mb-2 text-sm"><b class="underline">Retirer</b> ce(s) équipement(s) :</div>`;
+                        content += `<div class="flex flex-col gap-2">`;
                         for(var adjustment of data.alternatives.decision[alternative]) {
                             for(var value of adjustment.values) {
                                 content += `
                                 <div class="flex gap-2" title="${value.id}">
-                                    <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                    <span class="text-xl align-middle"><i class="inline-block icon icon-minus-circle -mt-[0.4em]"></i></span>
                                     <span class="flex-1 text-sm">${value.description}</span>
                                     <span class="text-sm font-bold">-${value.price.toEuro()}</span>
                                 </div>`;
                                 adjustToRemove.push(value.id);
                             }
                         }
+                        content += `</div>`;
                     break;
                     case 'REMOVE_ONE_OF':
-                        content += `<div class="mb-2 text-sm">Supprimer l'un de ces équipements ?</div>`;
-                        for(var adjustment of data.alternatives.decision[alternative]) {
+                        content += `<div class="mb-2 text-sm"><b class="underline">Retirer</b> l'un de ces équipements :</div>`;
+                        content += `<div class="flex flex-col gap-2">`;
+                        data.alternatives.decision[alternative].forEach((adjustment, index) => {
                             var value = adjustment.value;
                             content += `
-                            <div class="flex gap-2" title="${value.id}">
-                                <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                <span class="flex-1 text-sm">${value.description}</span>
+                            <div class="flex gap-2 order-${value.price}" title="${value.id}">
+                                <span class="radio"><input type="radio" id="id-alternative-${value.id}" name="adjustment_remove_alternative" value="${value.id}" ${index==0 ? 'checked' : ''}></span>
+                                <span class="text-xl align-middle"><i class="inline-block icon icon-minus-circle -mt-[0.4em]"></i></span>
+                                <label class="flex-1 text-sm" for="id-alternative-${value.id}">${value.description}</label>
                                 <span class="text-sm font-bold">-${value.price.toEuro()}</span>
                             </div>`;
-                            adjustToRemove.push(value.id);
-                        }
+                        });
+                        content += `</div>`;
                     break;
                     case 'ADD_ALL':
-                        content += `<div class="mb-2 text-sm">Ajouter ce(s) équipement(s) ?</div>`;
+                        content += `<div class="mb-2 text-sm"><b class="underline">Ajouter</b> ce(s) équipement(s) :</div>`;
+                        content += `<div class="flex flex-col gap-2">`;
                         for(var adjustment of data.alternatives.decision[alternative]) {
                             for(var value of adjustment.values) {
                                 content += `
                                 <div class="flex gap-2" title="${value.id}">
-                                    <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
+                                    <span class="text-xl align-middle"><i class="inline-block icon icon-plus-circle -mt-[0.4em]"></i></span>
                                     <span class="flex-1 text-sm">${value.description}</span>
-                                    <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                                    <span class="text-sm font-bold">+${value.price.toEuro()}</span>
                                 </div>`;
                                 adjustToAdd.push(value.id);
                             }
                         }
+                        content += `</div>`;
                     break;
                     case 'ADD_ONE_OF':
-                        content += `<div class="mb-2 text-sm">Ajouter un de ces équipements ?</div>`;
-                        for(var adjustment of data.alternatives.decision[alternative]) {
+                        content += `<div class="mb-2 text-sm"><b class="underline">Ajouter</b> un de ces équipements :</div>`;
+                        content += `<div class="flex flex-col gap-2">`;
+                        data.alternatives.decision[alternative].forEach((adjustment, index) => {
                             var value = adjustment.value;
                             content += `
-                            <div class="flex gap-2" title="${value.id}">
-                                <span class="mr-2 align-middle"><i class="inline-block icon icon-upload"></i></span>
-                                <span class="flex-1 text-sm">${value.description}</span>
-                                <span class="text-sm font-bold">-${value.price.toEuro()}</span>
+                            <div class="flex gap-2 order-${value.price}" title="${value.id}">
+                                <span class="radio"><input type="radio" id="id-alternative-${value.id}" name="adjustment_add_alternative" value="${value.id}" ${index==0 ? 'checked' : ''}></span>
+                                <span class="text-xl align-middle"><i class="inline-block icon icon-plus-circle -mt-[0.4em]"></i></span>
+                                <label class="flex-1 text-sm" for="id-alternative-${value.id}">${value.description}</label>
+                                <span class="text-sm font-bold">+${value.price.toEuro()}</span>
                             </div>`;
-                            adjustToAdd.push(value.id);
-                        }
+                        });
+                        content += `</div>`;
                     break;
                 }
-            }
-            if(action == 'remove') {
-                adjustToRemove.push(equipment.idEquipment);
-            } else if (action == 'add') {
-                adjustToAdd.push(equipment.idEquipment);
+
             }
 
             window.configurator.acceptAlternative = async function(){
+                modal.querySelectorAll('[name="adjustment_add_alternative"]').forEach((el) => {
+                    if(el.checked) {
+                        adjustToAdd.push(el.value);
+                    }
+                });
+                if(action == 'remove') {
+                    adjustToRemove.push(equipment.idEquipment);
+                } else if (action == 'add') {
+                    adjustToAdd.push(equipment.idEquipment);
+                }
                 await adjustToRemove.forEach(async (id) => {
                     document.querySelectorAll('#id-equipments-' + id).forEach((el) => {
                         el.checked = false;

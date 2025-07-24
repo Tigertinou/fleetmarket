@@ -1,5 +1,5 @@
 export default class MotorkApi {
-    constructor(baseUrl = '/api/v1') {
+    constructor(baseUrl = '/api/v1/fr') {
       this.baseUrl = baseUrl;
     }
 

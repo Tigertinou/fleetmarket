@@ -30,7 +30,7 @@
                         <br><small><b class="uppercase">{{ implode(' / ',$finition['fuelTypes'])}}</b></small>
                     </div>
                     <div class="justify-end text-right">
-                        <span class="flex-1 text-xs whitespace-nowrap">à partir de</span><br>
+                        <span class="flex-1 text-xs whitespace-nowrap">{{ __tl('à partir de') }}</span><br>
                         <span class="text-xs whitespace-nowrap"><span class="text-base font-extrabold md:text-base">{{ number_format($finition['price'], 0, ',', '.') . ' €' }}</span></span>
                     </div>
                 </div>

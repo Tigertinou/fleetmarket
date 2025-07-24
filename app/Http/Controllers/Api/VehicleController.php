@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\MotorK\MotorKVehicleService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\FilterFacet;
 
@@ -11,12 +12,12 @@ class VehicleController extends Controller
 {
     public function __construct(protected MotorKVehicleService $service) {}
 
-    public function listMakes(): JsonResponse
+    public function listMakes(Request $request,  string $lang): JsonResponse
     {
         return response()->json($this->service->getMakes());
     }
 
-    public function listFacets(string $type){
+    public function listFacets(Request $request,  string $lang, string $type){
 
         $facets = FilterFacet::where('facet_type', $type)
             ->orderBy('position')
@@ -39,7 +40,7 @@ class VehicleController extends Controller
         return response()->json($facets);
     }
 
-    public function getVersionDetails(string $versionId){
+    public function getVersionDetails(Request $request,  string $lang, string $versionId){
         $version = $this->service->getVersionDetails($versionId);
 
         if (!$version) {

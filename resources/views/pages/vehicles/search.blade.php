@@ -1,7 +1,7 @@
 @php
 $breadcrumb = [
     ['url' => localized_route('pages.home'), 'label' => '<span class="text-xs font-thin icon icon-home" />', 'class' => 'font-semibold text-black'],
-    ['label' => 'Recherche']
+    ['label' => __tl('Recherche') ]
 ]
 @endphp
 <x-layouts.app :title="'Page'" :$breadcrumb>
@@ -30,14 +30,14 @@ $breadcrumb = [
                     @if($make)
                         <div class="flex items-start gap-4 mb-4">
                             <div class="flex-1">
-                                <h1 class="h1">Les offres {{ $make['name'] }} du mois</h1>
-                                <p class="text-sm md:text-md">Découvrez les modèles de la marque {{ $make['name'] }} disponibles en Belgique, {{ strftime('%B %Y') }}</p>
+                                <h1 class="h1">{{ __tl('Les offres :make du mois',['make' => $make['name']]) }}</h1>
+                                <p class="text-sm md:text-md">{{ __tl('Découvrez les modèles de la marque :make disponibles en Belgique',['make' => $make['name']]) }}, {{ strftime('%B %Y') }}</p>
                             </div>
                             <img src="{{ $make['logo'] }}" class="w-20 md:w-24">
                         </div>
                     @else
-                        <h1 class="h1">Les offres du mois</h1>
-                        <p class="text-sm md:text-md">Les meilleures offres en Belgique, {{ strftime('%B %Y') }}</p>
+                        <h1 class="h1">{{ __tl('Les offres du mois') }}</h1>
+                        <p class="text-sm md:text-md">{{ __tl('Les meilleures offres en Belgique') }}, {{ strftime('%B %Y') }}</p>
                     @endif
 
                     <div class="flex flex-wrap gap-1 py-3 my-4 border-gray-200 border-y" x-show="facets.length > 0">
@@ -68,12 +68,12 @@ $breadcrumb = [
                     <div class="items-center md:flex">
                         <div class="flex flex-wrap items-center gap-2 text-sm md:justify-end md:order-2">
                             <x-utils.button r-icon="icon-chevron-down" color="bordered" size="md" class="flex-1 md:w-auto whitespace-nowrap" @click="suggestionsOpen=true">
-                                <span id="id-sort-label">Recommandations</span>
+                                <span id="id-sort-label">{{ __tl('Recommandations') }}</span>
                             </x-utils.button>
-                            <x-utils.button label="Filtres" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
+                            <x-utils.button label="{{ __tl('Filtres') }}" r-icon="icon-filter" color="bordered" size="md" class="flex-1 md:w-auto md:hidden" @click="filtersOpen=true"></x-utils.button>
                         </div>
 
-                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalSubmodelsFound">0</b> modèles trouvés</div>
+                        <div class="w-full pt-4 text-sm md:order-1 md:pt-0"><b class="font-bold" data-var="totalSubmodelsFound">0</b> {{ __tl('modèles trouvés') }}</div>
                     </div>
 
                     <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
@@ -85,17 +85,17 @@ $breadcrumb = [
                     <div class="mt-4" id="search-results"></div>
                     <div id="loading-results" class="flex flex-col items-center justify-center hidden gap-4 mt-12 mb-6 animate-pulse">
                         <svg class="mr-3 -ml-1 text-white size-8 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-15" cx="12" cy="12" r="10" stroke="{{-- var(--color-black) --}}" stroke-width="4"></circle><path class="opacity-75" fill="var(--color-theme)" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <span class="text-sm font-normal text-black">Chargement des résultats...</span>
+                        <span class="text-sm font-normal text-black">{{ __tl('Chargement des résultats...') }}</span>
                     </div>
 
-                    <x-layouts.modal title="Trier les vehicules par ?" ref="suggestions" id="suggestions-modal">
+                    <x-layouts.modal title="{{ __tl('Trier les vehicules par ?') }}" ref="suggestions" id="suggestions-modal">
                         <div class="flex flex-col">
-                            <a href="javascript:void(0);" data-sort="" data-label="Recommandation" class="py-3 border-b border-gray-100">Nos recommandations</a>
+                            <a href="javascript:void(0);" data-sort="" data-label="Recommandation" class="py-3 border-b border-gray-100">{{ __tl('Nos recommandations') }}</a>
                             {{-- <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Meilleurs ventes" class="py-3 border-b border-gray-100">Meilleurs ventes</a> --}}
-                            <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Les plus économiques" class="py-3 border-b border-gray-100">Du plus économique au plus cher</a>
-                            <a href="javascript:void(0);" data-sort="minPrice desc" data-label="Les plus chers" class="py-3 border-b border-gray-100">Du plus cher au plus économique</a>
-                            <a href="javascript:void(0);" data-sort="modelName asc" data-label="A-Z" class="py-3 border-b border-gray-100">De A-Z</a>
-                            <a href="javascript:void(0);" data-sort="modelName desc" data-label="Z-A" class="py-3">De Z-A</a>
+                            <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Les plus économiques" class="py-3 border-b border-gray-100">{{ __tl('Du plus économique au plus cher') }}</a>
+                            <a href="javascript:void(0);" data-sort="minPrice desc" data-label="Les plus chers" class="py-3 border-b border-gray-100">{{ __tl('Du plus cher au plus économique') }}</a>
+                            <a href="javascript:void(0);" data-sort="modelName asc" data-label="A-Z" class="py-3 border-b border-gray-100">{{ __tl('De A-Z') }}</a>
+                            <a href="javascript:void(0);" data-sort="modelName desc" data-label="Z-A" class="py-3">{{ __tl('De Z-A') }}</a>
                         </div>
                     </x-layouts.modal>
 

@@ -48,11 +48,11 @@ x-data="{
         </div>
         <div x-show="navOpen && !globalSearchOpen" x-cloak>
             <ul class="fixed bottom-0 right-0 z-10 flex flex-col w-full gap-3 px-8 py-6 transition-all duration-300 ease-in-out bg-white border-b border-gray-200 shadow-xl md:absolute md:bottom-auto justify-top md:border top-18 nowrap md:w-auto md:top-24 md:text-sm">
-                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">Actualités</a></li>
-                <li><a href="{{ localized_route('pages.vehicles.search') }}" class="hover:text-theme">{{ __('Rechercher') }}</a></li>
-                <li><a href="{{ localized_route('pages.vehicles.compare') }}" class="hover:text-theme">{{ __('Comparer') }}</a></li>
-                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __('Guide d’achat') }}</a></li>
-                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __('Comment ça marche') }}</a></li>
+                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __tl('Actualités') }}</a></li>
+                <li><a href="{{ localized_route('pages.vehicles.search') }}" class="hover:text-theme">{{ __tl('Rechercher') }}</a></li>
+                <li><a href="{{ localized_route('pages.vehicles.compare') }}" class="hover:text-theme">{{ __tl('Comparer') }}</a></li>
+                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __tl('Guide d’achat') }}</a></li>
+                <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __tl('Comment ça marche') }}</a></li>
                 <li class="border-t border-gray-100"></li>
                 <li><a href="{{ localized_route('pages.elements') }}" class="hover:text-theme">Elements UIUX</a></li>
                 <li><a href="/assets/fonts/fleetmarket.v1.1/icons-reference.html" class="hover:text-theme">Icons</a></li>

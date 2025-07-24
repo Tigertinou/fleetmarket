@@ -28,7 +28,7 @@ $breadcrumb = [
                     </h1>
                     <p>
                         @if(isset($vehicle['summary']['numVersions']))
-                            <span class="text-xs font-light underline">Disponible en {{ $vehicle['summary']['numVersions'] }} versions</span>
+                            <span class="text-xs font-light underline">{{ __tl('Disponible en :count version(s)',[ 'count' => $vehicle['summary']['numVersions']]) }}</span>
                         @endif
                     </p>
                 </div>
@@ -36,8 +36,8 @@ $breadcrumb = [
             </div>
             @if(isset($vehicle['summary']['minPrice']))
                 <div class="flex items-center w-full gap-4 md:w-auto">
-                    <div class="flex-1 text-xs">Prix à partir de</div>
-                    <div class="text-xs"><a href="#versions" class="mr-1 text-3xl font-extrabold md:text-3xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> TTC*</div>
+                    <div class="flex-1 text-xs">{{ __tl('Prix à partir de') }}</div>
+                    <div class="text-xs"><a href="#versions" class="mr-1 text-3xl font-extrabold md:text-3xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> {{ __tl('TTC') }}*</div>
                 </div>
             @endif
         </div>
@@ -45,19 +45,19 @@ $breadcrumb = [
 
     <x-utils.container class="py-6">
         <div class="text-center md:text-left">
-            <h2 class="mb-2 text-2xl">Configurez votre voiture</h2>
-            <p class="text-xs md:text-sm">Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.</p>
+            <h2 class="mb-2 text-2xl">{{ __tl('Configurez votre voiture') }}</h2>
+            <p class="text-xs md:text-sm">{{ __tl('Choisissez la finition, le moteur ainsi que toutes les options pour votre nouveau vehicule.') }}</p>
             <div class="flex flex-col gap-4 mt-6 md:flex-row">
                 <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme" href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}#versions">
-                    <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Finition</span>
-                    Sélectionner la <b class="font-semibold">finition</b>
+                    <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">{{ __tl('Finition') }}</span>
+                    {!! __tl('Sélectionner la <b class="font-semibold">finition</b>') !!}
                 </x-utils.box>
                 <x-utils.box color="bordered" class="flex-1 w-full cursor-pointer hover:outline-2 hover:outline-theme" href="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}#motor">
-                    <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">Moteur</span>
-                    Sélectionner le <b class="font-semibold">moteur</b>
+                    <span class="block -mb-1 text-xs text-gray-400 uppercase font-extralight">{{ __tl('Moteur') }}</span>
+                    {!! __tl('Sélectionner le <b class="font-semibold">moteur</b>') !!}
                 </x-utils.box>
                 <x-utils.button size="md" color="theme" class="flex-1 w-full" align="center" url="{{ localized_route('pages.vehicles.configurator', ['make' => $vehicle['model']['makeUrlCode'], 'model' => $vehicle['model']['modelUrlCode']]) }}">
-                    Configurez votre <b class="font-semibold">voiture</b><br>
+                    {!! __tl('Configurez votre <b class="font-semibold">voiture</b>') !!}<br>
                 </x-utils.button>
             </div>
         </div>
@@ -68,7 +68,7 @@ $breadcrumb = [
     @if(isset($submodelColors) && isset($submodelColors['data']['external']) && count($submodelColors['data']['external']) > 0)
         <x-utils.container class="py-4 md:py-2">
             <div>
-                <h2 class="mb-6 text-2xl text-center md:text-left">Couleurs</h2>
+                <h2 class="mb-6 text-2xl text-center md:text-left">{{ __tl('Couleurs') }}</h2>
                 <x-vehicles.colors-selector :colors="$submodelColors['data']['external']"></x-vehicles.colors-selector>
             </div>
         </x-utils.container>
@@ -76,7 +76,7 @@ $breadcrumb = [
 
     <x-utils.container class="py-4 bg-gray-100 md:py-2">
         <div>
-            <h2 class="mb-6 text-2xl text-center md:text-left">Spécifications techniques</h2>
+            <h2 class="mb-6 text-2xl text-center md:text-left">{{ __tl('Spécifications techniques') }}</h2>
             <div class="mb-4 text-xs md:text-base">
                 @php
                     $specs = array(
@@ -105,35 +105,45 @@ $breadcrumb = [
                 @endphp
                 <ul class="flex flex-col cursor-default gap-y-2 gap-x-1 specs-list">
                     <li class=" hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Puissance</span>
+                        <span>{{ __tl('Puissance') }}</span>
                         <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_power_hp'] }} - {{ $specs['max_power_hp'] }} <small>HP</small> / {{ $specs['min_power_kw'] }} - {{ $specs['max_power_kw'] }} <small>CV</small></span>
+                        <span class="font-normal">{{ $specs['min_power_hp'] }} - {{ $specs['max_power_hp'] }} <small>{{ __tl('HP') }}</small> / {{ $specs['min_power_kw'] }} - {{ $specs['max_power_kw'] }} <small>{{ __tl('CV') }}</small></span>
                     </li>
-                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Émissions de CO2</span>
-                        <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_co2'] }} - {{ $specs['max_co2'] }} <small>g/Km**</small></span>
-                    </li>
-                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Cylindrée</span>
-                        <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_cyl'] }} - {{ $specs['max_cyl'] }} <small>cm3</small></span>
-                    </li>
-                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Consommation de carburant mixte</span>
-                        <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_consumption'] }} - {{ $specs['max_consumption'] }} <small>l/100km**</small></span>
-                    </li>
-                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Autonomie</span>
-                        <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_autonomy'] }} - {{ $specs['max_autonomy'] }} <small>Km</small></span>
-                    </li>
-                    <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
-                        <span>Consommation électrique mixte</span>
-                        <span class="dots"></span>
-                        <span class="font-normal">{{ $specs['min_electric_consumption'] }} - {{ $specs['max_electric_consumption'] }} <small>kWh/100km**</small></span>
-                    </li>
+                    @if($specs['min_co2'] !== null && $specs['max_co2'] !== null)
+                        <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                            <span>{{ __tl('Émissions de CO2') }}</span>
+                            <span class="dots"></span>
+                            <span class="font-normal">{{ $specs['min_co2'] }} - {{ $specs['max_co2'] }} <small>{{ __tl('g/Km') }}**</small></span>
+                        </li>
+                    @endif
+                    @if($specs['min_cyl'] !== null && $specs['max_cyl'] !== null)
+                        <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                            <span>{{ __tl('Cylindrée') }}</span>
+                            <span class="dots"></span>
+                            <span class="font-normal">{{ $specs['min_cyl'] }} - {{ $specs['max_cyl'] }} <small>{{ __tl('cm3') }}</small></span>
+                        </li>
+                    @endif
+                    @if($specs['min_consumption'] !== null && $specs['max_consumption'] !== null)
+                        <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                            <span>{{ __tl('Consommation de carburant mixte') }}</span>
+                            <span class="dots"></span>
+                            <span class="font-normal">{{ $specs['min_consumption'] }} - {{ $specs['max_consumption'] }} <small>{{ __tl('l/100km') }}**</small></span>
+                        </li>
+                    @endif
+                    @if($specs['min_autonomy'] !== null && $specs['max_autonomy'] !== null)
+                        <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                            <span>{{ __tl('Autonomie') }}</span>
+                            <span class="dots"></span>
+                            <span class="font-normal">{{ $specs['min_autonomy'] }} - {{ $specs['max_autonomy'] }} <small>{{ __tl('Km') }}</small></span>
+                        </li>
+                    @endif
+                    @if($specs['min_electric_consumption'] !== null && $specs['max_electric_consumption'] !== null)
+                        <li class="hover:bg-gray-200 hover:outline-4 outline-gray-200">
+                            <span>{{ __tl('Consommation électrique mixte') }}</span>
+                            <span class="dots"></span>
+                            <span class="font-normal">{{ $specs['min_electric_consumption'] }} - {{ $specs['max_electric_consumption'] }} <small>{{ __tl('kWh/100km') }}**</small></span>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -142,8 +152,8 @@ $breadcrumb = [
     <div class="px-0 py-6 mx-auto overflow-hidden">
         <div>
             <div class="px-4 m-auto text-center md:text-left md:max-w-screen-xl">
-                <h2 class="text-2xl">Finitions</h2>
-                <p class="text-xs md:text-sm">Choisissez votre finition et commencez à configurer votre {{ $vehicle['model']['makeName'] }}</p>
+                <h2 class="text-2xl">{{ __tl('Finitions') }}</h2>
+                <p class="text-xs md:text-sm">{{ __tl('Choisissez votre finition et commencez à configurer votre :model',['model' => $vehicle['model']['makeName']]) }}</p>
             </div>
             <div x-data="{
                 init() {
@@ -171,7 +181,7 @@ $breadcrumb = [
                                 <small class="text-xs font-normal uppercase">{{ implode(' / ',$finition['fuelTypes'])}}</small>
                             </span>
                             <span class="flex items-center justify-between w-full p-4 border-t border-gray-100">
-                                <span class="flex-1 text-xs">Prix à partir de</span>
+                                <span class="flex-1 text-xs">{{ __tl('Prix à partir de') }}</span>
                                 <span class="text-xs"><span class="mr-1 text-base font-extrabold md:text-base">{{ number_format($finition['price'], 0, ',', '.') . ' €' }}</span></span>
                             </span>
                         </a>

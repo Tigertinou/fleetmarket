@@ -3,14 +3,14 @@
     "currentPage" => 1,
     "total" => 0,
     "perPage" => 20,
-    "tlElements" => __('éléments')
+    "tlElements" => __tl('éléments')
 ])
 @php
 @endphp
 @if($totalPages > 1)
     <div class="flex items-center justify-center py-4 md:justify-between">
         <div class="hidden text-sm md:block">
-            <b>{{ ($currentPage - 1) * 10 + 1 }}</b> / <b>{{ min($currentPage * 10, $totalPages * 10) }}</b> {{ $tlElements }} {{ __('sur') }} <b>{{ $total }}</b> {{ __('résultats') }}
+            <b>{{ ($currentPage - 1) * 10 + 1 }}</b> / <b>{{ min($currentPage * 10, $totalPages * 10) }}</b> {{ $tlElements }} {{ __tl('sur') }} <b>{{ $total }}</b> {{ __tl('résultats') }}
         </div>
         <div class="flex items-center space-x-2">
 

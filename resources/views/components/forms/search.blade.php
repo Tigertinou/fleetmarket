@@ -3,17 +3,17 @@
     <div class="flex flex-col flex-wrap mx-auto md:flex-row">
 
         <div class="mb-4 md:w-1/2">
-            <div class="mb-2 text-sm font-extrabold">Carosseries</div>
-            <x-forms.elements.select id="bodytype-select" multiple :options="[]" name="inp_bodytype" placeholder="Tous les type de carosseries ..."/>
+            <div class="mb-2 text-sm font-extrabold">{{ __tl('Carosseries') }}</div>
+            <x-forms.elements.select id="bodytype-select" multiple :options="[]" name="inp_bodytype" placeholder="{{ __tl('Tous les type de carosseries ...') }}"/>
         </div>
 
         <div class="mb-4 md:pl-4 md:w-1/2">
-            <div class="mb-2 text-sm font-extrabold">Marques</div>
-            <x-forms.elements.select id="makes-select" multiple :options="[]" name="inp_makes" placeholder="Toutes les marques ..."/>
+            <div class="mb-2 text-sm font-extrabold">{{ __tl('Marques') }}</div>
+            <x-forms.elements.select id="makes-select" multiple :options="[]" name="inp_makes" placeholder="{{ __tl('Toutes les marques ...') }}"/>
         </div>
 
         <div class="md:w-full">
-            <div class="text-sm font-extrabold">Budget</div>
+            <div class="text-sm font-extrabold">{{ __tl('Budget') }}</div>
             <x-forms.elements.range
                 name="inp_price"
                 min="0"
@@ -24,7 +24,7 @@
         </div>
 
         <div class="mt-4 md:w-full">
-            <x-utils.button label="Rechercher" icon="icon-search" class="w-full" size="lg" color="theme" id="run-search"></x-utils.button>
+            <x-utils.button label="{{ __tl('Rechercher') }}" icon="icon-search" class="w-full" size="lg" color="theme" id="run-search"></x-utils.button>
         </div>
 
     </div>

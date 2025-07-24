@@ -24,7 +24,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                         @endif
                         @if(isset($vehicle['summary']['co2']['min']))
                             <span class="pr-2 mr-2 border-r border-gray-400 last:border-r-0">
-                                CO² :
+                                {{ __tl('CO² :') }}
                                 <b class="font-semibold">{{ $vehicle['summary']['co2']['min'] }}
                                 {{ isset($vehicle['summary']['co2']['max']) && $vehicle['summary']['co2']['max'] !== $vehicle['summary']['co2']['min'] ? ' - ' . $vehicle['summary']['co2']['max'] : '' }}</b>
                                 {{ $vehicle['summary']['co2']['unitOfMeasure'] }}
@@ -32,7 +32,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                         @endif
                         @if(isset($vehicle['summary']['wltpEmissionsCombined']['min']))
                             <span class="pr-2 mr-2 border-r border-gray-400 last:border-r-0">
-                                Émissions WLTP combinées :
+                                {{ __tl('Émissions WLTP combinées :') }}
                                 <b class="font-semibold">{{ $vehicle['summary']['wltpEmissionsCombined']['min'] }}
                                 {{ isset($vehicle['summary']['wltpEmissionsCombined']['max']) && $vehicle['summary']['wltpEmissionsCombined']['max'] !== $vehicle['summary']['wltpEmissionsCombined']['min'] ? ' - ' . $vehicle['summary']['wltpEmissionsCombined']['max'] : '' }}</b>
                                 {{ $vehicle['summary']['wltpEmissionsCombined']['unitOfMeasure'] }}
@@ -40,7 +40,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                         @endif
                         @if(isset($vehicle['summary']['wltpConsumptionCombined']['min']))
                             <span class="pr-2 mr-2 border-r border-gray-400 last:border-r-0">
-                                Consommation WLTP combinée :
+                                {{ __tl('Consommation WLTP combinée :') }}
                                 <b class="font-semibold">{{ $vehicle['summary']['wltpConsumptionCombined']['min'] }}
                                 {{ isset($vehicle['summary']['wltpConsumptionCombined']['max']) && $vehicle['summary']['wltpConsumptionCombined']['max'] !== $vehicle['summary']['wltpConsumptionCombined']['min'] ? ' - ' . $vehicle['summary']['wltpConsumptionCombined']['max'] : '' }}</b>
                                 {{ $vehicle['summary']['wltpConsumptionCombined']['unitOfMeasure'] }}
@@ -48,7 +48,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                         @endif
                         @if(isset($vehicle['summary']['wltpElectricRangeCombinedKm ']['min']))
                             <span class="pr-2 mr-2 border-r border-gray-400 last:border-r-0">
-                                Consommation WLTP combinée :
+                                {{ __tl('Consommation WLTP combinée :') }}
                                 <b class="font-semibold">{{ $vehicle['summary']['wltpElectricRangeCombinedKm ']['min'] }}
                                 {{ isset($vehicle['summary']['wltpElectricRangeCombinedKm ']['max']) && $vehicle['summary']['wltpElectricRangeCombinedKm']['max'] !== $vehicle['summary']['wltpElectricRangeCombinedKm']['min'] ? ' - ' . $vehicle['summary']['wltpElectricRangeCombinedKm ']['max'] : '' }}</b>
                                 {{ $vehicle['summary']['wltpElectricRangeCombinedKm']['unitOfMeasure'] }}
@@ -58,14 +58,14 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                 </div>
                 @if(isset($vehicle['summary']['minPrice']))
                     <div class="flex items-center">
-                        <div class="flex-1 text-xs">Prix à partir de</div>
-                        <div class="text-xs"><a href="{{ $model_link }}" class="mr-1 text-3xl font-extrabold md:text-2xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> TTC*</div>
+                        <div class="flex-1 text-xs">{{ __tl('Prix à partir de') }}</div>
+                        <div class="text-xs"><a href="{{ $model_link }}" class="mr-1 text-3xl font-extrabold md:text-2xl">{{ number_format($vehicle['summary']['minPrice'], 0, ',', '.') . ' €' }}</a> {{ __tl('TTC') }}*</div>
                     </div>
                 @endif
                 <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100 md:justify-end md:flex-row">
-                    <div class="md:flex-1"><a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs font-semibold underline">Comparer avec un autre vehicule</a></div>
+                    <div class="md:flex-1"><a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs font-semibold underline">{{ __tl('Comparer avec un autre vehicule') }}</a></div>
                     {{--<x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>--}}
-                    <x-utils.button label="En savoir plus" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none" url="{{ $model_link }}"></x-utils.button>
+                    <x-utils.button label="{{ __tl('En savoir plus') }}" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none" url="{{ $model_link }}"></x-utils.button>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                             <span class="text-xs font-bold">{{ $version['versionName'] }}</span>
                         </div>
                         <div>
-                            <div class="text-xs"><span class="mr-1 font-extrabold underline font-lg">{{ number_format($version['minPrice'], 0, ',', '.') . ' €' }}</span> TTC*</div>
+                            <div class="text-xs"><span class="mr-1 font-extrabold underline font-lg">{{ number_format($version['minPrice'], 0, ',', '.') . ' €' }}</span> {{ __tl('TTC') }}*</div>
                         </div>
                     </a>
                 @endif

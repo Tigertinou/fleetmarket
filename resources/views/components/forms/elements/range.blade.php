@@ -10,8 +10,8 @@
 ])
 <div {{ $attributes->merge(['class' => 'range-slider']) }} data-name="{{ $name }}" data-min="{{ $min }}" data-max="{{ $max }}" data-min-value="{{ $minValue }}" data-max-value="{{ $maxValue }}" data-step="{{ $step }}" >
     <div class="flex text-xs">
-        <div>De <span class="font-semibold text-min"></span> {{ $prefix }}</div>
+        <div>{{ __tl('De') }} <span class="font-semibold text-min"></span> {{ $prefix }}</div>
         <div class="flex-1 text-center">@if($label)<b>{!!$label!!}</b>@endif</div>
-        <div>à <span class="font-semibold text-max"></span> {{ $prefix }}</div>
+        <div>{{ __tl('à') }} <span class="font-semibold text-max"></span> {{ $prefix }}</div>
     </div>
 </div>

@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\MotorK\MotorKVehicleService;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class EquipmentsController extends Controller
 {
     public function __construct(protected MotorKVehicleService $service) {}
 
-    public function listEquipments(string $vehicleId): JsonResponse
+    public function listEquipments(Request $request,  string $lang, string $vehicleId): JsonResponse
     {
         return response()->json($this->service->getEquipments($vehicleId));
     }
 
-    public function addEquipment(string $vehicleId): JsonResponse
+    public function addEquipment(Request $request,  string $lang, string $vehicleId): JsonResponse
     {
 
         $data = request()->validate([
@@ -31,7 +32,7 @@ class EquipmentsController extends Controller
         return response()->json(['status' => 'error', 'message' => 'Failed to add equipment'], 400);
     }
 
-    public function removeEquipment(string $vehicleId): JsonResponse
+    public function removeEquipment(Request $request,  string $lang, string $vehicleId): JsonResponse
     {
         $data = request()->validate([
             'idEquipment' => 'required|string',
