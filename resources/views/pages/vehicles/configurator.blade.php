@@ -19,8 +19,14 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         activeTab : 'MODEL',
         coverImage : '{{ $submodelColors['data']['external'][0]['colorImage']['image800'] ?? '' }}',
         coverLabel : '<b>{{ $vehicle['model']['makeName'] }}</b> {{ $vehicle['model']['submodelCommercialName'] ?? $vehicle['model']['modelName'] }}',
-        makeSelected : '{{ $vehicle['model']['makeName'] }}',
-        modelSelected : '{{ $vehicle['model']['modelName'] }}',
+        makeSelected : {
+            id: '{{ $vehicle['model']['makeId'] }}',
+            name: '{{ $vehicle['model']['makeName'] }}'
+        },
+        modelSelected : {
+            id: '{{ $vehicle['model']['modelId'] }}',
+            name: '{{ $vehicle['model']['modelName'] }}'
+        },
         versionHistoricalId : ({{ $versionHistoricalId }}).toString(),
         version : null,
         finitionSelected : '{{ $finitionSelected }}',
@@ -276,6 +282,9 @@ window.configurator = {
             return v.versionHistoricalId == versionId;
         })[0];
         window.xMainData.version = version;
+        window.xMainData.versionHistoricalId = versionId;
+        window.xMainData.makeSelected = { id: version.makeId, name: version.makeName };
+        window.xMainData.modelSelected = { id: version.modelId, name: version.modelName };
         window.configurator.loadEquipments();
         window.configurator.applyTotal();
     },

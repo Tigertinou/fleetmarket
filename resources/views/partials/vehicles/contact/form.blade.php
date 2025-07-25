@@ -14,22 +14,67 @@
             const form = document.querySelector('#contact-form');
             if (form.checkValidity()) {
                 const data = {
-                    make: makeSelected,
-                    model: modelSelected,
-                    finition: finitionSelected,
-                    motor: motorSelected,
-                    version: version?.versionName ?? '',
-                    colorExternal: colorExternalSelected?.description ?? '',
-                    colorInterior: colorInteriorSelected?.description ?? '',
-                    equipments: equipmentsSelected.map(e => e.idEquipment),
-                    total: total.total,
                     firstname: form.inp_firstname.value,
                     lastname: form.inp_lastname.value,
                     email: form.inp_email.value,
                     phone: form.inp_phone.value,
                     postcode: form.inp_postcode.value,
                     message: form.inp_message.value,
+                    lang: form.inp_lang.value,
+                    make: makeSelected,
+                    model: modelSelected,
+                    finition: finitionSelected,
+                    motor: motorSelected,
+                    version: {
+                        id: version?.versionId || '',
+                        historicalId: version?.versionHistoricalId || '',
+                        name: version?.versionName || '',
+                        price: version?.msrpPrice || 0
+                    },
+                    colorExternal: {
+                        id: colorExternalSelected?.code || '',
+                        ref: colorExternalSelected?.manufacturerCode || '',
+                        description: colorExternalSelected?.description || '',
+                        price: colorExternalSelected?.msrpPrice || 0
+                    },
+                    colorInterior: {
+                        id: colorInteriorSelected?.code || '',
+                        ref: colorInteriorSelected?.manufacturerCode || '',
+                        description: colorInteriorSelected?.description || '',
+                        price: colorInteriorSelected?.msrpPrice || 0
+                    },
+                    equipments: equipmentsSelected.map(e => {
+                        return {
+                            id: e.idEquipment || 0,
+                            description: e.description || '',
+                            price: e.msrp || 0
+                        };
+                    }),
+                    total: total.total,
                 };
+                fetch('{{ localized_route('vehicles.contact.store') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    contactModalOpen = false;
+                    // Optionally, you can show a success message or redirect the user
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Optionally, you can show an error message to the user
+                });
+
                 alert('Form data: ' + JSON.stringify(data, null, 2));
                 {{-- form.submit(); --}}
             } else {
@@ -74,7 +119,7 @@
                 </div>
                 <x-utils.box color="gray" class="w-full my-4 text-sm">
                     <div class="pb-4 mt-2 mb-4 border-b border-gray-400">
-                        <span class="text-lg font-bold leading-4" x-text="makeSelected"></span> <span class="text-lg font-normal leading-4" x-text="modelSelected"></span><br>
+                        <span class="text-lg font-bold leading-4" x-text="makeSelected.name"></span> <span class="text-lg font-normal leading-4" x-text="modelSelected.name"></span><br>
                         <span class="text-sm font-semibold" x-text="finitionSelected"></span><br>
                         <span class="text-sm font-normal" x-text="version?.versionName ?? ''"></span>
                     </div>

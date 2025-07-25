@@ -29,16 +29,21 @@ Route::group(['prefix' => '{lang}', 'where' => ['lang' => 'fr|nl|en'],'middlewar
         Route::get('/vehicles/search/results', [VehicleSearchController::class, 'partialResult'])->name('vehicles.search.partial');
         Route::get('/vehicles/configurator/options', [VehicleConfiguratorController::class, 'partialOptions'])->name('vehicles.configurator.options.partial');
         Route::get('/vehicles/contact/form', [VehicleContactController::class, 'partialContactForm'])->name('vehicles.contact.form.partial');
+        Route::post('/vehicles/contact/store', [VehicleContactController::class, 'storeContactForm'])->name('vehicles.contact.store');
     });
-
-    Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');
-
-    Route::get('/{make:slug}/{model:slug}', VehicleDetailModelController::class)->name('pages.vehicles.detail.model');
 
     Route::get('/{make:slug}/{model:slug}/configurator', VehicleConfiguratorController::class)->name('pages.vehicles.configurator');
 
     Route::get('/{make:slug}/{model:slug}/{submodel:slug}', VehicleDetailSubmodelController::class)->name('pages.vehicles.detail.submodel');
 
+    Route::get('/{make:slug}/{model:slug}', VehicleDetailModelController::class)->name('pages.vehicles.detail.model');
+
+    Route::get('/{make:slug}', VehicleSearchController::class, 'byMake')->name('pages.vehicles.search.make');
 
     // Route::get('/{make:slug}/{model:slug}/{version:slug}', [VehicleController::class, 'showVersion'])->name('pages.vehicles.version');
+
+    Route::fallback(function () {
+        abort(404);
+    });
+
 });
