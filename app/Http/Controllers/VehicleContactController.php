@@ -76,6 +76,6 @@ class VehicleContactController extends Controller
 
         $lead->save();
 
-        return response()->json($data,200);
+        return response()->json($lead,200);
     }
 }

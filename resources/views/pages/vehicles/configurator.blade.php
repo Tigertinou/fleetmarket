@@ -192,7 +192,7 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
         </div>
 
         <x-layouts.modal ref="optionsModal" id="options-modal"></x-layouts.modal>
-        <x-layouts.modal ref="contactModal" id="contact-modal"></x-layouts.modal>
+        <x-layouts.modal ref="contactModal" id="contact-modal" secure="true"></x-layouts.modal>
     </div>
 </x-layouts.app>
 {{--@dump($submodelColors)--}}
@@ -208,7 +208,7 @@ window.configurator = {
                 throw new Error(error.message || 'Erreur');
                 return;
             }
-            modal.querySelector('[data-area="title"]').innerHTML = `Votre demande de devis`;
+            modal.querySelector('[data-area="title"]').innerHTML = `{{ __tl('Votre demande de devis') }}`;
             modal.querySelector('[data-area="content"]').innerHTML = await response.text();
             modal.classList.add('loaded');
         }
@@ -326,24 +326,7 @@ window.configurator = {
                         }
                     }
                 };
-
                 Alpine.$data(el).options = window.configurator.options;
-                if(window.xMainData.equipmentsSelected.length > 0) {
-                    /* window.xMainData.equipmentsSelected.forEach((equipment) => {
-                        const eq = window.configurator.options.find(e => e.idEquipment == equipment.idEquipment);
-                        if(eq) {
-                            eq.selected = true;
-                        }
-                    }); */
-                } else {
-                    /* window.xMainData.equipmentsSelected = window.configurator.options.filter(e => e.type == 'STANDARD'); */
-                }
-                /* if(version.equipments && version.equipments.length > 0) {
-                    window.xMainData.equipmentsSelected = version.equipments.map(e => e.code);
-                } else {
-                    window.xMainData.equipmentsSelected = [];
-                } */
-                // console.log('options', window.configurator.options);
             });
         });
 

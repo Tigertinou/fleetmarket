@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ColorsController;
 use App\Http\Controllers\Api\EquipmentsController;
 use App\Http\Controllers\Api\ComparisonController;
 use App\Http\Controllers\Api\QuoteController;
+use App\Http\Controllers\Api\LeadController;
 use App\Http\Middleware\SetLocale;
 
 Route::get('/test', fn() => response()->json(['status' => 'OK']));
@@ -30,4 +31,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/compare', [ComparisonController::class, 'compare']);
         Route::post('/quote', [QuoteController::class, 'generateQuote']);
     });
+    /* SAMPLE : /api/v1/leads?status=new&search=&lang=fr&per_page=10&page=1 */
+    Route::get('/leads', [LeadController::class, 'index']);
 });
