@@ -21,21 +21,21 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-DF3Ad4_X.css",
+    "file": "assets/app-C9Kgd1Eg.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-Nq9S-xt9.js",
+    "file": "assets/app-DfgePCkV.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-DF3Ad4_X.css"
+      "assets/app-C9Kgd1Eg.css"
     ]
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-BvKYq-XP.css",
+    "file": "assets/app-BnC2KhzH.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

@@ -16,6 +16,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="theme-color" content="#ffffff">
 
+    <!-- Favicon Standard -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/icons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/icons/favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/icons/favicon.ico') }}">
+
+    <!-- Android -->
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/icons/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('assets/icons/android-chrome-512x512.png') }}">
+
+    <!-- Apple -->
+    <link rel="apple-touch-icon" href="{{ asset('assets/icons/apple-touch-icon.png') }}">
+
+    <!-- Manifest (PWA support) -->
+    <link rel="manifest" href="{{ asset('assets/icons/site.webmanifest') }}">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-title" content="FleetMarket">
+    <meta name="application-name" content="FleetMarket">
+
     <title>{{ $title ?? 'FleetMarket' }}</title>
 
     <script>
