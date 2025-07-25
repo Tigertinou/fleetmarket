@@ -1,7 +1,7 @@
 {{-- Footer --}}
-<footer class="py-4 bg-gray-100">
+<footer class="py-4 border-t border-gray-300 ">
     <div class="max-w-screen-xl px-4 py-4 mx-auto">
-        <img src="{{ asset('assets/images/logo.svg') }}" alt="FleetMarket logo" class="h-8 mb-4 md:mr-4 md:h-10">
+        <img src="{{ asset('assets/images/logo.svg') }}" alt="FleetMarket logo" class="h-8 mb-6 md:mr-4 md:h-10">
         <div class="flex flex-col gap-4 text-xs md:flex-row">
             <div class="flex flex-col justify-start gap-2 pb-4 border-b border-gray-300 md:flex-1/3">
                 <a href="{{ localized_route('pages.vehicles.search') }}" class="text-black underline">{{ __tl('Offres') }}</a>
