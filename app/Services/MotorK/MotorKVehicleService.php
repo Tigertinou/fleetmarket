@@ -21,6 +21,7 @@ class MotorKVehicleService
         $this->lang = in_array(Str::lower($this->lang), $this->availableLang) ? Str::lower($this->lang) : 'en';
     }
 
+    /************************************************************** MAKES **************************************************************/
     public function getMakes(): array
     {
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/makes?lang={$this->lang}");
@@ -158,6 +159,7 @@ class MotorKVehicleService
         return $res;
     }
 
+    /************************************************************** MODELS **************************************************************/
     public function getModelBySlug(string $makeSlug, $modelSlug): array
     {
         $queryParams = [
@@ -195,6 +197,7 @@ class MotorKVehicleService
         return $res;
     }
 
+    /************************************************************** SUBMODELS **************************************************************/
     public function getSubmodelColors(string $submodelId): array
     {
         $res = [
@@ -211,12 +214,36 @@ class MotorKVehicleService
                 $res['data'] = $json['response'] ?? [];
                 $res['data']['external'] = collect($res['data']['external'])->map(function ($item) {
                     $item['code'] = $item['equipmentId'] ?? Str::slug($item['description']);
+                    if(preg_match('/m[ée]tal/iu', $item['group']) === 1){
+                        $item['colorType'] = 'META';
+                    } else if(preg_match('/(pearl|perlé)/iu', $item['group']) === 1){
+                        $item['colorType'] = 'PERL';
+                    } else if(preg_match('/(opac|opaque)/iu', $item['group']) === 1) {
+                        $item['colorType'] = 'OPAC';
+                    } else if(preg_match('/m[ée]tal/iu', $item['description']) === 1){
+                        $item['colorType'] = 'META';
+                    } else if(preg_match('/(opac|opaque)/iu', $item['description']) === 1) {
+                        $item['colorType'] = 'OPAC';
+                    } else if(preg_match('/(pearl|perlé)/iu', $item['description']) === 1){
+                        $item['colorType'] = 'PERL';
+                    } else {
+                        $item['colorType'] = 'OTHER';
+                    }
                     return $item;
-                });
+                })->sortBy(function ($item) {
+                    return $item['msrpPrice'] ?? 999;
+                })->values()->all();
                 $res['data']['interior'] = collect($res['data']['interior'])->map(function ($item) {
                     $item['code'] = $item['equipmentId'] ?? Str::slug($item['description']);
+                    if(preg_match('/(cuir|leather|leer)/iu', $item['group']) === 1){
+                        $item['colorType'] = 'CUIR';
+                    } else {
+                        $item['colorType'] = 'OTHER';
+                    }
                     return $item;
-                });
+                })->sortBy(function ($item) {
+                    return $item['msrpPrice'] ?? 999;
+                })->values()->all();
                 $res['total']['external'] = count($json['response']['external'] ?? []);
                 $res['total']['interior'] = count($json['response']['interior'] ?? []);
             }
@@ -224,6 +251,7 @@ class MotorKVehicleService
         return $res;
     }
 
+    /************************************************************** VERSIONS **************************************************************/
     public function getVersionDetails(string $versionId): array
     {
         $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/version/{$versionId}?lang={$this->lang}");
@@ -239,6 +267,7 @@ class MotorKVehicleService
         return $res;
     }
 
+    /************************************************************** COLORS **************************************************************/
     public function getColors(string $versionId): array
     {
         $res = [
@@ -253,8 +282,54 @@ class MotorKVehicleService
                 $json = $response->json();
                 $res['data'] = $json['response'] ?? [];
             }
+            foreach ($res['data'] as $group => $items) {
+                if (is_array($items)) {
+                    usort($items, function ($a, $b) {
+                        $orderA = ($a['equipment']['type'] ?? '') === 'STANDARD' ? 0 : 1;
+                        $orderB = ($b['equipment']['type'] ?? '') === 'STANDARD' ? 0 : 1;
+                        return $orderA <=> $orderB;
+                    });
+                    $res['data'][$group] = $items;
+                }
+            }
         }
         return $res;
+    }
+
+    /************************************************************** EQUIPMENTS **************************************************************/
+    public function sortEquipments(array $equipments): array
+    {
+        /* !!! EN MINUSCULE !!! */
+        $groupOrder = [
+            'confort' => 10, 'comfort' => 10,
+            'security' => 20, 'veiligheid' => 20, 'securite' => 20,
+            'interieur' => 30, 'interior' => 30,
+            'exterieur' => 40, 'exterior' => 40,
+            'divers' => 800, 'miscellaneous' => 800, 'diverses' => 800, 'overig' => 800,
+            'autre' => 900, 'other' => 900, 'andere' => 900,
+        ];
+
+        $normalize = fn($value) => strtolower(str_replace(
+            ['é','è','ê','ë','à','â','ä','ô','ö','î','ï','ù','û','ü','ç'],
+            ['e','e','e','e','a','a','a','o','o','i','i','u','u','u','c'],
+            $value
+        ));
+
+        foreach ($equipments as $group => $subGroups) {
+            uksort($subGroups, function ($a, $b) use ($groupOrder) {
+                $orderA = $groupOrder[strtolower($a)] ?? 500;
+                $orderB = $groupOrder[strtolower($b)] ?? 500;
+                return $orderA <=> $orderB;
+            });
+        }
+
+        uksort($equipments, function ($a, $b) use ($groupOrder, $normalize) {
+            $orderA = $groupOrder[strtolower($a)] ?? 500;
+            $orderB = $groupOrder[strtolower($b)] ?? 500;
+            return $orderA <=> $orderB;
+        });
+
+        return $equipments;
     }
 
     public function getEquipments(string $versionId): array
@@ -272,6 +347,7 @@ class MotorKVehicleService
                 $res['data'] = $json['response'] ?? [];
             }
         }
+        $res['data'] = $this->sortEquipments($res['data']);
         return $res;
     }
 
@@ -318,38 +394,4 @@ class MotorKVehicleService
         return $res;
     }
 
-   /*  public function getSubmodel(string $submodelSlug): array
-    {
-        $response = Http::get("{$this->baseUrl}/{$this->apiKey}/car/models/{$makeSlug}");
-        $json = $response->json();
-        $res = [];
-        foreach ($json['response'] as $item) {
-            $res['data'][] = $item;
-        }
-        return $res;
-    } */
-
-
-
-    // Autres méthodes comme getModels, getSubmodels...
 }
-
-
-/*
-        Each parameter could be passed via the “q” parameter in query string by this way:
-        “?q=$param:$value”
-
-        If you want to add more params:
-        “?q=($param1:$value1 AND/OR param2:value2)”
-
-        And if you want to search ranges:
-        “?q=$param:[$value1 TO $value2]”
-
-        Additional parameters:
-        “withVersions=1” - Return all versions for submodel (versions)2
-        “withMedias=1” - Return all media (icon, main image and images)1
-        “rows=$numRows” - Choose number of submodels returned.
-        “facets=$param” - Choose between params you want to return as facet.
-
-        */
-        /* dd($query); */

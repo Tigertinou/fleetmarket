@@ -21,6 +21,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/version/{id}', [VehicleController::class, 'getVersionDetails']);
 
         Route::get('/colors/{vehicleId}', [ColorsController::class, 'listColors']);
+        Route::get('/submodel-colors/{submodelId}', [ColorsController::class, 'listSubmodelColors']);
 
         Route::get('/equipments/{vehicleId}', [EquipmentsController::class, 'listEquipments']);
         Route::post('/equipments/{vehicleId}/add', [EquipmentsController::class, 'addEquipment']);

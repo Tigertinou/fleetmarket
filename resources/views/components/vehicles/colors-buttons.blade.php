@@ -5,14 +5,8 @@
     @foreach ($colors as $key => $color)
         @php
             $c = $color['primaryHex'] ?? $color['baseColourHex'] ?? '#000000';
-            $cClass = '';
-            if(preg_match('/m[ée]tal/iu', $color['group']) === 1){
-                $cClass = 'vcolors-metallic';
-            } else if(preg_match('/opa[qc]/iu', $color['group']) === 1) {
-                $cClass = 'vcolors-opac';
-            }
         @endphp
-        <span class="vcolors-item w-12 h-12 border-white rounded-full border-4 outline-2 cursor-pointer hover:opacity-80 {{$cClass}}"
+        <span class="w-12 h-12 border-4 border-white rounded-full cursor-pointer vcolors-item outline-2 hover:opacity-80"
         style="background:{{ $c }};"
         title="{{$color['description']}} - {{$color['group']}}"
         :class="(selected == $el ? 'outline-theme' : 'outline-gray-200') @if($key > 4)+ (showAll ? '' : ' hidden')@endif"
@@ -22,6 +16,7 @@
         data-price="{{$color['msrpPrice']}}"
         data-value="{{ $color['code'] }}"
         data-image="{{ $color['colorImage']['image800'] ?? '' }}"
+        data-color-type="{{ $color['colorType'] ?? 'other' }}"
         @click="select"></span>
     @endforeach
     @if(count($colors) > 4)

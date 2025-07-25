@@ -78,12 +78,11 @@ details[open] summary::after {
     margin-right: .5em;
 }
 
-.vcolors-metallic,
-.vcolors-opac {
+[data-color-type] {
     position:relative;
     overflow: hidden;
 }
-.vcolors-metallic:before {
+[data-color-type="META"]:before {
     content : '';
     position: absolute;
     top: 0;
@@ -93,7 +92,7 @@ details[open] summary::after {
     right:0;
     background: linear-gradient(45deg, #FFFFFF33 0%, #FFFFFF33 40%, transparent 40%, transparent 60%,#FFFFFF33 60%, #FFFFFF33 70%, transparent 70%, transparent 100%);
 }
-.vcolors-opac:before {
+[data-color-type="OPAC"]:before {
     content : '';
     position: absolute;
     top: 0;
@@ -102,6 +101,26 @@ details[open] summary::after {
     height: 100%;
     right:0;
     background: linear-gradient(-135deg, #00000011 0%, #00000011 50%, transparent 50%, transparent 100%);
+}
+[data-color-type="PERL"]:before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    width: 20%;
+    height: 20%;
+    right: 25%;
+    background: #FFFFFF66;
+    border-radius: 100%;
+}
+[data-color-type="CUIR"]:before {
+    content: '';
+    position: absolute;
+    bottom: 25%;
+    width: 20%;
+    height: 20%;
+    right: 25%;
+    background: #FFFFFF66;
+    border-radius: 100%;
 }
 /****** range-slider *****/
 .range-slider {

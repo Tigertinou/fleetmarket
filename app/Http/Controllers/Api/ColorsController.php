@@ -13,6 +13,11 @@ class ColorsController extends Controller
 
     public function listColors(Request $request,  string $lang, string $vehicleId): JsonResponse
     {
-        return response()->json($this->service->getColors($vehicleId, $lang));
+        return response()->json($this->service->getColors($vehicleId));
+    }
+
+    public function listSubmodelColors(Request $request,  string $lang, string $submodelId): JsonResponse
+    {
+        return response()->json($this->service->getSubmodelColors($submodelId));
     }
 }
