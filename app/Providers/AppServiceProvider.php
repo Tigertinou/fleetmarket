@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Filament\Support\Facades\FilamentView;
+use Illuminate\Support\Facades\Session;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        /* if (config('session.driver') === 'redis') {
+            Session::setDefaultDriver('redis');
+        }
+
+        FilamentView::registerRenderHook(
+            'head.start',
+            fn () => '<meta name="locale" content="' . app()->getLocale() . '">'
+        ); */
     }
 }

@@ -19,9 +19,9 @@
             </div>
             <div class="flex flex-col justify-start gap-2 pb-4 border-b border-gray-300 md:flex-1/3">
                 <a href="{{ localized_route('pages.legals') }}" class="text-black underline">{{ __tl('Mentions légales') }}</a>
-                <a href="{{ localized_route('pages.legals') }}" class="text-black underline">{{ __tl('Politique de confidentialité') }}</a>
-                <a href="{{ localized_route('pages.legals') }}" class="text-black underline">{{ __tl('Conditions générales d’utilisation') }}</a>
-                <a href="{{ localized_route('pages.legals') }}" class="text-black underline">{{ __tl('Politique de cookies') }}</a>
+                <a href="{{ localized_route('pages.privacy-policy') }}" class="text-black underline">{{ __tl('Politique de confidentialité') }}</a>
+                <a href="{{ localized_route('pages.terms') }}" class="text-black underline">{{ __tl('Conditions générales d’utilisation') }}</a>
+                <a href="{{ localized_route('pages.cookies') }}" class="text-black underline">{{ __tl('Politique de cookies') }}</a>
             </div>
         </div>
         {{-- <div class="flex items-center justify-center mt-4">

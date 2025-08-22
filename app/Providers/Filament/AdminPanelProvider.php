@@ -23,24 +23,26 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
             ->id('admin')
-            ->path('admin')
-            ->login()
+            ->path('admin') // → URL base : /admin
+            ->login() // 🔐 active le login Filament
+            ->brandName('FleetMarket Admin') // facultatif
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => 'rgb(0, 88, 163)',
             ])
+            ->brandLogo(fn () => asset('assets/images/logo.svg'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->pages([
+                \App\Filament\Pages\Dashboard::class,
+            ])
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
+                'web',
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
