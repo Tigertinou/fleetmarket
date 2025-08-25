@@ -26,7 +26,13 @@
 
     <button
         type="button"
+        role="switch"
+        :aria-checked="toggled"
+        tabindex="0"
+        aria-labelledby="label-{{ $name }}-{{ $value }}"
         @click="toggled = !toggled"
+        @keydown.enter.prevent="toggled = !toggled"
+        @keydown.space.prevent="toggled = !toggled"
         :class="toggled ? 'bg-theme' : 'bg-gray-300'"
         class="relative inline-flex items-center cursor-pointer {{ $sizeClasses['track'] }} rounded-full transition-colors duration-300 focus:outline-none"
     >
@@ -37,6 +43,6 @@
     </button>
 
     @if($label)
-        <label class="select-none cursor-pointer" for="id-{{ $name }}-{{ $value }}">{!! $label !!}</label>
+        <label id="label-{{ $name }}-{{ $value }}" class="select-none cursor-pointer" for="id-{{ $name }}-{{ $value }}">{!! $label !!}</label>
     @endif
 </div>
