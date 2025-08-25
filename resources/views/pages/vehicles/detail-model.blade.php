@@ -189,8 +189,8 @@ $breadcrumb = [
                 </div>
             </div>
             <div class="flex items-center justify-center max-w-screen-xl gap-4 px-4 mx-auto mt-0">
-                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-left hover:opacity-90" @click="back" :class="expanded ? 'text-3xl' : 'bg-white'"></div>
-                <div class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-right hover:opacity-90" @click="next" :class="expanded ? 'text-3xl' : 'bg-white'"></div>
+                <button type="button" class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-left hover:opacity-90" @click="back" :class="expanded ? 'text-3xl' : 'bg-white'" aria-label="{{ __tl('Précédent') }}"></button>
+                <button type="button" class="p-2 font-light rounded-full shadow-lg cursor-pointer text-md icon icon-chevron-right hover:opacity-90" @click="next" :class="expanded ? 'text-3xl' : 'bg-white'" aria-label="{{ __tl('Suivant') }}"></button>
             </div>
         </div>
     </div>

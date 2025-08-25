@@ -78,7 +78,7 @@ $breadcrumb = [
 
                     <div x-data="{ shown : false }" x-intersect:leave="shown = true" x-intersect:enter="shown = false">
                         <div x-show="shown" class="fixed z-20 bottom-4 right-3 md:hidden" x-transition>
-                            <div class="p-3 text-xl font-light bg-white border-gray-100 rounded-full shadow-lg border-1 icon icon-filter" @click="filtersOpen=true"></div>
+                            <button type="button" class="p-3 text-xl font-light bg-white border-gray-100 rounded-full shadow-lg border-1 icon icon-filter" @click="filtersOpen=true" aria-label="{{ __tl('Afficher les filtres') }}"></button>
                         </div>
                     </div>
 

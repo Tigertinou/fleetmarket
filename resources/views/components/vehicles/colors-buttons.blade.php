@@ -17,10 +17,13 @@
         data-value="{{ $color['code'] }}"
         data-image="{{ $color['colorImage']['image800'] ?? '' }}"
         data-color-type="{{ $color['colorType'] ?? 'other' }}"
+        role="button"
+        tabindex="0"
+        aria-label="{{$color['description']}} - {{$color['group']}}"
         @click="select"></span>
     @endforeach
     @if(count($colors) > 4)
-        <span class="flex items-center justify-center w-12 h-12 border-4 border-white rounded-full cursor-pointer outline-2 outline-gray-100" @click="showAll=!showAll"><i class="text-2xl icon " :class="showAll ? 'icon-minus' : 'icon-plus'"></i></span>
+        <button type="button" class="flex items-center justify-center w-12 h-12 border-4 border-white rounded-full cursor-pointer outline-2 outline-gray-100" @click="showAll=!showAll" :aria-label="showAll ? @js(__tl('Masquer les couleurs')) : @js(__tl('Afficher toutes les couleurs'))"><i class="text-2xl icon " :class="showAll ? 'icon-minus' : 'icon-plus'"></i></button>
     @endif
 </div>
 <script>

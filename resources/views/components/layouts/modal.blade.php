@@ -9,7 +9,7 @@
             <div class="text-2xl" data-area="title">
                 @if($title) {{ $title }} @endif
             </div>
-            <a href="javascript:void(0);" @click="{{$ref}}Open=!{{$ref}}Open"><i class="text-2xl icon icon-times"></i></a>
+            <a href="javascript:void(0);" @click="{{$ref}}Open=!{{$ref}}Open" aria-label="{{ __tl('Fermer la fenêtre modale') }}"><i class="text-2xl icon icon-times"></i></a>
         </div>
         <div class="flex-1" data-area="content">
             {{ $slot }}

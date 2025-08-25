@@ -29,6 +29,7 @@
         @click="toggled = !toggled"
         :class="toggled ? 'bg-theme' : 'bg-gray-300'"
         class="relative inline-flex items-center cursor-pointer {{ $sizeClasses['track'] }} rounded-full transition-colors duration-300 focus:outline-none"
+        aria-label="{{ $label ? strip_tags($label) : __tl('Basculer') }}"
     >
         <span
             :class="toggled ? '{{ $sizeClasses['translate'] }}' : 'translate-x-1'"

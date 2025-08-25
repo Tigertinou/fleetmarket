@@ -14,13 +14,13 @@
         </div>
         <div class="flex items-center space-x-2">
 
-            <div class="p-2 font-light rounded-full text-md icon icon-chevron-left {{ $currentPage > 1 ? 'bg-theme text-white shadow-lg hover:opacity-90 cursor-pointer' : 'bg-gray-100 text-gray-400' }}" @click="paginate({{ $currentPage > 1 ? $currentPage - 1 : null }})"></div>
+            <button type="button" class="p-2 font-light rounded-full text-md icon icon-chevron-left {{ $currentPage > 1 ? 'bg-theme text-white shadow-lg hover:opacity-90 cursor-pointer' : 'bg-gray-100 text-gray-400' }}" @click="paginate({{ $currentPage > 1 ? $currentPage - 1 : null }})" aria-label="{{ __tl('Page précédente') }}"></button>
             @foreach (range(1, $totalPages) as $page)
                 @if( $currentPage > $page - 3 && $currentPage < $page + 3 )
-                    <div class="py-2 rounded-full text-xs leading-3 w-7 text-center font-normal {{ $currentPage == $page ? 'bg-theme text-white' : 'bg-gray-100 hover:bg-gray-100 cursor-pointer' }}" @click="paginate({{ $page }})">{{ $page }}</div>
+                    <button type="button" class="py-2 rounded-full text-xs leading-3 w-7 text-center font-normal {{ $currentPage == $page ? 'bg-theme text-white' : 'bg-gray-100 hover:bg-gray-100 cursor-pointer' }}" @click="paginate({{ $page }})">{{ $page }}</button>
                 @endif
             @endforeach
-            <div class="p-2 font-light rounded-full text-md icon icon-chevron-right {{ $currentPage < $totalPages ? 'bg-theme text-white shadow-lg hover:opacity-90 cursor-pointer' : 'bg-gray-100 text-gray-400' }}" @click="paginate({{ $currentPage < $totalPages ? $currentPage + 1 : null }})"></div>
+            <button type="button" class="p-2 font-light rounded-full text-md icon icon-chevron-right {{ $currentPage < $totalPages ? 'bg-theme text-white shadow-lg hover:opacity-90 cursor-pointer' : 'bg-gray-100 text-gray-400' }}" @click="paginate({{ $currentPage < $totalPages ? $currentPage + 1 : null }})" aria-label="{{ __tl('Page suivante') }}"></button>
 
         </div>
     </div>
