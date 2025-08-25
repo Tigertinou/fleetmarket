@@ -41,12 +41,12 @@ x-data="{
             <input x-ref="inpGlobalSearch" class="self-stretch flex-1 text-sm border-0 outline-0" name="inp_global_search" placeholder="{{ __tl('Recherche par marques, modèle ou mot-clé') }}" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         <div class="order-2 mx-2 md:order-3">
-            <a href="javascript:void(0);" @Click="toggleGlobalSearch" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>
+            <a href="javascript:void(0);" @Click="toggleGlobalSearch" :aria-expanded="globalSearchOpen.toString()" aria-controls="global-search" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>
         </div>
         <div class="order-3 mx-2 md:order-4" x-show="!globalSearchOpen">
-            <a href="javascript:void(0);" x-on:click="navOpen = ! navOpen" class="hover:text-theme"><span class="text-xl icon" :class="navOpen ? 'icon-times' : 'icon-burger'"></span></a>
+            <a href="javascript:void(0);" x-on:click="navOpen = ! navOpen" :aria-expanded="navOpen.toString()" aria-controls="nav-menu" class="hover:text-theme"><span class="text-xl icon" :class="navOpen ? 'icon-times' : 'icon-burger'"></span></a>
         </div>
-        <div x-show="navOpen && !globalSearchOpen" x-cloak>
+        <div x-show="navOpen && !globalSearchOpen" x-cloak id="nav-menu">
             <ul class="fixed bottom-0 right-0 z-10 flex flex-col w-full gap-3 px-8 py-6 transition-all duration-300 ease-in-out bg-white border-b border-gray-200 shadow-xl md:absolute md:bottom-auto justify-top md:border top-18 nowrap md:w-auto md:top-24 md:text-sm">
                 <li><a href="{{ localized_route('pages.home') }}" class="hover:text-theme">{{ __tl('Actualités') }}</a></li>
                 <li><a href="{{ localized_route('pages.vehicles.search') }}" class="hover:text-theme">{{ __tl('Rechercher') }}</a></li>

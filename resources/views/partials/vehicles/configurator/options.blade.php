@@ -10,9 +10,10 @@
     },
     options: [],
  }">
-    <x-forms.elements.switch class="flex-row-reverse mb-3 text-sm" name="inp_display_standard" label="{{ __tl('Afficher l\'équipement standard') }}" value="1" size="sm" checked
+    <x-forms.elements.switch class="flex-row-reverse mb-3 text-sm" name="inp_display_standard" label="{{ __tl('Afficher l\'équipement standard') }}" value="1" size="sm" checked control="equipment-options"
     x-init="$watch(`toggled`, value => showStandard = value)"
     x-effect="toggled = showStandard"/>
+    <div id="equipment-options">
     <template x-for="(eqSection, eqSectionKey) in options" :key="eqSectionKey">
         <details x-show="showStandard || Object.values(eqSection).some(sub => sub.some(e => e.type !== 'STANDARD'))">
             <summary class="pl-6 -ml-4 font-bold text-gray-800" x-text="eqSectionKey"></summary>
@@ -41,4 +42,5 @@
             </div>
         </details>
     </template>
+    </div>
 </div>

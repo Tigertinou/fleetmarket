@@ -7,6 +7,7 @@
     'size' => 'md',
     'xInit' => null,
     'xEffect' => null,
+    'control' => null,
 ])
 
 @php
@@ -27,6 +28,8 @@
     <button
         type="button"
         @click="toggled = !toggled"
+        :aria-expanded="toggled.toString()"
+        @if($control) aria-controls="{{ $control }}" @endif
         :class="toggled ? 'bg-theme' : 'bg-gray-300'"
         class="relative inline-flex items-center cursor-pointer {{ $sizeClasses['track'] }} rounded-full transition-colors duration-300 focus:outline-none"
     >

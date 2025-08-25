@@ -189,9 +189,9 @@
                     </x-utils.box>
                 </div>
                 <div class="flex-1">
-                    <x-forms.elements.switch class="mb-2 text-sm" name="inp_display_message" label="Ajouter un message" value="1" x-init="$watch(`toggled`, value => showMessage = value)"
+                    <x-forms.elements.switch class="mb-2 text-sm" name="inp_display_message" label="Ajouter un message" value="1" control="contact-message" x-init="$watch(`toggled`, value => showMessage = value)"
                     x-effect="toggled = showMessage"/>
-                    <textarea name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage"></textarea>
+                    <textarea id="contact-message" name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage"></textarea>
                 </div>
                 <div class="flex-1 text-xs">
                     {{ __tl('En validant le formulaire, j\'accepte la') }} <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">{{ __tl('Politique de confidentialité') }}</a> {{ __tl('et d\'être contacté(e) pour recevoir la prestation du service sollicité.') }}
