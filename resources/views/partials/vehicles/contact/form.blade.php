@@ -114,22 +114,27 @@
         <div class="flex-1 mb-4">
             <div class="flex flex-col gap-2 mb-4">
                 <div class="flex-1">
-                    <input type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Prénom') }} *" required>
+                    <label for="inp_firstname" class="sr-only">{{ __tl('Prénom') }}</label>
+                    <input id="inp_firstname" type="text" name="inp_firstname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Prénom') }} *" required>
                 </div>
                 <div class="flex-1">
-                    <input type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Nom de famille') }} *" required>
+                    <label for="inp_lastname" class="sr-only">{{ __tl('Nom de famille') }}</label>
+                    <input id="inp_lastname" type="text" name="inp_lastname" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Nom de famille') }} *" required>
                 </div>
                 <div class="flex-1">
-                    <input type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Email') }} *" required>
+                    <label for="inp_email" class="sr-only">{{ __tl('Email') }}</label>
+                    <input id="inp_email" type="email" name="inp_email" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Email') }} *" required>
                 </div>
                 <div class="flex-1">
-                    <input type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Téléphone') }} *" required>
+                    <label for="inp_phone" class="sr-only">{{ __tl('Téléphone') }}</label>
+                    <input id="inp_phone" type="tel" name="inp_phone" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Téléphone') }} *" required>
                 </div>
                 <div class="flex-1">
-                    <input type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Code postal') }} *" required>
+                    <label for="inp_postcode" class="sr-only">{{ __tl('Code postal') }}</label>
+                    <input id="inp_postcode" type="text" name="inp_postcode" class="w-full px-4 py-4 text-sm font-normal border-gray-300 rounded-sm h-11 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="{{ __tl('Code postal') }} *" required>
                 </div>
                 <div class="flex-1">
-                    <x-forms.elements.select class="rounded-sm text-theme" :options="
+                    <x-forms.elements.select class="rounded-sm text-theme" aria-label="{{ __tl('Langue') }}" :options="
                     array(
                         array( 'value' => '', 'name' =>  __tl('Aucune préférence') ),
                         array( 'value' => 'fr', 'name' => __tl('Je souhaite communiquer en <b>français</b>') ),
@@ -191,7 +196,7 @@
                 <div class="flex-1">
                     <x-forms.elements.switch class="mb-2 text-sm" name="inp_display_message" label="Ajouter un message" value="1" x-init="$watch(`toggled`, value => showMessage = value)"
                     x-effect="toggled = showMessage"/>
-                    <textarea name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage"></textarea>
+                    <textarea id="inp_message" name="inp_message" class="w-full h-24 px-4 py-3 text-sm font-normal border-gray-300 border-1 focus:outline-none text-theme placeholder:text-gray-500" placeholder="Message" x-show="showMessage" aria-label="{{ __tl('Message') }}"></textarea>
                 </div>
                 <div class="flex-1 text-xs">
                     {{ __tl('En validant le formulaire, j\'accepte la') }} <a href="{{ localized_route('pages.legals') }}" class="underline" target="_blank">{{ __tl('Politique de confidentialité') }}</a> {{ __tl('et d\'être contacté(e) pour recevoir la prestation du service sollicité.') }}

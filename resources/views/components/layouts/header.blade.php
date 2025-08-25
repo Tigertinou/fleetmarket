@@ -38,7 +38,7 @@ x-data="{
         </nav>
         <div id="global-search" class="flex self-stretch flex-1" x-show="globalSearchOpen" x-cloak>
             <div class="self-center pr-2 text-lg text-gray-400 icon icon-search"></div>
-            <input x-ref="inpGlobalSearch" class="self-stretch flex-1 text-sm border-0 outline-0" name="inp_global_search" placeholder="{{ __tl('Recherche par marques, modèle ou mot-clé') }}" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input x-ref="inpGlobalSearch" id="inp_global_search" class="self-stretch flex-1 text-sm border-0 outline-0" name="inp_global_search" placeholder="{{ __tl('Recherche par marques, modèle ou mot-clé') }}" aria-label="{{ __tl('Recherche par marques, modèle ou mot-clé') }}" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         <div class="order-2 mx-2 md:order-3">
             <a href="javascript:void(0);" @Click="toggleGlobalSearch" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>
