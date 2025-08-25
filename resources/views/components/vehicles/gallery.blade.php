@@ -43,7 +43,7 @@
                 @foreach ($images as $image)
                     @if(isset($image['image800']))
                         <div class="slide-item relative h-full" :class="expanded ? 'w-screen flex items-center' : 'aspect-9/16 md:aspect-4/3 w-full'">
-                            <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon top-3 right-3" :class="expanded ? 'icon-times text-3xl fixed top-4 right-4' : 'icon-expand'" @click="( expanded ? collapse(event) : expand(event) ) "></a>
+                            <button type="button" class="absolute p-1 text-white bg-black rounded-full icon top-3 right-3" :class="expanded ? 'icon-times text-3xl fixed top-4 right-4' : 'icon-expand'" @click="( expanded ? collapse(event) : expand(event) ) "></button>
                             <img src="{{ $image['image800'] }}" loading="lazy" class="w-full h-full snap-center" @click="expand" :class="expanded ? 'object-contain max-h-[80vh]' : 'object-cover'">
                         </div>
                     @endif

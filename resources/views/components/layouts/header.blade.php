@@ -41,10 +41,10 @@ x-data="{
             <input x-ref="inpGlobalSearch" class="self-stretch flex-1 text-sm border-0 outline-0" name="inp_global_search" placeholder="{{ __tl('Recherche par marques, modèle ou mot-clé') }}" @keyup.enter="globalSearch($event.target.value)" @keyup.esc="toggleGlobalSearch" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         <div class="order-2 mx-2 md:order-3">
-            <a href="javascript:void(0);" @Click="toggleGlobalSearch" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></a>
+            <button type="button" @click="toggleGlobalSearch" class="hover:text-theme"><span class="text-xl icon" :class="globalSearchOpen ? 'icon-times' : 'icon-search'"></span></button>
         </div>
         <div class="order-3 mx-2 md:order-4" x-show="!globalSearchOpen">
-            <a href="javascript:void(0);" x-on:click="navOpen = ! navOpen" class="hover:text-theme"><span class="text-xl icon" :class="navOpen ? 'icon-times' : 'icon-burger'"></span></a>
+            <button type="button" x-on:click="navOpen = ! navOpen" class="hover:text-theme"><span class="text-xl icon" :class="navOpen ? 'icon-times' : 'icon-burger'"></span></button>
         </div>
         <div x-show="navOpen && !globalSearchOpen" x-cloak>
             <ul class="fixed bottom-0 right-0 z-10 flex flex-col w-full gap-3 px-8 py-6 transition-all duration-300 ease-in-out bg-white border-b border-gray-200 shadow-xl md:absolute md:bottom-auto justify-top md:border top-18 nowrap md:w-auto md:top-24 md:text-sm">
@@ -57,8 +57,8 @@ x-data="{
                 <li><a href="{{ localized_route('pages.elements') }}" class="hover:text-theme">Elements UIUX</a></li>
                 <li><a href="/assets/fonts/fleetmarket.v1.1/icons-reference.html" class="hover:text-theme">Icons</a></li>
                 <li class="flex items-end flex-1 gap-2">
-                    <a href="javascript:void(0);" onclick="window.changeLang('fr')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'fr' ? 'font-semibold' : 'font-normal border-gray-200' }}">Français</a>
-                    <a href="javascript:void(0);" onclick="window.changeLang('nl')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'nl' ? 'font-semibold' : 'font-normal border-gray-200' }}">Nederlands</a>
+                    <button type="button" onclick="window.changeLang('fr')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'fr' ? 'font-semibold' : 'font-normal border-gray-200' }}">Français</button>
+                    <button type="button" onclick="window.changeLang('nl')" class="flex-1 text-center text-sm rounded-full px-4 py-2 border-1 {{ app()->getLocale() == 'nl' ? 'font-semibold' : 'font-normal border-gray-200' }}">Nederlands</button>
                 </li>
             </ul>
         </div>

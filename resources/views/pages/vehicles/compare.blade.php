@@ -9,7 +9,7 @@ $breadcrumb = [
     <x-utils.container>
         <h1 class="h1">Comparer véhicules</h1>
         <p><i>{{ __tl('Bientôt disponible...') }}</i></p>
-        <a href="javascript:void(0);" onclick="window.comparator.openModal()">Lancer le comparateur</a>
+        <button type="button" onclick="window.comparator.openModal()">Lancer le comparateur</button>
         <x-layouts.modal ref="comparatorModal" id="comparator-modal"></x-layouts.modal>
     </x-utils.container>
 

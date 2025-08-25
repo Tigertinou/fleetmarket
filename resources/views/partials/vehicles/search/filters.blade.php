@@ -1,7 +1,7 @@
 <div class="pb-8">
     <div class="flex items-center justify-between py-4 md:hidden">
         <div class="text-2xl">{{ __tl('Filtres') }}</div>
-        <a href="javascript:void(0);" @click="filtersOpen=!filtersOpen"><i class="text-2xl icon icon-times"></i></a>
+        <button type="button" @click="filtersOpen=!filtersOpen"><i class="text-2xl icon icon-times"></i></button>
     </div>
     <div class="flex justify-end my-4">
         <a href="?" class="text-xs font-semibold underline">{{ __tl('Supprimer tous les filtres ') }}<i class="icon icon-times"></i></a>

@@ -90,12 +90,12 @@ $breadcrumb = [
 
                     <x-layouts.modal title="{{ __tl('Trier les vehicules par ?') }}" ref="suggestions" id="suggestions-modal">
                         <div class="flex flex-col">
-                            <a href="javascript:void(0);" data-sort="" data-label="Recommandation" class="py-3 border-b border-gray-100">{{ __tl('Nos recommandations') }}</a>
-                            {{-- <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Meilleurs ventes" class="py-3 border-b border-gray-100">Meilleurs ventes</a> --}}
-                            <a href="javascript:void(0);" data-sort="minPrice asc" data-label="Les plus économiques" class="py-3 border-b border-gray-100">{{ __tl('Du plus économique au plus cher') }}</a>
-                            <a href="javascript:void(0);" data-sort="minPrice desc" data-label="Les plus chers" class="py-3 border-b border-gray-100">{{ __tl('Du plus cher au plus économique') }}</a>
-                            <a href="javascript:void(0);" data-sort="modelName asc" data-label="A-Z" class="py-3 border-b border-gray-100">{{ __tl('De A-Z') }}</a>
-                            <a href="javascript:void(0);" data-sort="modelName desc" data-label="Z-A" class="py-3">{{ __tl('De Z-A') }}</a>
+                            <button type="button" data-sort="" data-label="Recommandation" class="py-3 border-b border-gray-100 text-left w-full">{{ __tl('Nos recommandations') }}</button>
+                            {{-- <button type="button" data-sort="minPrice asc" data-label="Meilleurs ventes" class="py-3 border-b border-gray-100">Meilleurs ventes</button> --}}
+                            <button type="button" data-sort="minPrice asc" data-label="Les plus économiques" class="py-3 border-b border-gray-100 text-left w-full">{{ __tl('Du plus économique au plus cher') }}</button>
+                            <button type="button" data-sort="minPrice desc" data-label="Les plus chers" class="py-3 border-b border-gray-100 text-left w-full">{{ __tl('Du plus cher au plus économique') }}</button>
+                            <button type="button" data-sort="modelName asc" data-label="A-Z" class="py-3 border-b border-gray-100 text-left w-full">{{ __tl('De A-Z') }}</button>
+                            <button type="button" data-sort="modelName desc" data-label="Z-A" class="py-3 text-left w-full">{{ __tl('De Z-A') }}</button>
                         </div>
                     </x-layouts.modal>
 

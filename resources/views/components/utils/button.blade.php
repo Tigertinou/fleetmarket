@@ -4,7 +4,7 @@
     "disabled" => false,
     "size" => 'md',
     "color" => 'dark',
-    "url" => "javascript:void(0);",
+    "url" => null,
     "icon" => null,
     "rIcon" => null,
     "align" => ''
@@ -62,6 +62,7 @@ switch ($size) {
     break;
 }
 @endphp
+@if($url)
 <a href="{{ $url }}" {{ $attributes->merge(['class' => $def_class]) }}>
     <div class="flex items-center justify-center h-full">
         @if($icon ?? false)
@@ -73,4 +74,17 @@ switch ($size) {
         @endif
     </div>
 </a>
+@else
+<button type="button" {{ $attributes->merge(['class' => $def_class]) }}>
+    <div class="flex items-center justify-center h-full">
+        @if($icon ?? false)
+            <div class="align-middle {{ $def_class_icon }}"><i class="icon {{ $icon }} inline-block"></i></div>
+        @endif
+        <div class="{{ $align == 'center' ? 'flex-1' : ''}} {{ $align == 'left' ? 'flex-1 text-left' : ''}} {{ $align == 'right' ? 'flex-1 text-right' : ''}}">{!! $label ?? $slot !!}</div>
+        @if($rIcon ?? false)
+            <div class="align-middle {{ $def_class_r_icon }}"><i class="icon {{ $rIcon }} inline-block"></i></div>
+        @endif
+    </div>
+</button>
+@endif
 

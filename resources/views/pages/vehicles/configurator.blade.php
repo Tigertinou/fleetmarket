@@ -90,8 +90,8 @@ $versionHistoricalId = $versionHistoricalId ?? $motors->first()['versionHistoric
                         </p>
                     </div>
                     <div class="flex flex-col items-end justify-end order-3 w-full py-2 md:order-2 md:w-auto">
-                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Comparer des modèles') }}<i class="ml-2 text-xl icon icon-eye"></i></a>
-                        <a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Sauvegarder la configuration') }}<i class="ml-2 text-xl icon icon-bookmark"></i></a>
+                        <button type="button" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Comparer des modèles') }}<i class="ml-2 text-xl icon icon-eye"></i></button>
+                        <button type="button" onclick="window.unavailable()" class="text-xs underline">{{ __tl('Sauvegarder la configuration') }}<i class="ml-2 text-xl icon icon-bookmark"></i></button>
                     </div>
                     <img src="{{ $make['logo'] }}" class="self-start order-2 w-20 md:w-24 md:order-3" alt="{{ $vehicle['model']['makeName'] }} logo">
                 </div>
@@ -561,19 +561,19 @@ window.configurator = {
             }
 
             content += `<div class="flex mt-4">
-                <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm font-normal text-center transition-all duration-200 ease-in-out bg-gray-200 rounded-full hover:opacity-90" onclick="window.configurator.rejectAlternative()">
+                <div><button type="button" class="inline-block w-full max-w-sm px-6 py-3 text-sm font-normal text-center transition-all duration-200 ease-in-out bg-gray-200 rounded-full hover:opacity-90" onclick="window.configurator.rejectAlternative()">
                     <span class="flex items-center justify-center h-full">
                         <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-ban"></i></span>
                         <span>{{ __tl('Annuler') }}</span>
                     </span>
-                </a></div>
+                </button></div>
                 <div class="flex-1"></div>
-                <div><a href="javascript:void(0);" class="inline-block w-full max-w-sm px-6 py-3 text-sm text-center text-white transition-all duration-200 ease-in-out rounded-full hover:opacity-90 bg-theme" onclick="window.configurator.acceptAlternative()">
+                <div><button type="button" class="inline-block w-full max-w-sm px-6 py-3 text-sm text-center text-white transition-all duration-200 ease-in-out rounded-full hover:opacity-90 bg-theme" onclick="window.configurator.acceptAlternative()">
                     <span class="flex items-center justify-center h-full">
                         <span class="mr-2 -ml-3 align-middle"><i class="inline-block icon icon-check-circle"></i></span>
                         <span>{{ __tl('Accepter') }}</span>
                     </span>
-                </a></div>
+                </button></div>
                 </div>`;
             window.xMainData.optionsModalOpen = true;
             modal.querySelector('[data-area="content"]').innerHTML = content;

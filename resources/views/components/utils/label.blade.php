@@ -2,7 +2,6 @@
     "label" => null,
     "color" => 'dark',
     "size" => 'xs',
-    "url" => "javascript:void(0);",
     "icon" => null,
     "rIcon" => null,
 ])

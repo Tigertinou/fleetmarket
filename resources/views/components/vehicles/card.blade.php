@@ -8,7 +8,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
     <div class="flex flex-col">
         <div class="flex flex-col md:flex-row">
             <div class="relative md:max-w-xs">
-                <a href="javascript:void(0)" class="absolute p-1 text-white bg-black rounded-full icon icon-camera bottom-3 right-3"></a>
+                <button type="button" class="absolute p-1 text-white bg-black rounded-full icon icon-camera bottom-3 right-3"></button>
                 <a href="{{ $model_link }}"><img src="{{ $vehicle['model']['mainImage']['image400'] }}" class="object-cover w-full aspect-3/2"></a>
             </div>
             <div class="flex flex-col flex-1 gap-2 p-4">
@@ -63,7 +63,7 @@ $model_link = localized_route('pages.vehicles.detail.model', [
                     </div>
                 @endif
                 <div class="flex flex-col items-center gap-2 pt-4 border-t border-gray-100 md:justify-end md:flex-row">
-                    <div class="md:flex-1"><a href="javascript:void(0);" onclick="window.unavailable()" class="text-xs font-semibold underline">{{ __tl('Comparer avec un autre vehicule') }}</a></div>
+                    <div class="md:flex-1"><button type="button" onclick="window.unavailable()" class="text-xs font-semibold underline">{{ __tl('Comparer avec un autre vehicule') }}</button></div>
                     {{--<x-utils.button label="Comparer" size="md" icon="icon-car-compare" color="bordered"></x-utils.button>--}}
                     <x-utils.button label="{{ __tl('En savoir plus') }}" size="sm" icon="icon-info-circle" r-icon="icon-chevron-right" color="theme" class="flex-1 md:flex-none" url="{{ $model_link }}"></x-utils.button>
                 </div>
